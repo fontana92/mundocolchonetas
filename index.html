@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mundo Colchonetas | Catálogo Premium</title>
     
+    <!-- Tipografía Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -152,7 +153,9 @@
                 <input type="file" id="bulk-images" multiple accept="image/*" class="form-input">
             </div>
 
-            <div id="products-table" style="overflow-x: auto;"></div>
+            <div id="products-table" style="overflow-x: auto; background: var(--slate-100); border-radius: 12px; padding: 20px;">
+                <!-- Tabla dinámica -->
+            </div>
         </section>
     </main>
 
@@ -170,14 +173,14 @@
         </div>
     </div>
 
-    <!-- CART SIDEBAR -->
+    <!-- CARRITO -->
     <div class="cart-sidebar" id="cart-sidebar">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
             <h3>Tu Carrito</h3>
             <button onclick="toggleCart()" style="background:none; border:none; font-size:1.5rem; cursor:pointer;">&times;</button>
         </div>
         <div id="cart-items" style="flex:1; overflow-y:auto;"></div>
-        <div style="padding-top:20px; border-top:1px solid var(--border);">
+        <div id="cart-summary" style="padding-top:20px; border-top:1px solid var(--border);">
             <div style="display:flex; justify-content:space-between; margin-bottom:20px; font-weight:800; font-size:1.2rem;">
                 <span>Total</span>
                 <span id="cart-total">$0</span>
@@ -226,7 +229,16 @@
         }
 
         function saveLocalData() {
-            localStorage.setItem('mundoColchonetas', JSON.stringify({ products, productImages }));
+            try {
+                localStorage.setItem('mundoColchonetas', JSON.stringify({ products, productImages }));
+            } catch (e) {
+                console.warn("LocalStorage lleno. Es posible que no se guarden todas las imágenes.");
+            }
+        }
+
+        // Función auxiliar para normalizar claves y asegurar coincidencia
+        function normalizeKey(key) {
+            return key ? key.toString().toUpperCase().trim().replace(/\s+/g, '') : '';
         }
 
         function renderAll() {
@@ -241,7 +253,9 @@
             const filtered = currentCategory === 'all' ? products : products.filter(p => p.categoria === currentCategory);
             
             container.innerHTML = filtered.map(p => {
-                const img = productImages[p.clave.toUpperCase().trim()] || null;
+                const claveNormalizada = normalizeKey(p.clave);
+                const img = productImages[claveNormalizada] || null;
+                
                 return `
                 <div class="product-card">
                     ${p.oferta ? `<div class="badge-offer">-${p.descuento}%</div>` : ''}
@@ -349,7 +363,7 @@
                     const desc = parseInt(clean(cols[10])) || 0;
                     
                     return {
-                        clave: clean(cols[0]),
+                        clave: clean(cols[0]), // Aquí se guarda la clave original
                         nombre: clean(cols[2]),
                         cantidad: parseInt(clean(cols[3])) || 0,
                         precioVenta: precio,
@@ -370,19 +384,25 @@
             }
         }
 
+        // CORRECCIÓN: Manejo de imágenes con normalización de claves
         function handleBulkImages(e) {
             const files = Array.from(e.target.files);
+            if (files.length === 0) return;
+
             let processed = 0;
             files.forEach(file => {
                 const reader = new FileReader();
-                const clave = file.name.split('.')[0].toUpperCase().trim();
+                // Normalizamos el nombre del archivo para la vinculación
+                const claveNormalizada = normalizeKey(file.name.split('.')[0]);
+
                 reader.onload = (event) => {
-                    productImages[clave] = event.target.result;
+                    productImages[claveNormalizada] = event.target.result;
                     processed++;
+                    
                     if(processed === files.length) {
                         saveLocalData();
-                        renderAll();
-                        showNotify(`${processed} imágenes cargadas`);
+                        renderAll(); // Esto refresca el catálogo y las tablas
+                        showNotify(`${processed} imágenes vinculadas`);
                     }
                 };
                 reader.readAsDataURL(file);
@@ -393,12 +413,17 @@
             const container = document.getElementById('products-table');
             container.innerHTML = `<table style="width:100%; border-collapse:collapse; margin-top:20px; text-align:left; font-size:0.9rem;">
                 <tr style="border-bottom:2px solid var(--border);"><th style="padding:10px;">Clave</th><th>Nombre</th><th>Precio</th><th>Imagen</th><th>Acciones</th></tr>
-                ${products.map(p => `
+                ${products.map(p => {
+                    const claveNorm = normalizeKey(p.clave);
+                    return `
                     <tr style="border-bottom:1px solid var(--border);">
-                        <td style="padding:10px; font-weight:700;">${p.clave}</td><td>${p.nombre}</td><td>$${p.precioVenta.toLocaleString()}</td>
-                        <td>${productImages[p.clave.toUpperCase().trim()] ? '✅' : '❌'}</td>
+                        <td style="padding:10px; font-weight:700;">${p.clave}</td>
+                        <td>${p.nombre}</td>
+                        <td>$${p.precioVenta.toLocaleString()}</td>
+                        <td>${productImages[claveNorm] ? '✅' : '❌'}</td>
                         <td><button onclick="deleteProd('${p.clave}')" style="color:var(--danger); background:none; border:none; cursor:pointer;">Eliminar</button></td>
-                    </tr>`).join('')}</table>`;
+                    </tr>`;
+                }).join('')}</table>`;
         }
 
         function deleteProd(c) { if(confirm("¿Eliminar producto?")) { products = products.filter(p => p.clave !== c); saveLocalData(); renderAll(); } }
@@ -407,6 +432,7 @@
     </script>
 </body>
 </html>
+
 
 
 
