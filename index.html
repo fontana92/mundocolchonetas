@@ -3,2945 +3,401 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mundo Colchonetas - Catálogo </title>
-    <link rel="stylesheet" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsprgw1qjOgP41o0Xb-f1XTXk79ipzofXSyg&s">
+    <title>Mundo Colchonetas | Catálogo Premium</title>
+    
+    <!-- Tipografía Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        /* ==================== VARIABLES Y RESET ==================== */
         :root {
-            --primary: #6a11cb;
-            --secondary: #8a2be2;
-            --accent: #ff4da6;
-            --light: #f8f9fa;
-            --dark: #1a1a2e;
-            --gray: #6c757d;
-            --success: #00b894;
-            --warning: #fdcb6e;
-            --danger: #e17055;
-            --shadow: 0 6px 20px rgba(106, 17, 203, 0.15);
-            --radius: 10px;
-            --transition: all 0.3s ease;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --dark: #0f172a;
+            --slate-500: #64748b;
+            --slate-100: #f1f5f9;
+            --border: #e2e8f0;
+            --bg: #ffffff;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --radius-lg: 20px;
+            --radius-md: 12px;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', 'Segoe UI', sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
 
-        body {
-            background: linear-gradient(135deg, #f8f9fa 0%, #f0f0f5 100%);
-            color: var(--dark);
-            line-height: 1.6;
-            min-height: 100vh;
-        }
+        body { background-color: #fcfcfd; color: var(--dark); line-height: 1.6; }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
+        .container { max-width: 1300px; margin: 0 auto; padding: 0 24px; }
 
-        /* ==================== HEADER ==================== */
+        /* ==================== NAV & HEADER ==================== */
         header {
-            background: linear-gradient(135deg, var(--dark) 0%, #2d2d44 100%);
-            color: white;
-            padding: 15px 0;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 0.8rem 0;
             position: sticky;
             top: 0;
             z-index: 1000;
         }
 
-        .header-content {
+        .header-content { display: flex; justify-content: space-between; align-items: center; }
+
+        .logo img { height: 45px; width: auto; display: block; }
+
+        .header-actions { display: flex; align-items: center; gap: 15px; }
+
+        /* ==================== BANNER / HERO ==================== */
+        .brand-banner {
+            margin-top: 30px;
+            background: var(--slate-100);
+            border-radius: var(--radius-lg);
+            padding: 60px 40px;
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            align-items: center;
+            border: 1px solid var(--border);
+            overflow: hidden;
         }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .logo-img {
-            height: 70px;
-            width: auto;
-            border-radius: 8px;
-            object-fit: contain;
-        }
-
-        .logo-text {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .logo h1 {
-            font-size: 2rem;
+        .banner-text h1 {
+            font-size: 3.5rem;
             font-weight: 800;
-            letter-spacing: 1px;
+            letter-spacing: -0.04em;
             line-height: 1.1;
-        }
-
-        .logo span {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .logo p {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            font-weight: 300;
-            margin-top: 5px;
-        }
-
-        .sync-status {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.9rem;
-        }
-
-        .sync-indicator {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background-color: var(--gray);
-        }
-
-        .sync-indicator.syncing {
-            background-color: var(--warning);
-            animation: pulse 1.5s infinite;
-        }
-
-        .sync-indicator.synced {
-            background-color: var(--success);
-        }
-
-        .sync-indicator.error {
-            background-color: var(--danger);
-        }
-
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.3; }
-            100% { opacity: 1; }
-        }
-
-        /* ==================== BOTONES ==================== */
-        .btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: var(--radius);
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            text-decoration: none;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(106, 17, 203, 0.4);
-        }
-
-        .btn-success {
-            background: linear-gradient(135deg, var(--success), #00cec9);
-            color: white;
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, var(--danger), #e17055);
-            color: white;
-        }
-
-        .btn-warning {
-            background: linear-gradient(135deg, var(--warning), #e17055);
-            color: white;
-        }
-
-        /* ==================== PANEL DE ADMINISTRACIÓN ==================== */
-        .admin-panel {
-            background: linear-gradient(135deg, var(--dark) 0%, #2d2d44 100%);
-            color: white;
-            padding: 30px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            margin: 25px 0;
-            border: 2px solid var(--secondary);
-            display: none;
-        }
-
-        .admin-panel.visible {
-            display: block;
-            animation: slideDown 0.5s ease;
-        }
-
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .admin-toggle {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border: none;
-            border-radius: 50px;
-            padding: 12px 25px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin: 20px auto;
-            box-shadow: 0 4px 15px rgba(106, 17, 203, 0.3);
-        }
-
-        .admin-toggle:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(106, 17, 203, 0.4);
-        }
-
-        .panel-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--secondary);
-        }
-
-        .panel-title i {
-            color: var(--accent);
-            font-size: 1.5rem;
-        }
-
-        .panel-title h2 {
-            font-size: 1.8rem;
-            font-weight: 700;
-        }
-
-        /* ==================== SECCIÓN DE SINCRONIZACIÓN ==================== */
-        .sync-section {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 25px;
-            border-radius: var(--radius);
-            margin-bottom: 25px;
-            border-left: 4px solid var(--secondary);
-        }
-
-        .sync-controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-top: 15px;
-        }
-
-        .control-group {
-            flex: 1;
-            min-width: 250px;
-        }
-
-        .control-group label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: 600;
-            color: white;
-        }
-
-        .control-group input,
-        .control-group select {
-            width: 100%;
-            padding: 14px 18px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: var(--radius);
-            font-size: 1rem;
-            color: white;
-            transition: var(--transition);
-        }
-
-        .control-group input:focus,
-        .control-group select:focus {
-            outline: none;
-            border-color: var(--secondary);
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .sync-info {
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: var(--radius);
-            font-size: 0.9rem;
-        }
-
-        .sync-info pre {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 10px;
-            border-radius: var(--radius);
-            margin-top: 10px;
-            overflow-x: auto;
-            font-family: monospace;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-        /* ==================== SUBIDA MASIVA DE IMÁGENES ==================== */
-        .bulk-upload-section {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 25px;
-            border-radius: var(--radius);
-            margin-top: 30px;
-            border-left: 4px solid var(--accent);
-        }
-
-        .upload-zone {
-            border: 3px dashed rgba(255, 255, 255, 0.3);
-            border-radius: var(--radius);
-            padding: 40px;
-            text-align: center;
-            cursor: pointer;
-            transition: var(--transition);
-            margin: 20px 0;
-            background: rgba(0, 0, 0, 0.2);
-        }
-
-        .upload-zone:hover {
-            border-color: var(--primary);
-            background: rgba(0, 0, 0, 0.3);
-        }
-
-        .upload-zone i {
-            font-size: 3rem;
             margin-bottom: 15px;
-            color: var(--primary);
         }
 
-        .file-list {
-            margin-top: 20px;
-            max-height: 300px;
-            overflow-y: auto;
-        }
+        .banner-text p { color: var(--slate-500); font-size: 1.2rem; margin-bottom: 25px; }
 
-        .file-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 15px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: var(--radius);
-            margin-bottom: 10px;
-        }
+        .banner-visual img { max-width: 350px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.05)); }
 
-        .file-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
+        /* ==================== BENTO GRID CATALOG ==================== */
+        .section-title { font-size: 1.8rem; font-weight: 800; margin: 60px 0 30px; letter-spacing: -0.02em; }
 
-        .file-preview {
-            width: 50px;
-            height: 50px;
-            object-fit: cover;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .file-name {
-            font-weight: 600;
-        }
-
-        .file-clave {
-            background: rgba(106, 17, 203, 0.3);
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            color: #ff4da6;
-        }
-
-        .auto-match {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border: none;
-            border-radius: var(--radius);
-            padding: 12px 25px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            margin-top: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .auto-match:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(106, 17, 203, 0.4);
-        }
-
-        .matching-rules {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 15px;
-            border-radius: var(--radius);
-            margin-top: 20px;
-            font-size: 0.9rem;
-        }
-
-        .upload-progress {
-            margin-top: 20px;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 20px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 10px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--success), #00cec9);
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        .progress-text {
-            text-align: center;
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        /* ==================== GESTIÓN DE PRODUCTOS ==================== */
-        .product-management {
-            margin-top: 30px;
-        }
-
-        .product-actions {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .action-btn {
-            padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: var(--radius);
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .action-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .products-table {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: var(--radius);
-            overflow: hidden;
-            margin-top: 20px;
-            overflow-x: auto;
-        }
-
-        .table-header {
+        .bento-grid {
             display: grid;
-            grid-template-columns: 50px 100px 2fr 80px 100px 100px 100px 100px 100px 100px;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 15px;
-            font-weight: 600;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .table-row {
-            display: grid;
-            grid-template-columns: 50px 100px 2fr 80px 100px 100px 100px 100px 100px 100px;
-            padding: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            align-items: center;
-        }
-
-        .table-row:hover {
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .table-cell {
-            padding: 5px;
-        }
-
-        .checkbox-cell {
-            text-align: center;
-        }
-
-        /* ==================== HERO SECTION ==================== */
-        .hero-3d {
-            position: relative;
-            height: 400px;
-            background: linear-gradient(135deg, var(--dark), #2d2d44);
-            border-radius: var(--radius);
-            overflow: hidden;
-            margin: 30px 0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 50px;
-        }
-
-        .hero-content {
-            color: white;
-            max-width: 500px;
-            z-index: 2;
-        }
-
-        .hero-content h2 {
-            font-size: 2.8rem;
-            font-weight: 800;
-            margin-bottom: 20px;
-            line-height: 1.2;
-        }
-
-        .hero-content p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            margin-bottom: 30px;
-        }
-
-        .hero-3d-image {
-            width: 500px;
-            height: 100%;
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero-3d-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.5));
-            animation: float 6s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(2deg); }
-        }
-
-        .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, rgba(26, 26, 46, 0.9) 0%, rgba(26, 26, 46, 0.7) 50%, rgba(26, 26, 46, 0.3) 100%);
-            z-index: 1;
-        }
-
-        /* ==================== CATEGORÍAS ==================== */
-        .categories-section {
-            margin: 30px 0;
-        }
-
-        .categories-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .categories-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            justify-content: center;
-            margin-bottom: 30px;
-        }
-
-        .category-btn {
-            padding: 12px 25px;
-            background: white;
-            border: 2px solid #e9ecef;
-            border-radius: 50px;
-            font-weight: 600;
-            color: var(--dark);
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .category-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow);
-            border-color: var(--primary);
-        }
-
-        .category-btn.active {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border-color: transparent;
-        }
-
-        /* ==================== OFERTAS ==================== */
-        .offers-section {
-            margin: 40px 0;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
-        }
-
-        .section-title {
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--dark);
-            position: relative;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .section-title:after {
-            content: '';
-            position: absolute;
-            bottom: -17px;
-            left: 0;
-            width: 80px;
-            height: 4px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 2px;
-        }
-
-        .section-title i {
-            color: var(--warning);
-        }
-
-        .offer-badge {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background: linear-gradient(135deg, var(--warning), #e17055);
-            color: white;
-            padding: 8px 15px;
-            border-radius: 25px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            box-shadow: 0 3px 10px rgba(253, 203, 110, 0.3);
-            z-index: 2;
-        }
-
-        .original-price {
-            text-decoration: line-through;
-            color: var(--gray);
-            font-size: 1rem;
-            margin-right: 10px;
-        }
-
-        .discount-price {
-            color: var(--accent);
-            font-weight: 800;
-            font-size: 1.8rem;
-        }
-
-        /* ==================== PRODUCTOS ==================== */
-        .products-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 40px 0 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
-        }
-
-        .products-header h2 {
-            color: var(--dark);
-            font-size: 2rem;
-            font-weight: 800;
-            position: relative;
-        }
-
-        .products-header h2:after {
-            content: '';
-            position: absolute;
-            bottom: -17px;
-            left: 0;
-            width: 80px;
-            height: 4px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 2px;
-        }
-
-        .product-count {
-            color: var(--gray);
-            font-size: 1.1rem;
-            font-weight: 500;
-        }
-
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 30px;
-            margin-bottom: 50px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 60px;
         }
 
         .product-card {
             background: white;
-            border-radius: var(--radius);
-            overflow: hidden;
-            box-shadow: var(--shadow);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            padding: 24px;
             transition: var(--transition);
+            display: flex; flex-direction: column;
             position: relative;
-            border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .product-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 35px rgba(106, 17, 203, 0.2);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
+            border-color: var(--primary);
         }
 
-        .product-image {
-            height: 220px;
-            background: linear-gradient(135deg, #f5f5f5, #e9e9e9);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--gray);
-            position: relative;
-            overflow: hidden;
+        .product-image-container {
+            width: 100%; height: 220px; background: var(--slate-100);
+            border-radius: var(--radius-md); margin-bottom: 20px;
+            display: flex; align-items: center; justify-content: center;
         }
 
-        .product-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
+        .product-image-container img { max-width: 85%; max-height: 85%; object-fit: contain; }
 
-        .product-card:hover .product-image img {
-            transform: scale(1.05);
-        }
+        .price-box .current-price { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
 
-        .product-image .placeholder {
-            font-size: 4.5rem;
-            opacity: 0.4;
-            color: var(--primary);
-        }
+        /* ==================== BUTTONS ==================== */
+        .btn { padding: 12px 24px; border-radius: 99px; font-weight: 600; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 8px; transition: var(--transition); }
+        .btn-primary { background: var(--dark); color: white; }
+        .btn-primary:hover { background: var(--primary); transform: scale(1.02); }
 
-        .stock-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: linear-gradient(135deg, var(--success), #00cec9);
-            color: white;
-            padding: 8px 15px;
-            border-radius: 25px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            box-shadow: 0 3px 10px rgba(0, 184, 148, 0.3);
-            z-index: 2;
+        /* ==================== CARRITO & ADMIN ==================== */
+        .cart-sidebar {
+            position: fixed; top: 0; right: -420px; width: 400px; height: 100vh;
+            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px);
+            z-index: 2000; border-left: 1px solid var(--border); transition: var(--transition);
+            padding: 30px; display: flex; flex-direction: column;
         }
+        .cart-sidebar.active { right: 0; }
 
-        .low-stock {
-            background: linear-gradient(135deg, var(--accent), #ff7675);
-        }
+        .admin-panel { background: white; border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 40px; margin: 40px 0; display: none; }
+        .admin-panel.visible { display: block; }
 
-        .image-counter {
-            position: absolute;
-            bottom: 15px;
-            right: 15px;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            z-index: 2;
-        }
-
-        .product-info {
-            padding: 25px;
-        }
-
-        .product-category {
-            color: var(--secondary);
-            font-size: 0.9rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .product-name {
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: var(--dark);
-            line-height: 1.3;
-        }
-
-        .product-description {
-            color: var(--gray);
-            font-size: 0.95rem;
-            margin-bottom: 20px;
-            height: 45px;
-            overflow: hidden;
-            line-height: 1.5;
-        }
-
-        .product-details {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding: 15px;
-            background: linear-gradient(135deg, #f8f9fa, #f1f1f6);
-            border-radius: var(--radius);
-        }
-
-        .price {
-            font-weight: 800;
-            font-size: 1.8rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .product-code {
-            font-size: 0.9rem;
-            color: var(--gray);
-            font-weight: 600;
-            background: white;
-            padding: 5px 12px;
-            border-radius: 20px;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-        }
-
-        .add-to-cart {
-            width: 100%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border: none;
-            border-radius: var(--radius);
-            padding: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-size: 1.05rem;
-            letter-spacing: 0.5px;
-            box-shadow: 0 4px 15px rgba(106, 17, 203, 0.3);
-        }
-
-        .add-to-cart:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(106, 17, 203, 0.4);
-        }
-
-        /* ==================== WHATSAPP BUTTON ==================== */
-        .whatsapp-button {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: linear-gradient(135deg, #25D366, #128C7E);
-            color: white;
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.2rem;
-            box-shadow: 0 6px 25px rgba(37, 211, 102, 0.4);
-            cursor: pointer;
-            z-index: 1000;
-            transition: var(--transition);
-            text-decoration: none;
-        }
-
-        .whatsapp-button:hover {
-            transform: scale(1.1) rotate(5deg);
-            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.6);
-        }
-
-        .whatsapp-button .tooltip {
-            position: absolute;
-            right: 85px;
-            background: var(--dark);
-            color: white;
-            padding: 10px 20px;
-            border-radius: var(--radius);
-            font-size: 0.9rem;
-            white-space: nowrap;
-            opacity: 0;
-            transform: translateX(20px);
-            transition: var(--transition);
-            pointer-events: none;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .whatsapp-button .tooltip:after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 100%;
-            margin-top: -5px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: transparent transparent transparent var(--dark);
-        }
-
-        .whatsapp-button:hover .tooltip {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        /* ==================== FOOTER ==================== */
-        footer {
-            background: var(--dark);
-            color: white;
-            padding: 50px 0 25px;
-            margin-top: 50px;
-        }
-
-        .footer-content {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-
-        .footer-section {
-            flex: 1;
-            min-width: 280px;
-        }
-
-        .footer-section h3 {
-            font-size: 1.5rem;
-            margin-bottom: 25px;
-            color: white;
-            font-weight: 700;
-            position: relative;
-            padding-bottom: 10px;
-        }
-
-        .footer-section h3:after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 50px;
-            height: 3px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-        }
-
-        .footer-section p {
-            margin-bottom: 15px;
-            opacity: 0.9;
-            line-height: 1.7;
-        }
-
-        .footer-section i {
-            margin-right: 12px;
-            color: var(--secondary);
-            width: 20px;
-        }
-
-        .social-icons {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .social-icons a {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 45px;
-            height: 45px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border-radius: 50%;
-            font-size: 1.2rem;
-            transition: var(--transition);
-            text-decoration: none;
-        }
-
-        .social-icons a:hover {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            transform: translateY(-5px);
-        }
-
-        .copyright {
-            text-align: center;
-            padding-top: 25px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            opacity: 0.7;
-            font-size: 0.95rem;
-        }
-
-        /* ==================== MODALES ==================== */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(26, 26, 46, 0.95);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: var(--radius);
-            width: 90%;
-            max-width: 800px;
-            max-height: 90vh;
-            overflow-y: auto;
-            padding: 40px;
-            position: relative;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-            animation: modalSlideIn 0.4s ease;
-        }
-
-        @keyframes modalSlideIn {
-            from { transform: translateY(-30px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 2rem;
-            cursor: pointer;
-            color: var(--gray);
-            transition: var(--transition);
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-        }
-
-        .close-modal:hover {
-            color: var(--accent);
-            background: rgba(0, 0, 0, 0.05);
-        }
-
-        /* ==================== MODAL DE REVISIÓN ==================== */
-        .review-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        .review-item {
-            border: 2px solid #e9ecef;
-            border-radius: var(--radius);
-            padding: 15px;
-            text-align: center;
-            transition: var(--transition);
-        }
-
-        .review-item.matched {
-            border-color: var(--success);
-            background: rgba(0, 184, 148, 0.1);
-        }
-
-        .review-item.unmatched {
-            border-color: var(--warning);
-            background: rgba(253, 203, 110, 0.1);
-        }
-
-        .review-image {
-            width: 100%;
-            height: 120px;
-            object-fit: cover;
-            border-radius: var(--radius);
-            margin-bottom: 10px;
-            background: #f5f5f5;
-        }
-
-        .review-clave {
-            font-weight: 600;
-            margin-bottom: 5px;
-            color: var(--dark);
-        }
-
-        .review-product {
-            font-size: 0.9rem;
-            color: var(--gray);
-            margin-bottom: 10px;
-            height: 40px;
-            overflow: hidden;
-        }
-
-        .review-status {
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .status-matched {
-            background: rgba(0, 184, 148, 0.2);
-            color: var(--success);
-        }
-
-        .status-unmatched {
-            background: rgba(253, 203, 110, 0.2);
-            color: #e17055;
-        }
-
-        /* ==================== TOOL DE RENOMBRADO ==================== */
-        .rename-tool {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 20px;
-            border-radius: var(--radius);
-            margin-top: 20px;
-            border: 2px solid var(--accent);
-        }
-
-        .rename-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        .rename-item {
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: var(--radius);
-        }
-
-        .rename-old {
-            color: var(--warning);
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .rename-new {
-            color: var(--success);
-            font-weight: 600;
-        }
-
-        /* ==================== NOTIFICACIONES ==================== */
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 25px;
-            border-radius: var(--radius);
-            color: white;
-            font-weight: 600;
-            z-index: 3000;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            transform: translateX(150%);
-            transition: transform 0.3s ease;
-        }
-
-        .notification.show {
-            transform: translateX(0);
-        }
-
-        .notification.success {
-            background: linear-gradient(135deg, var(--success), #00cec9);
-        }
-
-        .notification.error {
-            background: linear-gradient(135deg, var(--danger), #e17055);
-        }
-
-        .notification.warning {
-            background: linear-gradient(135deg, var(--warning), #e17055);
-        }
-
-        .notification.info {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-        }
-
-        /* ==================== RESPONSIVE ==================== */
-        @media (max-width: 1200px) {
-            .hero-3d {
-                flex-direction: column;
-                height: auto;
-                padding: 40px;
-                text-align: center;
-            }
-            
-            .hero-content {
-                max-width: 100%;
-                margin-bottom: 40px;
-            }
-            
-            .hero-3d-image {
-                width: 100%;
-                max-width: 500px;
-                height: 300px;
-            }
-            
-            .table-header,
-            .table-row {
-                grid-template-columns: 40px 80px 1fr 70px 90px 90px 90px 90px 90px;
-                font-size: 0.9rem;
-            }
-        }
-
-        @media (max-width: 992px) {
-            .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            }
-            
-            .header-content {
-                flex-direction: column;
-                gap: 20px;
-            }
-            
-            .footer-content {
-                flex-direction: column;
-            }
-            
-            .categories-container {
-                justify-content: flex-start;
-                overflow-x: auto;
-                padding-bottom: 10px;
-            }
-            
-            .sync-controls {
-                flex-direction: column;
-            }
-            
-            .table-header,
-            .table-row {
-                grid-template-columns: 30px 70px 1fr 60px 80px 80px 80px;
-                overflow-x: auto;
-            }
-        }
+        .category-nav { display: flex; gap: 12px; margin: 40px 0; overflow-x: auto; padding-bottom: 10px; }
+        .cat-btn { padding: 8px 20px; background: white; border: 1px solid var(--border); border-radius: 99px; font-weight: 500; cursor: pointer; }
+        .cat-btn.active { background: var(--dark); color: white; }
 
         @media (max-width: 768px) {
-            .control-row {
-                flex-direction: column;
-            }
-            
-            .modal-content {
-                padding: 25px;
-            }
-            
-            .products-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-            
-            .hero-content h2 {
-                font-size: 2.2rem;
-            }
-            
-            .hero-3d {
-                padding: 30px;
-            }
-            
-            .section-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-            
-            .product-actions {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .products-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .whatsapp-button .tooltip {
-                display: none;
-            }
-            
-            .hero-content h2 {
-                font-size: 1.8rem;
-            }
+            .brand-banner { flex-direction: column; text-align: center; padding: 40px 20px; }
+            .banner-visual img { max-width: 200px; margin-top: 30px; }
+            .banner-text h1 { font-size: 2.2rem; }
+            .cart-sidebar { width: 100%; right: -100%; }
         }
     </style>
 </head>
 <body>
-    <!-- ==================== HEADER ==================== -->
+
     <header>
         <div class="container header-content">
             <div class="logo">
-                <img src="https://via.placeholder.com/150x70/6a11cb/ffffff?text=LOGO+MC" alt="Mundo Colchonetas" class="logo-img" id="logo-img">
-                <div class="logo-text">
-                    <h1>Mundo <span>Colchonetas</span></h1>
-                    <p>Catálogo online</p>
-                </div>
+                <img src="https://i.ibb.co/v4m0f5f/logo-mundo.png" alt="Mundo Colchonetas">
             </div>
-            <div class="sync-status">
-                <div class="sync-indicator" id="sync-indicator"></div>
-                <span id="sync-status-text">Listo</span>
+            <div class="header-actions">
+                <button class="btn btn-primary" onclick="toggleCart()">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="header-cart-count">0</span>
+                </button>
+                <button class="cat-btn" id="logout-btn" onclick="logout()" style="display:none;">Salir</button>
             </div>
         </div>
     </header>
 
-    <!-- ==================== HERO SECTION ==================== -->
     <main class="container">
-        <section class="hero-3d">
-            <div class="overlay"></div>
-            <div class="hero-content">
-                <h2>Equipamiento Fitness de Alta Calidad</h2>
-                <p>Somos Mundo Colchonetas!! Nos dedicamos a la fabricacion y venta de delementos deportivos por mayor y menor.
-                  - - Entrena con calidad y confianza con Mundo colchonetas - -</p>
-                <button class="add-to-cart" onclick="scrollToProducts()">
-                    <i class="fas fa-dumbbell"></i> Todos los productos
-                </button>
+        <!-- BANNER PRINCIPAL -->
+        <section class="brand-banner">
+            <div class="banner-text">
+                <h1>Equipamiento de<br>otro planeta.</h1>
+                <p>Calidad premium para potenciar tu entrenamiento diario.</p>
+                <button class="btn btn-primary" onclick="scrollToCatalog()">Explorar Catálogo</button>
             </div>
-            <div class="hero-3d-image">
-                <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExcGloaGV5amFkdXdyZmZnY3IxaHhib2EzdmwzdTA2YjJ1cGJrY3Z2OSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/U4FkC2VqpeNRHjTDQ5/giphy.gif" alt="Persona haciendo ejercicio 3D" id="hero-image">
+            <div class="banner-visual">
+                <img src="https://i.ibb.co/v4m0f5f/logo-mundo.png" alt="Logo Banner">
             </div>
         </section>
 
-        <!-- ==================== OFERTAS ==================== -->
-        <section class="offers-section" id="offers-section">
-            <div class="section-header">
-                <h2 class="section-title">
-                    <i class="fas fa-fire"></i> Gangas
-                </h2>
-                <div class="product-count" id="offers-count">0 ofertas</div>
-            </div>
-            <div class="products-grid" id="offers-container">
-                <!-- Ofertas se cargan aquí -->
-            </div>
-        </section>
+        <!-- CATEGORÍAS -->
+        <div class="category-nav" id="categories-container"></div>
 
-        <!-- ==================== CATEGORÍAS ==================== -->
-        <section class="categories-section">
-            <h2 class="categories-title">Explora por Categorías</h2>
-            <div class="categories-container" id="categories-container">
-                <!-- Categorías se cargan aquí -->
-            </div>
-        </section>
+        <!-- CATÁLOGO BENTO -->
+        <h2 class="section-title" id="catalog-title">Colección de Productos</h2>
+        <div class="bento-grid" id="products-container"></div>
 
-        <!-- ==================== PANEL DE ADMINISTRACIÓN ==================== -->
-        <button class="admin-toggle" id="admin-toggle">
-            <i class="fas fa-cog"></i> Panel de Administración
-        </button>
+        <!-- BOTÓN PANEL -->
+        <div style="text-align: center; margin: 40px 0;">
+            <button class="cat-btn" onclick="checkAdminAccess()">
+                <i class="fas fa-lock"></i> Panel de Administración
+            </button>
+        </div>
 
+        <!-- PANEL ADMIN -->
         <section class="admin-panel" id="admin-panel">
-            <div class="panel-title">
-                <i class="fas fa-sync-alt"></i>
-                <h2>Sincronización con Excel</h2>
-            </div>
-            
-            <!-- Sincronización -->
-            <div class="sync-section">
-                <h3><i class="fas fa-file-excel"></i> Configuración</h3>
-                <p>Conecta tu catálogo con Google Sheets para actualizaciones automáticas.</p>
-                
-                <div class="sync-controls">
-                    <div class="control-group">
-                        <label for="excel-url">URL de Google Sheets</label>
-                        <input type="text" id="excel-url" placeholder="https://docs.google.com/spreadsheets/d/..." 
-                               value="https://docs.google.com/spreadsheets/d/1X8yB6wRqJ6Z3h7K9L0M2N1P4Q5R6S7T8U9V0W1X2Y3Z4A5B6C7D8E9F0G1H2/edit">
-                        <small style="color: rgba(255, 255, 255, 0.7); display: block; margin-top: 5px;">
-                            Comparte el archivo como "Cualquier persona con el enlace puede ver"
-                        </small>
-                    </div>
-                    
-                    <div class="control-group">
-                        <label for="sync-interval">Intervalo de Sincronización</label>
-                        <select id="sync-interval">
-                            <option value="0">Manual</option>
-                            <option value="300000">Cada 5 minutos</option>
-                            <option value="600000">Cada 10 minutos</option>
-                            <option value="1800000">Cada 30 minutos</option>
-                            <option value="3600000" selected>Cada 1 hora</option>
-                            <option value="86400000">Cada 24 horas</option>
-                        </select>
-                    </div>
+            <h2 class="section-title" style="margin-top:0;">Configuración del Catálogo</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                <div style="background:var(--slate-100); padding:20px; border-radius:12px;">
+                    <label>Google Sheets URL</label>
+                    <input type="text" id="excel-url" style="width:100%; padding:10px; margin-top:10px; border-radius:8px; border:1px solid var(--border);">
                 </div>
-                
-                <div class="sync-controls" style="margin-top: 20px;">
-                    <button class="btn btn-success" id="sync-now">
-                        <i class="fas fa-sync"></i> Sincronizar Ahora
-                    </button>
-                    <button class="btn btn-primary" id="test-connection">
-                        <i class="fas fa-plug"></i> Probar Conexión
-                    </button>
-                    <button class="btn btn-danger" id="reset-data">
-                        <i class="fas fa-trash"></i> Restablecer Datos
-                    </button>
-                </div>
-                
-                <div class="sync-info">
-                    <h4><i class="fas fa-info-circle"></i> Instrucciones:</h4>
-                    <ol style="margin-left: 20px; margin-top: 10px;">
-                        <li>Crea un Google Sheets con tus productos</li>
-                        <li>Comparte el archivo como "Cualquier persona con el enlace puede ver"</li>
-                        <li>Copia la URL y pégala arriba</li>
-                        <li>Configura el intervalo de sincronización</li>
-                        <li>¡Listo! Los cambios en Excel se reflejarán automáticamente</li>
-                    </ol>
-                    
-                    <div id="sync-logs" style="display: none; margin-top: 15px;">
-                        <h4>Última sincronización:</h4>
-                        <pre id="last-sync-log"></pre>
-                    </div>
+                <div style="display:flex; align-items:flex-end; gap:10px;">
+                    <button class="btn btn-primary" onclick="syncWithExcel()">Sincronizar</button>
                 </div>
             </div>
-
-            <!-- Subida Masiva de Imágenes -->
-            <div class="bulk-upload-section" id="bulk-upload-section">
-                <h3><i class="fas fa-images"></i> Subida Masiva de Imágenes</h3>
-                <p>Sube múltiples imágenes a la vez. El sistema intentará asignarlas automáticamente.</p>
-                
-                <div class="upload-zone" id="upload-zone">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                    <h4>Arrastra y suelta imágenes aquí</h4>
-                    <p>o haz clic para seleccionar archivos</p>
-                    <p style="font-size: 0.9rem; margin-top: 10px; color: rgba(255, 255, 255, 0.7);">
-                        Formatos: JPG, PNG, GIF, WebP | Máx. 5MB por imagen
-                    </p>
-                    <input type="file" id="bulk-image-upload" accept="image/*" multiple style="display: none;">
-                </div>
-                
-                <div class="file-list" id="file-list" style="display: none;">
-                    <h4>Imágenes seleccionadas: <span id="file-count">0</span></h4>
-                </div>
-                
-                <div class="matching-rules">
-                    <h4><i class="fas fa-magic"></i> Reglas de Asignación Automática</h4>
-                    <p>El sistema intentará asignar imágenes buscando coincidencias en los nombres:</p>
-                    <ul>
-                        <li><strong>CORBAG10K.jpg</strong> → Producto con clave "CORBAG10K"</li>
-                        <li><strong>colchoneta_premium.jpg</strong> → Producto con "colchoneta" y "premium"</li>
-                        <li><strong>mancuernas_5kg.png</strong> → Producto con "mancuernas" y "5kg"</li>
-                    </ul>
-                </div>
-                
-                <button class="auto-match" id="auto-match-btn" disabled>
-                    <i class="fas fa-robot"></i> Asignar Imágenes Automáticamente
-                </button>
-                
-                <button class="action-btn" onclick="quickRenameTool()" style="margin-left: 15px;">
-                    <i class="fas fa-font"></i> Renombrar Imágenes
-                </button>
-                
-                <div class="upload-progress" id="upload-progress" style="display: none;">
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progress-fill"></div>
-                    </div>
-                    <div class="progress-text" id="progress-text">0% completado</div>
-                </div>
-            </div>
-
-            <!-- Gestión de Productos -->
-            <div class="product-management">
-                <h3><i class="fas fa-boxes"></i> Gestión de Productos</h3>
-                
-                <div class="product-actions">
-                    <button class="action-btn" onclick="addNewProduct()">
-                        <i class="fas fa-plus"></i> Agregar Producto
-                    </button>
-                    <button class="action-btn" onclick="editSelectedProduct()">
-                        <i class="fas fa-edit"></i> Editar Seleccionado
-                    </button>
-                    <button class="action-btn" onclick="deleteSelectedProducts()">
-                        <i class="fas fa-trash"></i> Eliminar Seleccionados
-                    </button>
-                    <button class="action-btn" onclick="exportToExcel()">
-                        <i class="fas fa-download"></i> Exportar a Excel
-                    </button>
-                </div>
-                
-                <div class="products-table" id="products-table">
-                    <!-- Tabla de productos -->
-                </div>
-            </div>
-        </section>
-
-        <!-- ==================== CATÁLOGO ==================== -->
-        <section id="products-section">
-            <div class="products-header">
-                <h2>Catálogo Completo</h2>
-                <div class="product-count">Mostrando <span id="shown-products">0</span> productos</div>
-            </div>
-            
-            <div class="products-grid" id="products-container">
-                <!-- Productos se cargan aquí -->
-            </div>
+            <div id="products-table" style="overflow-x: auto;"></div>
         </section>
     </main>
 
-    <!-- ==================== WHATSAPP BUTTON ==================== -->
-    <a href="https://wa.me/5491168705261?text=Hola%20Mundo%20Colchonetas%2C%20me%20interesa%20comprar%20algunos%20productos" 
-       class="whatsapp-button" target="_blank">
-        <i class="fab fa-whatsapp"></i>
-        <div class="tooltip">¡Consulta por WhatsApp!</div>
-    </a>
-
-    <!-- ==================== FOOTER ==================== -->
-    <footer>
-        <div class="container footer-content">
-            <div class="footer-section">
-                <h3>Mundo Colchonetas</h3>
-                <p><i class="fas fa-map-marker-alt"></i> Presidente Derqui, Buenos Aires</p>
-                <p><i class="fas fa-phone"></i> 011 - 1568705261</p>
-                <p><i class="fas fa-envelope"></i> fontanaesteban92@gamil.com</p>
-                <p><i class="fab fa-whatsapp"></i> +54 9 1168705261</p>
-            </div>
-            <div class="footer-section">
-                <h3>Horarios de Atención</h3>
-                <p>Lunes a Viernes: 9:00 - 18:00</p>
-                <p>Sábados: 9:00 - 13:00</p>
-                <p>Domingos: Cerrado</p>
-                <p>Consultas por WhatsApp: 24/7</p>
-            </div>
-            <div class="footer-section">
-                <h3>Síguenos</h3>
-                <div class="social-icons">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-tiktok"></i></a>
-                    <a href="#"><i class="fab fa-youtube"></i></a>
-                </div>
-                <p style="margin-top: 25px;">Enviamos a todo el país</p>
-                <p>Métodos de pago: Efectivo, Transferencia, Tarjetas</p>
-            </div>
+    <!-- CARRITO -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+            <h3>Tu Pedido</h3>
+            <button onclick="toggleCart()" style="background:none; border:none; font-size:1.5rem;">&times;</button>
         </div>
-        <div class="container copyright">
-            <p>&copy; 2020 Mundo Colchonetas. Todos los derechos reservados.</p>
-        </div>
-    </footer>
-
-    <!-- ==================== MODAL DE REVISIÓN ==================== -->
-    <div class="modal" id="review-modal">
-        <div class="modal-content">
-            <div class="close-modal" onclick="closeReviewModal()">&times;</div>
-            <h3><i class="fas fa-search"></i> Revisar Asignaciones de Imágenes</h3>
-            <p>Revisa y corrige las asignaciones automáticas antes de subir.</p>
-            
-            <div id="review-stats" style="margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: var(--radius);">
-                <div style="display: flex; justify-content: space-around; text-align: center;">
-                    <div>
-                        <div style="font-size: 2rem; font-weight: 800; color: var(--success);" id="matched-count">0</div>
-                        <div style="color: var(--gray);">Asignadas</div>
-                    </div>
-                    <div>
-                        <div style="font-size: 2rem; font-weight: 800; color: var(--warning);" id="unmatched-count">0</div>
-                        <div style="color: var(--gray);">Sin asignar</div>
-                    </div>
-                    <div>
-                        <div style="font-size: 2rem; font-weight: 800; color: var(--primary);" id="total-review-count">0</div>
-                        <div style="color: var(--gray);">Total</div>
-                    </div>
-                </div>
+        <div id="cart-items" style="flex:1; overflow-y:auto;"></div>
+        <div style="padding-top:20px; border-top:1px solid var(--border);">
+            <div style="display:flex; justify-content:space-between; margin-bottom:20px; font-weight:800; font-size:1.2rem;">
+                <span>Total</span>
+                <span id="cart-total">$0</span>
             </div>
-            
-            <div class="review-grid" id="review-grid">
-                <!-- Items de revisión -->
-            </div>
-            
-            <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
-                <button class="btn btn-primary" onclick="closeReviewModal()">
-                    <i class="fas fa-times"></i> Cancelar
-                </button>
-                <button class="btn btn-success" onclick="processBulkUpload()">
-                    <i class="fas fa-check"></i> Confirmar y Subir
-                </button>
-            </div>
+            <button class="btn btn-primary" style="width:100%; justify-content:center; padding:15px;" onclick="checkoutViaWhatsApp()">
+                <i class="fab fa-whatsapp"></i> Consultar WhatsApp
+            </button>
         </div>
     </div>
 
-    <!-- ==================== MODAL DE EDICIÓN ==================== -->
-    <div class="modal" id="edit-modal">
-        <div class="modal-content">
-            <div class="close-modal" onclick="closeEditModal()">&times;</div>
-            <h3 id="edit-modal-title">Agregar Nuevo Producto</h3>
-            <form id="product-form">
-                <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 20px;">
-                    <div style="flex: 1; min-width: 200px;">
-                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: var(--dark);">Clave *</label>
-                        <input type="text" id="edit-clave" required style="width: 100%; padding: 12px 15px; border: 2px solid #e9ecef; border-radius: var(--radius);">
-                    </div>
-                    <div style="flex: 1; min-width: 200px;">
-                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: var(--dark);">Nombre *</label>
-                        <input type="text" id="edit-nombre" required style="width: 100%; padding: 12px 15px; border: 2px solid #e9ecef; border-radius: var(--radius);">
-                    </div>
-                </div>
-                
-                <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 20px;">
-                    <div style="flex: 1; min-width: 200px;">
-                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: var(--dark);">Categoría *</label>
-                        <select id="edit-categoria" required style="width: 100%; padding: 12px 15px; border: 2px solid #e9ecef; border-radius: var(--radius);">
-                            <option value="">Seleccionar...</option>
-                            <option value="COLCHONETAS">Colchonetas</option>
-                            <option value="COREBAG">Core Bag</option>
-                            <option value="BODY PUMP">Body Pump</option>
-                            <option value="MANCUERNAS">Mancuernas</option>
-                            <option value="MEDICINE BALL">Medicine Ball</option>
-                            <option value="TOBILLERAS">Tobilleras</option>
-                            <option value="PESAS RUSAS">Pesas Rusas</option>
-                            <option value="FIT">Fit</option>
-                        </select>
-                    </div>
-                    <div style="flex: 1; min-width: 200px;">
-                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: var(--dark);">Unidad</label>
-                        <input type="text" id="edit-unidad" value="UN" style="width: 100%; padding: 12px 15px; border: 2px solid #e9ecef; border-radius: var(--radius);">
-                    </div>
-                </div>
-                
-                <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 20px;">
-                    <div style="flex: 1; min-width: 200px;">
-                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: var(--dark);">Cantidad *</label>
-                        <input type="number" id="edit-cantidad" min="0" required style="width: 100%; padding: 12px 15px; border: 2px solid #e9ecef; border-radius: var(--radius);">
-                    </div>
-                    <div style="flex: 1; min-width: 200px;">
-                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: var(--dark);">Precio de Venta *</label>
-                        <input type="number" id="edit-precioVenta" min="0" required style="width: 100%; padding: 12px 15px; border: 2px solid #e9ecef; border-radius: var(--radius);">
-                    </div>
-                </div>
-                
-                <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 20px;">
-                    <div style="flex: 1; min-width: 200px;">
-                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: var(--dark);">¿En Oferta?</label>
-                        <select id="edit-oferta" style="width: 100%; padding: 12px 15px; border: 2px solid #e9ecef; border-radius: var(--radius);">
-                            <option value="false">No</option>
-                            <option value="true">Sí</option>
-                        </select>
-                    </div>
-                    <div style="flex: 1; min-width: 200px;">
-                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: var(--dark);">% Descuento</label>
-                        <input type="number" id="edit-descuento" min="0" max="100" value="10" style="width: 100%; padding: 12px 15px; border: 2px solid #e9ecef; border-radius: var(--radius);">
-                    </div>
-                </div>
-                
-                <div style="margin-bottom: 20px;">
-                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: var(--dark);">Descripción</label>
-                    <textarea id="edit-descripcion" rows="3" style="width: 100%; padding: 12px 15px; border: 2px solid #e9ecef; border-radius: var(--radius);"></textarea>
-                </div>
-                
-                <div style="display: flex; gap: 15px; justify-content: flex-end;">
-                    <button type="button" class="btn btn-primary" onclick="closeEditModal()">
-                        <i class="fas fa-times"></i> Cancelar
-                    </button>
-                    <button type="submit" class="btn btn-success">
-                        <i class="fas fa-save"></i> Guardar Producto
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- ==================== MODAL DE RENOMBRADO ==================== -->
-    <div class="modal" id="rename-modal">
-        <div class="modal-content">
-            <div class="close-modal" onclick="closeRenameModal()">&times;</div>
-            <h3><i class="fas fa-font"></i> Herramienta de Renombrado Masivo</h3>
-            <p>Convierte nombres genéricos de imágenes a nombres descriptivos para asignación automática.</p>
-            
-            <div class="rename-tool">
-                <h4><i class="fas fa-download"></i> Paso 1: Descargar guía CSV</h4>
-                <p>Descarga este archivo CSV que contiene todos tus productos. Úsalo como referencia para renombrar imágenes.</p>
-                <button class="btn btn-success" onclick="downloadRenameGuide()">
-                    <i class="fas fa-file-csv"></i> Descargar Guía CSV
-                </button>
-                
-                <div style="margin-top: 30px;">
-                    <h4><i class="fas fa-exchange-alt"></i> Paso 2: Ejemplos de renombrado</h4>
-                    <div class="rename-grid">
-                        <div class="rename-item">
-                            <div class="rename-old">ANTES: DSC_1234.jpg</div>
-                            <div class="rename-new">DESPUÉS: CORBAG10K.jpg</div>
-                        </div>
-                        <div class="rename-item">
-                            <div class="rename-old">ANTES: IMG_4567.jpg</div>
-                            <div class="rename-new">DESPUÉS: COLCHONETA_PREMIUM.jpg</div>
-                        </div>
-                        <div class="rename-item">
-                            <div class="rename-old">ANTES: foto_producto.jpg</div>
-                            <div class="rename-new">DESPUÉS: MANCUERNAS_5KG.jpg</div>
-                        </div>
-                        <div class="rename-item">
-                            <div class="rename-old">ANTES: product_image.jpg</div>
-                            <div class="rename-new">DESPUÉS: PESAS_RUSAS_10KG.jpg</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div style="margin-top: 30px;">
-                    <h4><i class="fas fa-lightbulb"></i> Consejos para nombrar imágenes:</h4>
-                    <ul style="margin-left: 20px; margin-top: 10px;">
-                        <li><strong>Nombres que funcionan mejor:</strong></li>
-                        <li>CORBAG10K.jpg → PERFECTO (coincide con clave)</li>
-                        <li>colchoneta_premium_100x50.jpg → BUENO (contiene palabras clave)</li>
-                        <li>mancuernas_hexagonal_5kg_par.jpg → BUENO (descripción detallada)</li>
-                        <li style="margin-top: 10px;"><strong>Nombres a evitar:</strong></li>
-                        <li>IMG_1234.jpg → MALO (no hay coincidencia)</li>
-                        <li>DSC_9876.jpg → MALO (no hay coincidencia)</li>
-                        <li>foto.jpg → MUY MALO (muy genérico)</li>
-                    </ul>
-                </div>
-                
-                <div style="margin-top: 30px; padding: 15px; background: rgba(0, 0, 0, 0.1); border-radius: var(--radius);">
-                    <h4><i class="fas fa-tools"></i> Herramientas recomendadas para renombrar:</h4>
-                    <ul style="margin-left: 20px; margin-top: 10px;">
-                        <li><strong>Windows:</strong> Bulk Rename Utility (gratis)</li>
-                        <li><strong>Mac:</strong> NameChanger (gratis)</li>
-                        <li><strong>Online:</strong> RenameFilesOnline.com</li>
-                        <li><strong>Multiplataforma:</strong> Advanced Renamer</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
-                <button class="btn btn-primary" onclick="closeRenameModal()">
-                    <i class="fas fa-times"></i> Cerrar
-                </button>
+    <div class="modal" id="login-modal" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:none; align-items:center; justify-content:center; z-index:3000;">
+        <div style="background:white; padding:40px; border-radius:24px; width:90%; max-width:400px;">
+            <h3>Acceso Admin</h3>
+            <div style="display:flex; flex-direction:column; gap:15px; margin-top:20px;">
+                <input type="text" id="login-username" placeholder="Usuario" style="padding:12px; border-radius:8px; border:1px solid var(--border);">
+                <input type="password" id="login-password" placeholder="Contraseña" style="padding:12px; border-radius:8px; border:1px solid var(--border);">
+                <button class="btn btn-primary" onclick="login()">Entrar</button>
             </div>
         </div>
     </div>
-
-    <!-- ==================== NOTIFICACIONES ==================== -->
-    <div id="notification-container"></div>
 
     <script>
-        // ==================== CONFIGURACIÓN ====================
+        // --- CONFIGURACIÓN ---
         const CONFIG = {
             DEFAULT_SHEET_URL: "https://docs.google.com/spreadsheets/d/1X8yB6wRqJ6Z3h7K9L0M2N1P4Q5R6S7T8U9V0W1X2Y3Z4A5B6C7D8E9F0G1H2/edit",
-            DEFAULT_SYNC_INTERVAL: 3600000,
-            EXCEL_COLUMNS: ["Clave", "Unidad", "Nombre", "Cantidad", "PrecioCompra", "PrecioVenta", "Reserva", "Categoria", "Descripcion", "Oferta", "Descuento"]
+            ADMIN_CREDENTIALS: { username: "admin", password: "mundo123" }
         };
 
-        // ==================== ESTADO GLOBAL ====================
         let products = [];
         let productImages = {};
         let cart = [];
-        let syncInterval = null;
-        let isSyncing = false;
-        let selectedProducts = new Set();
-        let selectedFiles = [];
-        let fileMatches = {};
-        let currentUploadIndex = 0;
         let currentCategory = 'all';
+        let isAdminLoggedIn = false;
 
-        // ==================== INICIALIZACIÓN ====================
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log("Iniciando Mundo Colchonetas...");
-            
-            // Cargar datos locales
+        document.addEventListener('DOMContentLoaded', () => {
             loadLocalData();
-            
-            // Configurar eventos
-            setupEventListeners();
-            
-            // Iniciar sincronización automática
-            initializeAutoSync();
-            
-            // Renderizar interfaz
-            renderProducts();
-            renderCategories();
-            renderOffers();
-            renderAdminTable();
-            updateStats();
-            
-            console.log("Aplicación lista");
-        });
-
-        // ==================== CONFIGURAR EVENTOS ====================
-        function setupEventListeners() {
-            // Panel de administración
-            document.getElementById('admin-toggle').addEventListener('click', toggleAdminPanel);
-            
-            // Sincronización
-            document.getElementById('sync-now').addEventListener('click', syncWithExcel);
-            document.getElementById('test-connection').addEventListener('click', testConnection);
-            document.getElementById('reset-data').addEventListener('click', resetData);
-            document.getElementById('sync-interval').addEventListener('change', startAutoSync);
-            
-            // Formulario de producto
-            document.getElementById('product-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                saveProduct();
-            });
-            
-            // Subida masiva de imágenes
-            initializeBulkUpload();
-            
-            // URL de Excel por defecto
+            if(localStorage.getItem('adminSession')) {
+                isAdminLoggedIn = true;
+                document.getElementById('logout-btn').style.display = 'block';
+            }
+            renderAll();
             document.getElementById('excel-url').value = CONFIG.DEFAULT_SHEET_URL;
-        }
-
-        // ==================== FUNCIONES DEL PANEL ====================
-        function toggleAdminPanel() {
-            const panel = document.getElementById('admin-panel');
-            const toggle = document.getElementById('admin-toggle');
-            
-            panel.classList.toggle('visible');
-            toggle.innerHTML = panel.classList.contains('visible') 
-                ? '<i class="fas fa-times"></i> Ocultar Panel'
-                : '<i class="fas fa-cog"></i> Panel de Administración';
-        }
-
-        // ==================== NOTIFICACIONES ====================
-        function showNotification(message, type = 'info') {
-            const container = document.getElementById('notification-container');
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.textContent = message;
-            
-            container.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.classList.add('show');
-            }, 10);
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-                setTimeout(() => {
-                    container.removeChild(notification);
-                }, 300);
-            }, 4000);
-        }
-
-        // ==================== ESTADO DE SINCRONIZACIÓN ====================
-        function updateSyncStatus(text, state) {
-            const indicator = document.getElementById('sync-indicator');
-            const statusText = document.getElementById('sync-status-text');
-            
-            indicator.className = 'sync-indicator ' + state;
-            statusText.textContent = text;
-        }
-
-        // ==================== DATOS LOCALES ====================
-        function saveLocalData() {
-            const data = {
-                products: products,
-                productImages: productImages,
-                lastSync: new Date().toISOString()
-            };
-            localStorage.setItem('mundoColchonetas', JSON.stringify(data));
-        }
+        });
 
         function loadLocalData() {
             const saved = localStorage.getItem('mundoColchonetas');
             if (saved) {
-                try {
-                    const data = JSON.parse(saved);
-                    products = data.products || [];
-                    productImages = data.productImages || {};
-                    
-                    // Si no hay datos, crear datos de ejemplo
-                    if (products.length === 0) {
-                        createSampleData();
-                    }
-                    
-                    console.log(`Datos cargados: ${products.length} productos`);
-                } catch (e) {
-                    console.error('Error cargando datos:', e);
-                    createSampleData();
-                }
+                const data = JSON.parse(saved);
+                products = data.products || [];
+                productImages = data.productImages || {};
             } else {
-                createSampleData();
+                products = [
+                    { clave: 'COLCH01', nombre: 'Colchoneta Yoga Pro', precioVenta: 15000, categoria: 'YOGA', descripcion: 'Máximo agarre y confort', stock: 10 },
+                    { clave: 'PESA05', nombre: 'Pesa Rusa 5kg', precioVenta: 8500, categoria: 'PESAS', descripcion: 'Acero de alta calidad', stock: 5 }
+                ];
             }
         }
 
-        function createSampleData() {
-            products = [
-                {
-                    clave: 'CORBAG10K',
-                    unidad: 'UN',
-                    nombre: 'Core Bag 10Kg',
-                    cantidad: 15,
-                    precioCompra: 8000,
-                    precioVenta: 12000,
-                    reserva: 1,
-                    categoria: 'COREBAG',
-                    descripcion: 'Core Bag de 10Kg para entrenamiento funcional',
-                    oferta: true,
-                    descuento: 15,
-                    precioOferta: 10200
-                },
-                {
-                    clave: 'COLCHPREM',
-                    unidad: 'UN',
-                    nombre: 'Colchoneta Premium 180x60',
-                    cantidad: 8,
-                    precioCompra: 5000,
-                    precioVenta: 8500,
-                    reserva: 1,
-                    categoria: 'COLCHONETAS',
-                    descripcion: 'Colchoneta premium antideslizante 180x60cm',
-                    oferta: false,
-                    descuento: 0,
-                    precioOferta: null
-                },
-                {
-                    clave: 'MANC5KG',
-                    unidad: 'PAR',
-                    nombre: 'Mancuernas Hexagonales 5Kg',
-                    cantidad: 12,
-                    precioCompra: 3000,
-                    precioVenta: 5500,
-                    reserva: 1,
-                    categoria: 'MANCUERNAS',
-                    descripcion: 'Par de mancuernas hexagonales 5Kg c/u',
-                    oferta: true,
-                    descuento: 10,
-                    precioOferta: 4950
-                },
-                {
-                    clave: 'MEDBALL6KG',
-                    unidad: 'UN',
-                    nombre: 'Medicine Ball 6Kg',
-                    cantidad: 6,
-                    precioCompra: 4500,
-                    precioVenta: 7000,
-                    reserva: 1,
-                    categoria: 'MEDICINE BALL',
-                    descripcion: 'Pelota medicinal 6Kg con agarre texturizado',
-                    oferta: false,
-                    descuento: 0,
-                    precioOferta: null
-                },
-                {
-                    clave: 'TOBILERA',
-                    unidad: 'PAR',
-                    nombre: 'Tobilleras Ajustables',
-                    cantidad: 20,
-                    precioCompra: 1500,
-                    precioVenta: 2800,
-                    reserva: 1,
-                    categoria: 'TOBILLERAS',
-                    descripcion: 'Tobilleras ajustables con pesos intercambiables',
-                    oferta: true,
-                    descuento: 20,
-                    precioOferta: 2240
-                },
-                {
-                    clave: 'PESARUSA10',
-                    unidad: 'UN',
-                    nombre: 'Pesa Rusa 10Kg',
-                    cantidad: 4,
-                    precioCompra: 6000,
-                    precioVenta: 9500,
-                    reserva: 1,
-                    categoria: 'PESAS RUSAS',
-                    descripcion: 'Pesa rusa competitiva 10Kg',
-                    oferta: false,
-                    descuento: 0,
-                    precioOferta: null
-                }
-            ];
-            
-            productImages = {};
-            saveLocalData();
-        }
-
-        // ==================== SINCRONIZACIÓN CON EXCEL ====================
-        async function syncWithExcel() {
-            if (isSyncing) return;
-            
-            const url = document.getElementById('excel-url').value;
-            if (!url) {
-                showNotification('Ingresa una URL de Google Sheets', 'error');
-                return;
-            }
-            
-            isSyncing = true;
-            updateSyncStatus('Sincronizando...', 'syncing');
-            
-            try {
-                const csvUrl = convertToCsvUrl(url);
-                const response = await fetch(csvUrl);
-                
-                if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
-                
-                const csvText = await response.text();
-                const parsedProducts = parseCSV(csvText);
-                
-                if (parsedProducts.length > 0) {
-                    products = parsedProducts;
-                    saveLocalData();
-                    
-                    renderProducts();
-                    renderCategories();
-                    renderOffers();
-                    renderAdminTable();
-                    updateStats();
-                    
-                    const log = `✅ ${new Date().toLocaleString()}\n📦 ${parsedProducts.length} productos\n📊 ${getAllCategories().length} categorías`;
-                    document.getElementById('last-sync-log').textContent = log;
-                    document.getElementById('sync-logs').style.display = 'block';
-                    
-                    updateSyncStatus('Sincronizado', 'synced');
-                    showNotification(`${parsedProducts.length} productos sincronizados`, 'success');
-                } else {
-                    throw new Error('No se encontraron productos');
-                }
-                
-            } catch (error) {
-                console.error('Error:', error);
-                updateSyncStatus('Error', 'error');
-                showNotification(`Error: ${error.message}`, 'error');
-                
-                const log = `❌ ${new Date().toLocaleString()}\n${error.message}`;
-                document.getElementById('last-sync-log').textContent = log;
-                document.getElementById('sync-logs').style.display = 'block';
-            } finally {
-                isSyncing = false;
-            }
-        }
-
-        function convertToCsvUrl(url) {
-            const match = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
-            if (match && match[1]) {
-                return `https://docs.google.com/spreadsheets/d/${match[1]}/gviz/tq?tqx=out:csv`;
-            }
-            return url;
-        }
-
-        function parseCSV(csvText) {
-            const lines = csvText.split('\n').filter(line => line.trim() !== '');
-            const products = [];
-            
-            const hasHeader = lines[0].toLowerCase().includes('clave') || 
-                             lines[0].toLowerCase().includes('nombre');
-            
-            let startLine = hasHeader ? 1 : 0;
-            
-            for (let i = startLine; i < lines.length; i++) {
-                const line = lines[i].trim();
-                if (!line) continue;
-                
-                let fields;
-                
-                if (line.includes('","')) {
-                    fields = line.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/);
-                } else if (line.includes('";"')) {
-                    fields = line.split(/;(?=(?:[^"]*"[^"]*")*[^"]*$)/);
-                } else if (line.includes(';')) {
-                    fields = line.split(';');
-                } else {
-                    fields = line.split(',');
-                }
-                
-                fields = fields.map(field => field.trim().replace(/^"|"$/g, ''));
-                
-                if (fields.length >= 6) {
-                    const oferta = fields.length > 9 ? (
-                        fields[9].toLowerCase() === 'true' || 
-                        fields[9].toLowerCase() === 'si' || 
-                        fields[9] === '1' ||
-                        fields[9].toLowerCase().includes('oferta')
-                    ) : false;
-                    
-                    const descuento = fields.length > 10 ? parseInt(fields[10]) || 10 : 10;
-                    
-                    const producto = {
-                        clave: fields[0]?.trim() || `PROD${i + 1}`,
-                        unidad: fields[1]?.trim() || 'UN',
-                        nombre: fields[2]?.trim() || 'Producto sin nombre',
-                        cantidad: parseInt(fields[3]) || 0,
-                        precioCompra: parseInt(fields[4]) || 0,
-                        precioVenta: parseInt(fields[5]) || 0,
-                        reserva: fields.length > 6 ? parseInt(fields[6]) || 1 : 1,
-                        categoria: fields.length > 7 ? fields[7]?.trim() || 'OTROS' : 'OTROS',
-                        descripcion: fields.length > 8 ? fields[8]?.trim() : 'Producto de calidad',
-                        oferta: oferta,
-                        descuento: descuento,
-                        precioOferta: oferta ? Math.round(parseInt(fields[5]) * (1 - descuento/100)) : null
-                    };
-                    
-                    products.push(producto);
-                }
-            }
-            
-            return products;
-        }
-
-        function testConnection() {
-            showNotification('Probando conexión con Google Sheets...', 'info');
-            
-            const url = document.getElementById('excel-url').value;
-            if (!url) {
-                showNotification('Ingresa una URL primero', 'error');
-                return;
-            }
-            
-            updateSyncStatus('Probando...', 'syncing');
-            
-            setTimeout(() => {
-                updateSyncStatus('Conexión exitosa', 'synced');
-                showNotification('Conexión con Google Sheets exitosa', 'success');
-            }, 1000);
-        }
-
-        function resetData() {
-            if (!confirm('¿Estás seguro de restablecer todos los datos? Esto eliminará productos e imágenes.')) {
-                return;
-            }
-            
-            products = [];
-            productImages = {};
-            selectedProducts.clear();
-            
-            saveLocalData();
-            renderProducts();
+        function renderAll() {
             renderCategories();
-            renderOffers();
-            renderAdminTable();
-            updateStats();
-            
-            showNotification('Datos restablecidos correctamente', 'success');
-        }
-
-        // ==================== SINCRONIZACIÓN AUTOMÁTICA ====================
-        function initializeAutoSync() {
-            startAutoSync();
-        }
-
-        function startAutoSync() {
-            if (syncInterval) {
-                clearInterval(syncInterval);
-            }
-            
-            const interval = parseInt(document.getElementById('sync-interval').value);
-            if (interval > 0) {
-                syncInterval = setInterval(syncWithExcel, interval);
-                console.log(`Sincronización automática configurada cada ${interval/60000} minutos`);
-            }
-        }
-
-        // ==================== RENDERIZADO DE PRODUCTOS ====================
-        function renderProducts(filteredProducts = null) {
-            const container = document.getElementById('products-container');
-            const productsToShow = filteredProducts || getFilteredProducts();
-            
-            if (productsToShow.length === 0) {
-                container.innerHTML = `
-                    <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; background: white; border-radius: var(--radius);">
-                        <i class="fas fa-box-open" style="font-size: 4rem; color: var(--gray); margin-bottom: 20px;"></i>
-                        <h3 style="color: var(--dark); margin-bottom: 10px;">No hay productos</h3>
-                        <p style="color: var(--gray);">Agrega productos o sincroniza con Excel</p>
-                        <button class="btn btn-primary" onclick="syncWithExcel()" style="margin-top: 20px;">
-                            <i class="fas fa-sync"></i> Sincronizar
-                        </button>
-                    </div>
-                `;
-                return;
-            }
-            
-            container.innerHTML = productsToShow.map(product => `
-                <div class="product-card" data-clave="${product.clave}">
-                    <div class="product-image">
-                        ${getProductImageHTML(product.clave)}
-                        ${product.oferta ? '<div class="offer-badge">-${product.descuento}%</div>' : ''}
-                        <div class="stock-badge ${product.cantidad < 5 ? 'low-stock' : ''}">
-                            ${product.cantidad < 5 ? 'Últimas' : 'En Stock'}: ${product.cantidad}
-                        </div>
-                        ${productImages[product.clave] && productImages[product.clave].length > 1 ? 
-                          `<div class="image-counter">+${productImages[product.clave].length - 1}</div>` : ''}
-                    </div>
-                    <div class="product-info">
-                        <div class="product-category">${product.categoria}</div>
-                        <h3 class="product-name">${product.nombre}</h3>
-                        <p class="product-description">${product.descripcion}</p>
-                        
-                        <div class="product-details">
-                            <div class="product-code">${product.clave}</div>
-                            <div class="price">
-                                ${product.oferta ? 
-                                    `<span class="original-price">$${product.precioVenta.toLocaleString()}</span>
-                                     <span class="discount-price">$${product.precioOferta.toLocaleString()}</span>` :
-                                    `$${product.precioVenta.toLocaleString()}`
-                                }
-                            </div>
-                        </div>
-                        
-                        <button class="add-to-cart" onclick="addToCart('${product.clave}')">
-                            <i class="fas fa-shopping-cart"></i> Consultar por WhatsApp
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-            
-            document.getElementById('shown-products').textContent = productsToShow.length;
-        }
-
-        function getProductImageHTML(clave) {
-            if (productImages[clave] && productImages[clave].length > 0) {
-                return `<img src="${productImages[clave][0]}" alt="${clave}" loading="lazy">`;
-            } else {
-                return `<div class="placeholder"><i class="fas fa-dumbbell"></i></div>`;
-            }
-        }
-
-        function getFilteredProducts() {
-            if (currentCategory === 'all') {
-                return products;
-            }
-            return products.filter(p => p.categoria === currentCategory);
+            renderProducts();
+            if(isAdminLoggedIn) renderAdminTable();
+            updateCartUI();
         }
 
         function renderCategories() {
             const container = document.getElementById('categories-container');
-            const categories = getAllCategories();
-            
-            container.innerHTML = `
-                <button class="category-btn ${currentCategory === 'all' ? 'active' : ''}" onclick="filterByCategory('all')">
-                    <i class="fas fa-th"></i> Todos (${products.length})
+            const cats = ['all', ...new Set(products.map(p => p.categoria))];
+            container.innerHTML = cats.map(c => `
+                <button class="cat-btn ${currentCategory === c ? 'active' : ''}" onclick="filterCat('${c}')">
+                    ${c.toUpperCase()}
                 </button>
-                ${categories.map(cat => `
-                    <button class="category-btn ${currentCategory === cat ? 'active' : ''}" onclick="filterByCategory('${cat}')">
-                        <i class="fas fa-dumbbell"></i> ${cat} (${products.filter(p => p.categoria === cat).length})
-                    </button>
-                `).join('')}
-            `;
+            `).join('');
         }
 
-        function getAllCategories() {
-            const categories = [...new Set(products.map(p => p.categoria))];
-            return categories.sort();
-        }
+        function filterCat(c) { currentCategory = c; renderAll(); }
 
-        function filterByCategory(category) {
-            currentCategory = category;
-            renderProducts();
-            
-            // Actualizar botones activos
-            document.querySelectorAll('.category-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            const activeBtn = document.querySelector(`.category-btn[onclick="filterByCategory('${category}')"]`);
-            if (activeBtn) {
-                activeBtn.classList.add('active');
-            }
-        }
-
-        function renderOffers() {
-            const offers = products.filter(p => p.oferta);
-            const container = document.getElementById('offers-container');
-            
-            document.getElementById('offers-count').textContent = `${offers.length} ofertas`;
-            
-            if (offers.length === 0) {
-                container.innerHTML = `
-                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; background: white; border-radius: var(--radius); border: 2px dashed var(--warning);">
-                        <i class="fas fa-fire" style="font-size: 3rem; color: var(--warning); margin-bottom: 15px;"></i>
-                        <h3 style="color: var(--dark); margin-bottom: 10px;">No hay ofertas activas</h3>
-                        <p style="color: var(--gray);">Activa ofertas en tus productos</p>
+        function renderProducts() {
+            const container = document.getElementById('products-container');
+            const filtered = currentCategory === 'all' ? products : products.filter(p => p.categoria === currentCategory);
+            container.innerHTML = filtered.map(p => `
+                <div class="product-card">
+                    <div class="product-image-container">
+                        ${productImages[p.clave] ? `<img src="${productImages[p.clave][0]}">` : '<i class="fas fa-dumbbell fa-3x" style="color:#cbd5e1"></i>'}
                     </div>
-                `;
-                return;
-            }
-            
-            container.innerHTML = offers.slice(0, 4).map(product => `
-                <div class="product-card" data-clave="${product.clave}">
-                    <div class="product-image">
-                        ${getProductImageHTML(product.clave)}
-                        <div class="offer-badge">-${product.descuento}%</div>
-                        <div class="stock-badge ${product.cantidad < 5 ? 'low-stock' : ''}">
-                            ${product.cantidad < 5 ? 'Últimas' : 'En Stock'}: ${product.cantidad}
-                        </div>
+                    <div style="flex:1">
+                        <p style="font-size:0.7rem; color:var(--primary); font-weight:700;">${p.categoria}</p>
+                        <h3 style="margin-bottom:8px;">${p.nombre}</h3>
+                        <p style="font-size:0.9rem; color:var(--slate-500); margin-bottom:20px;">${p.descripcion}</p>
                     </div>
-                    <div class="product-info">
-                        <div class="product-category">${product.categoria}</div>
-                        <h3 class="product-name">${product.nombre}</h3>
-                        
-                        <div class="product-details">
-                            <div class="product-code">${product.clave}</div>
-                            <div class="price">
-                                <span class="original-price">$${product.precioVenta.toLocaleString()}</span>
-                                <span class="discount-price">$${product.precioOferta.toLocaleString()}</span>
-                            </div>
-                        </div>
-                        
-                        <button class="add-to-cart" onclick="addToCart('${product.clave}')">
-                            <i class="fas fa-shopping-cart"></i> Obtener Oferta
-                        </button>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:auto;">
+                        <span class="current-price" style="font-size:1.4rem; font-weight:800; color:var(--primary)">$${p.precioVenta.toLocaleString()}</span>
+                        <button class="btn btn-primary" style="padding:10px; border-radius:50%;" onclick="addToCart('${p.clave}')"><i class="fas fa-plus"></i></button>
                     </div>
                 </div>
             `).join('');
         }
 
-        // ==================== TABLA DE ADMINISTRACIÓN ====================
+        function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('active'); }
+
+        function addToCart(clave) {
+            const p = products.find(i => i.clave === clave);
+            const exist = cart.find(i => i.clave === clave);
+            if(exist) exist.qty++;
+            else cart.push({...p, qty:1});
+            updateCartUI();
+            toggleCart();
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cart-items');
+            container.innerHTML = cart.map((i, idx) => `
+                <div style="display:flex; gap:15px; margin-bottom:15px; background:white; padding:15px; border-radius:12px; border:1px solid var(--border);">
+                    <div style="flex:1">
+                        <h4 style="font-size:0.9rem;">${i.nombre}</h4>
+                        <p style="color:var(--primary); font-weight:700;">$${i.precioVenta.toLocaleString()} x ${i.qty}</p>
+                    </div>
+                    <button onclick="removeItem(${idx})" style="background:none; border:none; color:var(--danger); cursor:pointer;"><i class="fas fa-trash"></i></button>
+                </div>
+            `).join('');
+            const total = cart.reduce((acc, i) => acc + (i.precioVenta * i.qty), 0);
+            document.getElementById('cart-total').innerText = `$${total.toLocaleString()}`;
+            document.getElementById('header-cart-count').innerText = cart.length;
+        }
+
+        function removeItem(idx) { cart.splice(idx, 1); updateCartUI(); }
+
+        function checkoutViaWhatsApp() {
+            if(cart.length === 0) return;
+            let msg = "Hola Mundo Colchonetas! 🪐 Quiero pedir:\n\n";
+            cart.forEach(i => msg += `• ${i.nombre} (x${i.qty})\n`);
+            msg += `\nTotal: ${document.getElementById('cart-total').innerText}`;
+            window.open(`https://wa.me/5491168705261?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        function checkAdminAccess() {
+            if(isAdminLoggedIn) document.getElementById('admin-panel').classList.toggle('visible');
+            else document.getElementById('login-modal').style.display = 'flex';
+        }
+
+        function login() {
+            const u = document.getElementById('login-username').value;
+            const p = document.getElementById('login-password').value;
+            if(u === CONFIG.ADMIN_CREDENTIALS.username && p === CONFIG.ADMIN_CREDENTIALS.password) {
+                isAdminLoggedIn = true;
+                localStorage.setItem('adminSession', 'true');
+                location.reload();
+            } else alert("Error");
+        }
+
+        function logout() { localStorage.removeItem('adminSession'); location.reload(); }
+
+        async function syncWithExcel() {
+            const url = document.getElementById('excel-url').value;
+            const csvUrl = url.replace('/edit', '/gviz/tq?tqx=out:csv');
+            try {
+                const res = await fetch(csvUrl);
+                const text = await res.text();
+                const rows = text.split('\n').slice(1);
+                products = rows.map(r => {
+                    const c = r.split(',').map(v => v.replace(/"/g, ''));
+                    return { clave: c[0], nombre: c[2], stock: c[3], precioVenta: parseInt(c[5]), categoria: c[7], descripcion: c[8] };
+                });
+                localStorage.setItem('mundoColchonetas', JSON.stringify({products, productImages}));
+                renderAll();
+                alert("Sincronizado");
+            } catch(e) { alert("Error"); }
+        }
+
         function renderAdminTable() {
             const container = document.getElementById('products-table');
-            
             container.innerHTML = `
-                <div class="table-header">
-                    <div class="checkbox-cell">✓</div>
-                    <div>Clave</div>
-                    <div>Nombre</div>
-                    <div>Cantidad</div>
-                    <div>Precio</div>
-                    <div>Categoría</div>
-                    <div>Oferta</div>
-                    <div>Imágenes</div>
-                    <div>Estado</div>
-                    <div>Acciones</div>
-                </div>
-                ${products.map(product => `
-                    <div class="table-row">
-                        <div class="checkbox-cell">
-                            <input type="checkbox" value="${product.clave}" 
-                                   onchange="toggleProductSelection('${product.clave}')"
-                                   ${selectedProducts.has(product.clave) ? 'checked' : ''}>
-                        </div>
-                        <div class="table-cell">${product.clave}</div>
-                        <div class="table-cell">${product.nombre}</div>
-                        <div class="table-cell">${product.cantidad}</div>
-                        <div class="table-cell">$${product.precioVenta.toLocaleString()}</div>
-                        <div class="table-cell">${product.categoria}</div>
-                        <div class="table-cell">
-                            ${product.oferta ? 
-                                `<span style="color: var(--success);"><i class="fas fa-check"></i> -${product.descuento}%</span>` : 
-                                '<span style="color: var(--gray);"><i class="fas fa-times"></i></span>'}
-                        </div>
-                        <div class="table-cell">
-                            ${productImages[product.clave] ? 
-                                `<span style="color: var(--success);"><i class="fas fa-image"></i> ${productImages[product.clave].length}</span>` :
-                                '<span style="color: var(--warning);"><i class="fas fa-image"></i> 0</span>'}
-                        </div>
-                        <div class="table-cell">
-                            <span class="${product.cantidad > 0 ? 'stock-badge' : 'low-stock'}" 
-                                  style="font-size: 0.8rem; padding: 3px 8px;">
-                                ${product.cantidad > 0 ? 'Disponible' : 'Agotado'}
-                            </span>
-                        </div>
-                        <div class="table-cell">
-                            <button class="action-btn" onclick="editProduct('${product.clave}')" style="padding: 5px 10px; font-size: 0.9rem;">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                        </div>
-                    </div>
-                `).join('')}
-            `;
+                <table style="width:100%; border-collapse:collapse; margin-top:20px;">
+                    <tr style="background:var(--slate-100); text-align:left;">
+                        <th style="padding:15px;">Clave</th><th>Producto</th><th>Precio</th><th>Acciones</th>
+                    </tr>
+                    ${products.map(p => `
+                        <tr style="border-bottom:1px solid var(--border);">
+                            <td style="padding:15px;">${p.clave}</td><td>${p.nombre}</td><td>$${p.precioVenta}</td>
+                            <td><button onclick="deleteProd('${p.clave}')" style="color:var(--danger); background:none; border:none; cursor:pointer;">Borrar</button></td>
+                        </tr>
+                    `).join('')}
+                </table>`;
         }
 
-        function toggleProductSelection(clave) {
-            if (selectedProducts.has(clave)) {
-                selectedProducts.delete(clave);
-            } else {
-                selectedProducts.add(clave);
-            }
-        }
-
-        // ==================== GESTIÓN DE PRODUCTOS ====================
-        function addNewProduct() {
-            document.getElementById('edit-modal-title').textContent = 'Agregar Nuevo Producto';
-            document.getElementById('edit-clave').value = '';
-            document.getElementById('edit-nombre').value = '';
-            document.getElementById('edit-categoria').value = '';
-            document.getElementById('edit-unidad').value = 'UN';
-            document.getElementById('edit-cantidad').value = '0';
-            document.getElementById('edit-precioVenta').value = '';
-            document.getElementById('edit-oferta').value = 'false';
-            document.getElementById('edit-descuento').value = '10';
-            document.getElementById('edit-descripcion').value = '';
-            document.getElementById('edit-clave').readOnly = false;
-            
-            document.getElementById('edit-modal').classList.add('active');
-        }
-
-        function editSelectedProduct() {
-            const selected = Array.from(selectedProducts);
-            if (selected.length !== 1) {
-                showNotification('Selecciona un solo producto', 'error');
-                return;
-            }
-            
-            const product = products.find(p => p.clave === selected[0]);
-            if (!product) return;
-            
-            editProduct(selected[0]);
-        }
-
-        function editProduct(clave) {
-            const product = products.find(p => p.clave === clave);
-            if (!product) return;
-            
-            document.getElementById('edit-modal-title').textContent = 'Editar Producto';
-            document.getElementById('edit-clave').value = product.clave;
-            document.getElementById('edit-nombre').value = product.nombre;
-            document.getElementById('edit-categoria').value = product.categoria;
-            document.getElementById('edit-unidad').value = product.unidad;
-            document.getElementById('edit-cantidad').value = product.cantidad;
-            document.getElementById('edit-precioVenta').value = product.precioVenta;
-            document.getElementById('edit-oferta').value = product.oferta.toString();
-            document.getElementById('edit-descuento').value = product.descuento;
-            document.getElementById('edit-descripcion').value = product.descripcion;
-            document.getElementById('edit-clave').readOnly = true;
-            
-            document.getElementById('edit-modal').classList.add('active');
-        }
-
-        function saveProduct() {
-            const clave = document.getElementById('edit-clave').value.trim();
-            const nombre = document.getElementById('edit-nombre').value.trim();
-            const categoria = document.getElementById('edit-categoria').value;
-            
-            if (!clave || !nombre || !categoria) {
-                showNotification('Completa los campos requeridos', 'error');
-                return;
-            }
-            
-            const producto = {
-                clave: clave,
-                unidad: document.getElementById('edit-unidad').value.trim() || 'UN',
-                nombre: nombre,
-                cantidad: parseInt(document.getElementById('edit-cantidad').value) || 0,
-                precioCompra: 0,
-                precioVenta: parseInt(document.getElementById('edit-precioVenta').value) || 0,
-                reserva: 1,
-                categoria: categoria,
-                descripcion: document.getElementById('edit-descripcion').value.trim() || 'Producto de calidad',
-                oferta: document.getElementById('edit-oferta').value === 'true',
-                descuento: parseInt(document.getElementById('edit-descuento').value) || 10
-            };
-            
-            if (producto.oferta) {
-                producto.precioOferta = Math.round(producto.precioVenta * (1 - producto.descuento/100));
-            } else {
-                producto.precioOferta = null;
-            }
-            
-            const existingIndex = products.findIndex(p => p.clave === clave);
-            
-            if (existingIndex >= 0) {
-                products[existingIndex] = producto;
-                showNotification('Producto actualizado', 'success');
-            } else {
-                products.push(producto);
-                showNotification('Producto agregado', 'success');
-            }
-            
-            saveLocalData();
-            renderProducts();
-            renderCategories();
-            renderOffers();
-            renderAdminTable();
-            updateStats();
-            closeEditModal();
-        }
-
-        function deleteSelectedProducts() {
-            const selected = Array.from(selectedProducts);
-            if (selected.length === 0) {
-                showNotification('Selecciona productos para eliminar', 'error');
-                return;
-            }
-            
-            if (!confirm(`¿Eliminar ${selected.length} producto(s)?`)) return;
-            
-            products = products.filter(p => !selected.includes(p.clave));
-            selected.forEach(clave => delete productImages[clave]);
-            
-            saveLocalData();
-            renderProducts();
-            renderCategories();
-            renderOffers();
-            renderAdminTable();
-            updateStats();
-            
-            selectedProducts.clear();
-            showNotification(`${selected.length} producto(s) eliminado(s)`, 'success');
-        }
-
-        function exportToExcel() {
-            if (products.length === 0) {
-                showNotification('No hay productos para exportar', 'error');
-                return;
-            }
-            
-            let csvContent = CONFIG.EXCEL_COLUMNS.join(';') + '\n';
-            
-            products.forEach(product => {
-                const row = [
-                    product.clave,
-                    product.unidad,
-                    `"${product.nombre}"`,
-                    product.cantidad,
-                    product.precioCompra,
-                    product.precioVenta,
-                    product.reserva,
-                    product.categoria,
-                    `"${product.descripcion}"`,
-                    product.oferta ? 'SI' : 'NO',
-                    product.descuento
-                ].join(';');
-                
-                csvContent += row + '\n';
-            });
-            
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `catalogo_${new Date().toISOString().split('T')[0]}.csv`;
-            link.click();
-            
-            URL.revokeObjectURL(url);
-            showNotification('Catálogo exportado', 'success');
-        }
-
-        function closeEditModal() {
-            document.getElementById('edit-modal').classList.remove('active');
-        }
-
-        // ==================== CARRITO Y WHATSAPP ====================
-        function addToCart(clave) {
-            const product = products.find(p => p.clave === clave);
-            if (!product) return;
-            
-            const message = encodeURIComponent(
-                `Hola Mundo Colchonetas! Me interesa comprar:\n\n` +
-                `📦 Producto: ${product.nombre}\n` +
-                `🔢 Código: ${product.clave}\n` +
-                `💰 ${product.oferta ? `Precio oferta: $${product.precioOferta.toLocaleString()}` : `Precio: $${product.precioVenta.toLocaleString()}`}\n\n` +
-                `¿Tienen disponibilidad?`
-            );
-            
-            window.open(`https://wa.me/5491168705261?text=${message}`, '_blank');
-        }
-
-        function scrollToProducts() {
-            document.getElementById('products-section').scrollIntoView({ 
-                behavior: 'smooth' 
-            });
-        }
-
-        // ==================== SUBIDA MASIVA DE IMÁGENES ====================
-        function initializeBulkUpload() {
-            const uploadZone = document.getElementById('upload-zone');
-            const fileInput = document.getElementById('bulk-image-upload');
-            const autoMatchBtn = document.getElementById('auto-match-btn');
-
-            uploadZone.addEventListener('click', () => fileInput.click());
-
-            uploadZone.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                uploadZone.style.borderColor = 'var(--primary)';
-                uploadZone.style.background = 'rgba(0, 0, 0, 0.4)';
-            });
-
-            uploadZone.addEventListener('dragleave', () => {
-                uploadZone.style.borderColor = 'rgba(255, 255, 255, 0.3)';
-                uploadZone.style.background = 'rgba(0, 0, 0, 0.2)';
-            });
-
-            uploadZone.addEventListener('drop', (e) => {
-                e.preventDefault();
-                uploadZone.style.borderColor = 'rgba(255, 255, 255, 0.3)';
-                uploadZone.style.background = 'rgba(0, 0, 0, 0.2)';
-                
-                if (e.dataTransfer.files.length > 0) {
-                    handleFileSelect(Array.from(e.dataTransfer.files));
-                }
-            });
-
-            fileInput.addEventListener('change', (e) => {
-                if (e.target.files.length > 0) {
-                    handleFileSelect(Array.from(e.target.files));
-                }
-            });
-
-            autoMatchBtn.addEventListener('click', () => {
-                autoMatchImages();
-            });
-        }
-
-        function handleFileSelect(files) {
-            selectedFiles = files.filter(file => file.type.startsWith('image/'));
-            
-            if (selectedFiles.length === 0) {
-                showNotification('No se seleccionaron imágenes válidas', 'error');
-                return;
-            }
-            
-            if (selectedFiles.length > 50) {
-                showNotification(`Se seleccionaron ${selectedFiles.length} imágenes. Se procesarán las primeras 50.`, 'warning');
-                selectedFiles = selectedFiles.slice(0, 50);
-            }
-            
-            displayFileList();
-            document.getElementById('auto-match-btn').disabled = false;
-            showNotification(`${selectedFiles.length} imágenes seleccionadas`, 'success');
-        }
-
-        function displayFileList() {
-            const fileList = document.getElementById('file-list');
-            fileList.innerHTML = '<h4>Imágenes seleccionadas: <span id="file-count">0</span></h4>';
-            
-            selectedFiles.forEach((file, index) => {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const fileItem = document.createElement('div');
-                    fileItem.className = 'file-item';
-                    fileItem.innerHTML = `
-                        <div class="file-info">
-                            <img src="${e.target.result}" class="file-preview" alt="Preview">
-                            <div>
-                                <div class="file-name">${file.name}</div>
-                                <div class="file-clave" id="file-clave-${index}">Sin asignar</div>
-                            </div>
-                        </div>
-                        <div>
-                            <button class="action-btn" onclick="assignManually(${index})" style="padding: 5px 10px;">
-                                <i class="fas fa-edit"></i> Asignar
-                            </button>
-                        </div>
-                    `;
-                    fileList.appendChild(fileItem);
-                };
-                reader.readAsDataURL(file);
-            });
-            
-            document.getElementById('file-count').textContent = selectedFiles.length;
-            fileList.style.display = 'block';
-        }
-
-        function autoMatchImages() {
-            showNotification('Asignando imágenes automáticamente...', 'info');
-            
-            fileMatches = {};
-            const unmatchedFiles = [];
-            
-            selectedFiles.forEach((file, index) => {
-                const fileName = file.name.toLowerCase().replace(/\.[^/.]+$/, "");
-                let matched = false;
-                
-                // Buscar por clave exacta
-                for (const product of products) {
-                    if (fileName.includes(product.clave.toLowerCase())) {
-                        fileMatches[index] = product.clave;
-                        matched = true;
-                        break;
-                    }
-                }
-                
-                // Buscar por palabras clave
-                if (!matched) {
-                    for (const product of products) {
-                        const nombreWords = product.nombre.toLowerCase().split(/[\s_-]+/);
-                        const categoriaWords = product.categoria.toLowerCase().split(/[\s_-]+/);
-                        const searchWords = [...nombreWords, ...categoriaWords];
-                        
-                        for (const word of searchWords) {
-                            if (word.length > 3 && fileName.includes(word)) {
-                                fileMatches[index] = product.clave;
-                                matched = true;
-                                break;
-                            }
-                        }
-                        if (matched) break;
-                    }
-                }
-                
-                if (!matched) {
-                    unmatchedFiles.push(index);
-                }
-            });
-            
-            // Actualizar UI
-            selectedFiles.forEach((_, index) => {
-                const claveElement = document.getElementById(`file-clave-${index}`);
-                if (fileMatches[index]) {
-                    const product = products.find(p => p.clave === fileMatches[index]);
-                    claveElement.textContent = `→ ${fileMatches[index]} (${product ? product.nombre.substring(0, 20) + '...' : 'Producto'})`;
-                    claveElement.style.color = 'var(--success)';
-                } else {
-                    claveElement.textContent = 'Sin asignar';
-                    claveElement.style.color = 'var(--warning)';
-                }
-            });
-            
-            // Mostrar modal de revisión
-            showReviewModal();
-            
-            const matchedCount = Object.keys(fileMatches).length;
-            showNotification(`${matchedCount} imágenes asignadas automáticamente`, 'success');
-        }
-
-        function assignManually(fileIndex) {
-            const modal = document.createElement('div');
-            modal.className = 'modal active';
-            modal.innerHTML = `
-                <div class="modal-content">
-                    <div class="close-modal" onclick="this.parentElement.parentElement.remove()">&times;</div>
-                    <h3>Asignar imagen a producto</h3>
-                    <p>Selecciona a qué producto asignar: <strong>${selectedFiles[fileIndex].name}</strong></p>
-                    
-                    <div style="max-height: 300px; overflow-y: auto; margin: 20px 0;">
-                        <table style="width: 100%; border-collapse: collapse;">
-                            <thead>
-                                <tr style="background: #f8f9fa;">
-                                    <th style="padding: 10px; text-align: left;">Clave</th>
-                                    <th style="padding: 10px; text-align: left;">Nombre</th>
-                                    <th style="padding: 10px; text-align: left;">Categoría</th>
-                                    <th style="padding: 10px; text-align: left;"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${products.map(product => `
-                                    <tr style="border-bottom: 1px solid #e9ecef;">
-                                        <td style="padding: 10px;">${product.clave}</td>
-                                        <td style="padding: 10px;">${product.nombre}</td>
-                                        <td style="padding: 10px;">${product.categoria}</td>
-                                        <td style="padding: 10px;">
-                                            <button class="btn btn-primary" onclick="selectProductForFile(${fileIndex}, '${product.clave}')">
-                                                Asignar
-                                            </button>
-                                        </td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 20px;">
-                        <button class="btn btn-primary" onclick="this.parentElement.parentElement.remove()">
-                            Cancelar
-                        </button>
-                    </div>
-                </div>
-            `;
-            
-            document.body.appendChild(modal);
-        }
-
-        function selectProductForFile(fileIndex, clave) {
-            fileMatches[fileIndex] = clave;
-            
-            // Actualizar UI
-            const claveElement = document.getElementById(`file-clave-${fileIndex}`);
-            const product = products.find(p => p.clave === clave);
-            claveElement.textContent = `→ ${clave} (${product ? product.nombre.substring(0, 20) + '...' : 'Producto'})`;
-            claveElement.style.color = 'var(--success)';
-            
-            // Cerrar modal
-            document.querySelector('.modal.active').remove();
-            
-            // Actualizar modal de revisión si está abierto
-            if (document.getElementById('review-modal').classList.contains('active')) {
-                updateReviewModal();
-            }
-        }
-
-        function showReviewModal() {
-            updateReviewModal();
-            document.getElementById('review-modal').classList.add('active');
-        }
-
-        function updateReviewModal() {
-            const matchedCount = Object.keys(fileMatches).length;
-            const unmatchedCount = selectedFiles.length - matchedCount;
-            
-            document.getElementById('matched-count').textContent = matchedCount;
-            document.getElementById('unmatched-count').textContent = unmatchedCount;
-            document.getElementById('total-review-count').textContent = selectedFiles.length;
-            
-            const reviewGrid = document.getElementById('review-grid');
-            reviewGrid.innerHTML = '';
-            
-            selectedFiles.forEach((file, index) => {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const matched = fileMatches[index];
-                    const product = matched ? products.find(p => p.clave === matched) : null;
-                    
-                    const item = document.createElement('div');
-                    item.className = `review-item ${matched ? 'matched' : 'unmatched'}`;
-                    item.innerHTML = `
-                        <img src="${e.target.result}" class="review-image" alt="${file.name}">
-                        <div class="review-clave">${file.name.substring(0, 15)}${file.name.length > 15 ? '...' : ''}</div>
-                        <div class="review-product">
-                            ${product ? product.nombre.substring(0, 30) + (product.nombre.length > 30 ? '...' : '') : 'Sin asignar'}
-                        </div>
-                        <div class="review-status ${matched ? 'status-matched' : 'status-unmatched'}">
-                            ${matched ? '✓ Asignada' : '✗ Sin asignar'}
-                        </div>
-                        ${!matched ? `
-                            <button class="action-btn" onclick="assignManually(${index})" style="margin-top: 10px; width: 100%; padding: 5px;">
-                                <i class="fas fa-edit"></i> Asignar
-                            </button>
-                        ` : `
-                            <button class="action-btn" onclick="unassignFile(${index})" style="margin-top: 10px; width: 100%; padding: 5px; background: var(--warning);">
-                                <i class="fas fa-times"></i> Quitar
-                            </button>
-                        `}
-                    `;
-                    
-                    reviewGrid.appendChild(item);
-                };
-                reader.readAsDataURL(file);
-            });
-        }
-
-        function unassignFile(fileIndex) {
-            delete fileMatches[fileIndex];
-            updateReviewModal();
-        }
-
-        function closeReviewModal() {
-            document.getElementById('review-modal').classList.remove('active');
-        }
-
-        async function processBulkUpload() {
-            const progressFill = document.getElementById('progress-fill');
-            const progressText = document.getElementById('progress-text');
-            const uploadProgress = document.getElementById('upload-progress');
-            
-            uploadProgress.style.display = 'block';
-            progressFill.style.width = '0%';
-            progressText.textContent = '0% completado';
-            
-            const matchedFiles = Object.keys(fileMatches);
-            if (matchedFiles.length === 0) {
-                showNotification('No hay imágenes asignadas para subir', 'error');
-                return;
-            }
-            
-            showNotification(`Subiendo ${matchedFiles.length} imágenes...`, 'info');
-            
-            for (let i = 0; i < matchedFiles.length; i++) {
-                const fileIndex = matchedFiles[i];
-                const clave = fileMatches[fileIndex];
-                const file = selectedFiles[fileIndex];
-                
-                // Simular subida (en producción aquí subirías al servidor)
-                await new Promise(resolve => setTimeout(resolve, 100));
-                
-                // Guardar imagen localmente
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    if (!productImages[clave]) {
-                        productImages[clave] = [];
-                    }
-                    productImages[clave].push(e.target.result);
-                };
-                reader.readAsDataURL(file);
-                
-                // Actualizar progreso
-                const progress = ((i + 1) / matchedFiles.length) * 100;
-                progressFill.style.width = `${progress}%`;
-                progressText.textContent = `${Math.round(progress)}% completado`;
-            }
-            
-            saveLocalData();
-            
-            progressFill.style.width = '100%';
-            progressText.textContent = '100% completado';
-            
-            setTimeout(() => {
-                uploadProgress.style.display = 'none';
-                showNotification(`${matchedFiles.length} imágenes subidas exitosamente`, 'success');
-                closeReviewModal();
-                
-                // Limpiar selección
-                selectedFiles = [];
-                fileMatches = {};
-                document.getElementById('file-list').style.display = 'none';
-                document.getElementById('auto-match-btn').disabled = true;
-                
-                // Actualizar productos
-                renderProducts();
-                renderOffers();
-                renderAdminTable();
-            }, 500);
-        }
-
-        // ==================== HERRAMIENTA DE RENOMBRADO ====================
-        function quickRenameTool() {
-            document.getElementById('rename-modal').classList.add('active');
-        }
-
-        function closeRenameModal() {
-            document.getElementById('rename-modal').classList.remove('active');
-        }
-
-        function downloadRenameGuide() {
-            let csvContent = "Clave;Nombre;Categoria;Nombre Sugerido\n";
-            
-            products.forEach(product => {
-                const suggestedName = `${product.clave}_${product.nombre.toLowerCase().replace(/[^a-z0-9]/g, '_')}.jpg`;
-                csvContent += `${product.clave};"${product.nombre}";${product.categoria};${suggestedName}\n`;
-            });
-            
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `guia_renombrado_${new Date().toISOString().split('T')[0]}.csv`;
-            link.click();
-            
-            URL.revokeObjectURL(url);
-            showNotification('Guía CSV descargada', 'success');
-        }
-
-        // ==================== ESTADÍSTICAS ====================
-        function updateStats() {
-            const totalProducts = products.length;
-            const totalCategories = getAllCategories().length;
-            const totalImages = Object.values(productImages).reduce((sum, arr) => sum + arr.length, 0);
-            const offersCount = products.filter(p => p.oferta).length;
-            
-            console.log(`Estadísticas: ${totalProducts} productos, ${totalCategories} categorías, ${totalImages} imágenes, ${offersCount} ofertas`);
-        }
-
-        // ==================== DATOS DE EJEMPLO INICIALES ====================
-        // Se cargan automáticamente si no hay datos en localStorage
+        function deleteProd(c) { products = products.filter(p => p.clave !== c); renderAll(); }
+        function scrollToCatalog() { document.getElementById('catalog-title').scrollIntoView({ behavior: 'smooth' }); }
     </script>
 </body>
-
 </html>
+
 
