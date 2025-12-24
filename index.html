@@ -109,7 +109,7 @@
 
         <div class="category-nav" id="categories-container" style="display:flex; gap:10px; margin-bottom:40px; overflow-x:auto; padding:10px 0;"></div>
 
-        <h2 style="margin-bottom: 30px; font-weight: 800;">Nuestra Colección</h2>
+        <h2 style="margin-bottom: 30px; font-weight: 800;" id="catalog-title">Nuestra Colección</h2>
         <div class="bento-grid" id="products-container"></div>
 
         <div style="text-align: center; margin: 80px 0;">
@@ -118,6 +118,7 @@
             </button>
         </div>
 
+        <!-- PANEL ADMIN -->
         <section class="admin-panel" id="admin-panel">
             <h2 style="margin-bottom: 20px;">Gestión de Inventario</h2>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px;">
@@ -127,8 +128,8 @@
                     <button class="btn btn-primary" style="margin-top:15px; width:100%;" onclick="syncWithExcel()">Sincronizar</button>
                 </div>
                 <div style="background:var(--slate-100); padding:20px; border-radius:12px;">
-                    <label>Carga Multi-Imagen (Sin límite de memoria)</label>
-                    <p style="font-size:0.7rem; margin-bottom:10px;">Nombre archivo = Clave (ej: PESA01.jpg)</p>
+                    <label>Carga Multi-Imagen Inteligente</label>
+                    <p style="font-size:0.7rem; margin-bottom:10px;">Identifica: CODIGO, CODIGO (2), CODIGO (3), etc.</p>
                     <input type="file" id="bulk-images" multiple accept="image/*" style="width:100%;">
                     <div id="upload-progress" style="font-size: 0.8rem; margin-top: 10px; color: var(--primary);"></div>
                 </div>
@@ -178,22 +179,16 @@
             SHEET: "https://docs.google.com/spreadsheets/d/1X8yB6wRqJ6Z3h7K9L0M2N1P4Q5R6S7T8U9V0W1X2Y3Z4A5B6C7D8E9F0G1H2/edit"
         };
 
-        // --- MOTOR DE BASE DE DATOS (IndexedDB) ---
+        // --- INDEXED DB ---
         const DB_NAME = "MundoColchonetasDB";
         const STORE_NAME = "images";
         let db;
 
         async function initDB() {
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
                 const request = indexedDB.open(DB_NAME, 1);
-                request.onupgradeneeded = (e) => {
-                    e.target.result.createObjectStore(STORE_NAME);
-                };
-                request.onsuccess = (e) => {
-                    db = e.target.result;
-                    resolve();
-                };
-                request.onerror = () => reject("Error abriendo base de datos");
+                request.onupgradeneeded = (e) => e.target.result.createObjectStore(STORE_NAME);
+                request.onsuccess = (e) => { db = e.target.result; resolve(); };
             });
         }
 
@@ -213,7 +208,6 @@
             });
         }
 
-        // --- ESTADO GLOBAL ---
         let products = [];
         let cart = [];
         let currentCategory = 'all';
@@ -233,18 +227,11 @@
 
         function loadLocalData() {
             const saved = localStorage.getItem('mundoColchonetas_v5');
-            if (saved) {
-                const data = JSON.parse(saved);
-                products = data.products || [];
-            }
+            if (saved) products = JSON.parse(saved).products || [];
         }
 
-        function saveLocalData() {
-            // Solo guardamos productos en LocalStorage, las imágenes van a IndexedDB
-            localStorage.setItem('mundoColchonetas_v5', JSON.stringify({ products }));
-        }
+        function saveLocalData() { localStorage.setItem('mundoColchonetas_v5', JSON.stringify({ products })); }
 
-        // --- COMPRESIÓN DE IMAGEN ---
         async function compressImage(base64Str) {
             return new Promise((resolve) => {
                 const img = new Image();
@@ -252,14 +239,9 @@
                 img.onload = () => {
                     const canvas = document.createElement('canvas');
                     const MAX_WIDTH = 1000;
-                    let width = img.width;
-                    let height = img.height;
-                    if (width > MAX_WIDTH) {
-                        height *= MAX_WIDTH / width;
-                        width = MAX_WIDTH;
-                    }
-                    canvas.width = width;
-                    canvas.height = height;
+                    let width = img.width, height = img.height;
+                    if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+                    canvas.width = width; canvas.height = height;
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
                     resolve(canvas.toDataURL('image/jpeg', 0.8));
@@ -267,10 +249,9 @@
             });
         }
 
-        // --- RENDERIZADO ---
-        async function renderAll() {
+        function renderAll() {
             renderCategories();
-            await renderProducts();
+            renderProducts();
             if(isAdmin) renderAdminTable();
             updateCartUI();
         }
@@ -293,10 +274,8 @@
             
             let html = "";
             for (const p of filtered) {
-                const claveNorm = p.clave.toUpperCase().trim();
-                const imgs = await getImageFromDB(claveNorm);
+                const imgs = await getImageFromDB(p.clave.toUpperCase().trim());
                 const mainImg = imgs.length > 0 ? imgs[0] : null;
-                
                 html += `
                 <div class="product-card" onclick="openDetail('${p.clave}')">
                     <div class="product-image-container">
@@ -328,7 +307,7 @@
                     <img src="${imgs[0] || ''}" class="main-img" id="active-detail-img">
                     <div class="thumb-container" style="display:flex; gap:10px; overflow-x:auto; margin-top:10px;">
                         ${imgs.map((img, idx) => `
-                            <img src="${img}" class="thumb ${idx===0?'active':''}" onclick="changeDetailImg(this)">
+                            <img src="${img}" class="thumb ${idx===0?'active':''}" onclick="changeDetailImg(this)" style="width:60px; height:60px; object-fit:cover; border-radius:8px; cursor:pointer;">
                         `).join('')}
                     </div>
                 </div>
@@ -342,8 +321,7 @@
                     <button class="btn btn-primary" style="width:100%; padding:15px; justify-content:center;" onclick="addToCart('${p.clave}')">
                         Añadir al Carrito
                     </button>
-                </div>
-            `;
+                </div>`;
             document.getElementById('detail-modal').classList.add('active');
         }
 
@@ -353,6 +331,7 @@
             el.classList.add('active');
         }
 
+        // --- NUEVA LÓGICA DE CARGA DE IMÁGENES ---
         async function handleBulkImages(e) {
             const files = Array.from(e.target.files);
             const progress = document.getElementById('upload-progress');
@@ -360,8 +339,14 @@
 
             for (const file of files) {
                 const reader = new FileReader();
-                const rawName = file.name.split('.')[0].toUpperCase().trim();
-                const clave = rawName.split('_')[0].split('-')[0]; 
+                
+                // 1. Obtener nombre sin extensión: "COLPLE100X50X2 (2)"
+                const fileNameWithSuffix = file.name.split('.')[0].trim();
+                
+                // 2. Regex para separar el código de la numeración (N)
+                // Busca si termina en un espacio seguido de paréntesis con número
+                const match = fileNameWithSuffix.match(/(.+?)(?:\s\(\d+\))?$/);
+                const claveBase = match ? match[1].toUpperCase().trim() : fileNameWithSuffix.toUpperCase().trim();
 
                 const base64 = await new Promise(resolve => {
                     reader.onload = (ev) => resolve(ev.target.result);
@@ -370,19 +355,18 @@
 
                 const compressed = await compressImage(base64);
                 
-                // Obtenemos lo que ya existe en DB para esa clave
-                let existingImgs = await getImageFromDB(clave);
+                let existingImgs = await getImageFromDB(claveBase);
                 if(!existingImgs.includes(compressed)) {
                     existingImgs.push(compressed);
-                    await saveImageToDB(clave, existingImgs);
+                    await saveImageToDB(claveBase, existingImgs);
                 }
                 
                 processed++;
-                progress.innerText = `Cargando en base de datos: ${processed} de ${files.length}...`;
+                progress.innerText = `Vinculando: ${processed} de ${files.length}...`;
             }
             
             renderAll();
-            progress.innerText = "¡Imágenes guardadas correctamente!";
+            progress.innerText = "¡Imágenes agrupadas correctamente!";
             setTimeout(() => progress.innerText = "", 3000);
         }
 
@@ -401,10 +385,7 @@
             const container = document.getElementById('cart-items');
             container.innerHTML = cart.map((item, idx) => `
                 <div style="display:flex; gap:15px; margin-bottom:15px; background:white; padding:15px; border-radius:12px; border:1px solid #eee;">
-                    <div style="flex:1">
-                        <h4 style="font-size:0.9rem;">${item.nombre}</h4>
-                        <p style="color:var(--primary); font-weight:700;">$${item.precioVenta.toLocaleString()} x ${item.qty}</p>
-                    </div>
+                    <div style="flex:1"><h4>${item.nombre}</h4><p style="color:var(--primary); font-weight:700;">$${item.precioVenta.toLocaleString()} x ${item.qty}</p></div>
                     <button onclick="removeFromCart('${item.clave}')" style="background:none; border:none; color:red; cursor:pointer;"><i class="fas fa-trash"></i></button>
                 </div>`).join('');
             const total = cart.reduce((acc, i) => acc + (i.precioVenta * i.qty), 0);
@@ -447,25 +428,16 @@
                 const res = await fetch(csvUrl);
                 const csvText = await res.text();
                 const rows = csvText.split(/\r?\n/).slice(1);
-                
                 products = rows.map(row => {
                     const cols = row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
                     if(!cols || cols.length < 6) return null;
                     const clean = (val) => val ? val.replace(/^"|"$/g, '').trim() : '';
-                    
                     return {
-                        clave: clean(cols[0]),
-                        nombre: clean(cols[2]),
-                        cantidad: parseInt(clean(cols[3])) || 0,
-                        precioVenta: parseInt(clean(cols[5])) || 0,
-                        categoria: clean(cols[7]) || 'OTROS',
-                        descripcion: clean(cols[8]) || ''
+                        clave: clean(cols[0]), nombre: clean(cols[2]), cantidad: parseInt(clean(cols[3])) || 0,
+                        precioVenta: parseInt(clean(cols[5])) || 0, categoria: clean(cols[7]) || 'OTROS', descripcion: clean(cols[8]) || ''
                     };
                 }).filter(p => p !== null);
-
-                saveLocalData();
-                renderAll();
-                alert("Sincronización Exitosa");
+                saveLocalData(); renderAll(); alert("Sincronización Exitosa");
             } catch (e) { alert("Error al conectar con Google Sheets."); }
         }
 
@@ -473,15 +445,13 @@
             const container = document.getElementById('products-table');
             let html = `<table style="width:100%; border-collapse:collapse; margin-top:20px; text-align:left;">
                 <tr style="border-bottom:2px solid var(--primary);"><th style="padding:10px;">Clave</th><th>Nombre</th><th>Precio</th><th>Fotos</th><th>Acciones</th></tr>`;
-            
             for (const p of products) {
                 const imgs = await getImageFromDB(p.clave.toUpperCase().trim());
-                html += `
-                    <tr style="border-bottom:1px solid #eee;">
-                        <td style="padding:10px; font-weight:700;">${p.clave}</td><td>${p.nombre}</td><td>$${p.precioVenta}</td>
-                        <td>${imgs.length > 0 ? '✅ ('+imgs.length+')' : '❌'}</td>
-                        <td><button onclick="deleteProd('${p.clave}')" style="color:red; background:none; border:none; cursor:pointer;">Borrar</button></td>
-                    </tr>`;
+                html += `<tr style="border-bottom:1px solid #eee;">
+                    <td style="padding:10px; font-weight:700;">${p.clave}</td><td>${p.nombre}</td><td>$${p.precioVenta}</td>
+                    <td>${imgs.length > 0 ? '✅ ('+imgs.length+')' : '❌'}</td>
+                    <td><button onclick="deleteProd('${p.clave}')" style="color:red; background:none; border:none; cursor:pointer;">Borrar</button></td>
+                </tr>`;
             }
             html += "</table>";
             container.innerHTML = html;
@@ -491,7 +461,6 @@
             if(confirm("¿Eliminar producto?")) { 
                 products = products.filter(p => p.clave !== c); 
                 saveLocalData(); 
-                // También borramos imágenes de DB
                 const tx = db.transaction(STORE_NAME, "readwrite");
                 tx.objectStore(STORE_NAME).delete(c.toUpperCase().trim());
                 renderAll(); 
