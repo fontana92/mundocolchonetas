@@ -172,11 +172,6 @@
                 <input type="text" id="excel-url" class="form-input" placeholder="https://docs.google.com/spreadsheets/d/...">
                 <button class="cat-btn active" style="margin-top:15px; width:100%;" onclick="syncWithExcel()">Sincronizar Ahora</button>
             </div>
-            <div style="background:var(--slate-100); padding:20px; border-radius:15px;">
-                <label style="font-weight:700;">Carga Local Fallback (IndexedDB)</label>
-                <input type="file" id="bulk-images" multiple accept="image/*" style="width:100%; margin-top:10px;">
-                <div id="upload-progress" style="font-size: 0.8rem; margin-top: 10px; color: var(--primary);"></div>
-            </div>
             <div id="products-table" style="overflow-x: auto; margin-top: 20px;"></div>
         </section>
     </main>
@@ -190,7 +185,7 @@
     </div>
 
     <div class="modal" id="login-modal">
-        <div class="modal-content" style="max-width: 400px; text-align: center;">
+        <div class="modal-content" style="max-width: 400px; text-align: center; padding: 40px 25px;">
             <h3>Acceso Admin</h3>
             <input type="text" id="login-username" placeholder="Usuario" class="form-input">
             <input type="password" id="login-password" placeholder="Contraseña" class="form-input" style="margin-bottom: 20px;">
@@ -220,7 +215,7 @@
         </div>
     </div>
 
-    <div id="notification" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--dark); color: white; padding: 10px 25px; border-radius: 99px; z-index: 3000; transition: var(--transition); font-weight: 500;">Añadido</div>
+    <div id="notification" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--dark); color: white; padding: 10px 25px; border-radius: 99px; z-index: 3000; transition: var(--transition); font-weight: 500; font-size: 0.9rem;">Añadido</div>
     <a href="https://wa.me/5491168705261" class="wa-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
     <script>
@@ -235,16 +230,14 @@
         let db, products = [], cart = [], currentCategory = 'all', isAdminLoggedIn = false, shippingFee = 0, currentLoc = "";
 
         async function initDB() { return new Promise((resolve) => { const request = indexedDB.open(DB_NAME, 1); request.onupgradeneeded = (e) => e.target.result.createObjectStore(STORE_NAME); request.onsuccess = (e) => { db = e.target.result; resolve(); }; }); }
-        async function saveImageToDB(key, dataArray) { return new Promise((resolve) => { const tx = db.transaction(STORE_NAME, "readwrite"); tx.objectStore(STORE_NAME).put(dataArray, key); tx.oncomplete = () => resolve(); }); }
         async function getImageFromDB(key) { return new Promise((resolve) => { const tx = db.transaction(STORE_NAME, "readonly"); const request = tx.objectStore(STORE_NAME).get(key); request.onsuccess = () => resolve(request.result || []); }); }
 
         document.addEventListener('DOMContentLoaded', async () => {
             await initDB();
             loadLocalData();
-            syncWithExcel(true); // Auto-sync inicial
+            syncWithExcel(true);
             if(localStorage.getItem('adminSession') === 'active') { isAdminLoggedIn = true; document.getElementById('logout-btn').style.display = 'block'; }
             document.getElementById('excel-url').value = CONFIG.SHEET;
-            document.getElementById('bulk-images').addEventListener('change', handleBulkImages);
         });
 
         function loadLocalData() { const saved = localStorage.getItem('mundoColchonetas_v5'); if (saved) products = JSON.parse(saved).products || []; }
@@ -265,7 +258,6 @@
             const filtered = currentCategory === 'all' ? products : products.filter(p => p.categoria === currentCategory);
             let html = "";
             for (const p of filtered) {
-                // Combinamos imágenes de Excel con las de IndexedDB
                 const localImgs = await getImageFromDB(p.clave.toUpperCase().trim());
                 const allImgs = [...(p.fotos || []), ...localImgs];
                 const mainImg = allImgs.length > 0 ? allImgs[0] : null;
@@ -276,7 +268,7 @@
                         <p style="font-size:0.7rem; color:var(--primary); font-weight:700; text-transform:uppercase;">${p.categoria}</p>
                         <h3 style="font-size:1.1rem; line-height:1.2;">${p.nombre}</h3>
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
-                            <span class="current-price">$${p.precioVenta.toLocaleString()}</span>
+                            <span class="current-price">$${(p.oferta === 'SI' ? p.precioOferta : p.precioVenta).toLocaleString()}</span>
                             <div class="btn-add-circle" onclick="event.stopPropagation(); addToCart('${p.clave}')"><i class="fas fa-plus"></i></div>
                         </div>
                     </div>
@@ -302,7 +294,9 @@
                         <p style="color:var(--primary); font-weight:700; text-transform:uppercase; font-size:0.8rem;">${p.categoria}</p>
                         <h2 style="font-size:1.8rem; margin-bottom:15px; font-weight:800; line-height:1.1;">${p.nombre}</h2>
                         <p style="color:var(--slate-500); margin-bottom:20px; font-size:0.95rem;">${p.descripcion || 'Sin descripción.'}</p>
-                        <div style="background:var(--slate-100); padding:20px; border-radius:15px; margin-bottom:20px;"><span style="font-size:1.8rem; font-weight:900;">$${p.precioVenta.toLocaleString()}</span></div>
+                        <div style="background:var(--slate-100); padding:20px; border-radius:15px; margin-bottom:20px;">
+                            <span style="font-size:1.8rem; font-weight:900;">$${(p.oferta === 'SI' ? p.precioOferta : p.precioVenta).toLocaleString()}</span>
+                        </div>
                         <button class="cat-btn active" style="width:100%; padding:18px; font-size:1rem;" onclick="addToCart('${p.clave}')">Añadir al Carrito</button>
                     </div>
                 </div>`;
@@ -324,43 +318,40 @@
                     if(!cols || cols.length < 6) return null;
                     const clean = (val) => val ? val.replace(/^"|"$/g, '').trim() : '';
                     
-                    // Nueva lógica Pro: Columna 10 (index 9) para fotos separadas por coma
-                    let fotosArray = [];
-                    if (cols[9]) {
-                        fotosArray = clean(cols[9]).split(',').map(link => link.trim());
-                    }
+                    const precioVenta = parseInt(clean(cols[5])) || 0;
+                    const oferta = clean(cols[9]); // SI o NO
+                    const descuento = parseInt(clean(cols[10])) || 0;
+                    const precioOferta = Math.round(precioVenta * (1 - descuento/100));
 
                     return { 
                         clave: clean(cols[0]), 
                         nombre: clean(cols[2]), 
                         cantidad: parseInt(clean(cols[3])) || 0, 
-                        precioVenta: parseInt(clean(cols[5])) || 0, 
+                        precioVenta: precioVenta, 
                         categoria: clean(cols[7]) || 'OTROS', 
                         descripcion: clean(cols[8]) || '',
-                        fotos: fotosArray // Guardamos los links de la nube
+                        oferta: oferta,
+                        descuento: descuento,
+                        precioOferta: precioOferta,
+                        fotos: cols[11] ? clean(cols[11]).split(',').map(l => l.trim()) : [] // Columna L (11)
                     };
                 }).filter(p => p !== null);
                 saveLocalData(); renderAll(); 
-                if(!silent) alert("Sincronizado con éxito");
-            } catch (e) { if(!silent) alert("Error de conexión"); }
+                if(!silent) alert("Actualizado");
+            } catch (e) { if(!silent) alert("Error Sheets"); }
         }
 
-        // Lógica de carrito y admin (se mantiene igual)
         function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('active'); }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
         function addToCart(clave) { const p = products.find(i => i.clave === clave); const exist = cart.find(i => i.clave === clave); if (exist) exist.qty++; else cart.push({ ...p, qty: 1 }); updateCartUI(); showNotify(`Añadido!`); }
         function calculateShipping() { const cp = document.getElementById('shipping-cp').value.trim(); const result = document.getElementById('shipping-result'); if (SHIPPING_RATES[cp]) { shippingFee = SHIPPING_RATES[cp].price; currentLoc = SHIPPING_RATES[cp].loc; result.innerText = `✅ Envío a ${currentLoc}: $${shippingFee.toLocaleString()}`; } else { shippingFee = 0; result.innerText = "❌ CP no disponible para envío local."; } updateCartUI(); }
-        function updateCartUI() { const container = document.getElementById('cart-items'); container.innerHTML = cart.map((item) => `<div style="display:flex; gap:12px; margin-bottom:12px; background:var(--slate-100); padding:15px; border-radius:15px;"><div style="flex:1"><h4 style="font-size:0.9rem; font-weight:700;">${item.nombre}</h4><p style="color:var(--primary); font-weight:800; font-size:1rem;">$${item.precioVenta.toLocaleString()} x ${item.qty}</p></div><button onclick="removeFromCart('${item.clave}')" style="background:none; border:none; color:red; cursor:pointer;"><i class="fas fa-trash-alt"></i></button></div>`).join(''); const subtotal = cart.reduce((acc, i) => acc + (i.precioVenta * i.qty), 0); document.getElementById('cart-subtotal').innerText = `$${subtotal.toLocaleString()}`; document.getElementById('cart-shipping-fee').innerText = `$${shippingFee.toLocaleString()}`; document.getElementById('cart-total').innerText = `$${(subtotal + shippingFee).toLocaleString()}`; document.getElementById('header-cart-count').innerText = cart.length; }
+        function updateCartUI() { const container = document.getElementById('cart-items'); container.innerHTML = cart.map((item) => `<div style="display:flex; gap:12px; margin-bottom:12px; background:var(--slate-100); padding:15px; border-radius:15px;"><div style="flex:1"><h4 style="font-size:0.9rem; font-weight:700;">${item.nombre}</h4><p style="color:var(--primary); font-weight:800; font-size:1rem;">$${(item.oferta === 'SI' ? item.precioOferta : item.precioVenta).toLocaleString()} x ${item.qty}</p></div><button onclick="removeFromCart('${item.clave}')" style="background:none; border:none; color:red; cursor:pointer;"><i class="fas fa-trash-alt"></i></button></div>`).join(''); const subtotal = cart.reduce((acc, i) => acc + ((i.oferta === 'SI' ? i.precioOferta : i.precioVenta) * i.qty), 0); document.getElementById('cart-subtotal').innerText = `$${subtotal.toLocaleString()}`; document.getElementById('cart-shipping-fee').innerText = `$${shippingFee.toLocaleString()}`; document.getElementById('cart-total').innerText = `$${(subtotal + shippingFee).toLocaleString()}`; document.getElementById('header-cart-count').innerText = cart.length; }
         function removeFromCart(clave) { cart = cart.filter(i => i.clave !== clave); updateCartUI(); }
         function checkoutViaWhatsApp() { if (cart.length === 0) return; let msg = "Hola Mundo Colchonetas! 🪐 Pedido:\n\n"; cart.forEach(i => msg += `• ${i.nombre} (x${i.qty})\n`); msg += `\nSubtotal: ${document.getElementById('cart-subtotal').innerText}\nEnvío: ${document.getElementById('cart-shipping-fee').innerText}\nTOTAL: ${document.getElementById('cart-total').innerText}`; window.open(`https://wa.me/5491168705261?text=${encodeURIComponent(msg)}`, '_blank'); }
         function checkAdminAccess() { if (isAdminLoggedIn) document.getElementById('admin-panel').classList.toggle('visible'); else document.getElementById('login-modal').classList.add('active'); }
         function login() { const u = document.getElementById('login-username').value, p = document.getElementById('login-password').value; if (u === CONFIG.ADMIN.user && p === CONFIG.ADMIN.pass) { isAdminLoggedIn = true; localStorage.setItem('adminSession', 'active'); location.reload(); } else alert("Error"); }
         function logout() { localStorage.removeItem('adminSession'); location.reload(); }
-        async function handleBulkImages(e) { const files = Array.from(e.target.files), progress = document.getElementById('upload-progress'); let processed = 0; for (const file of files) { const reader = new FileReader(); const fileName = file.name.split('.')[0].trim(); const match = fileName.match(/(.+?)(?:\s\(\d+\))?$/); const claveBase = match ? match[1].toUpperCase().trim() : fileName.toUpperCase().trim(); const base64 = await new Promise(resolve => { const r = new FileReader(); r.onload = (ev) => resolve(ev.target.result); r.readAsDataURL(file); }); const img = new Image(); img.src = base64; const compressed = await new Promise(resolve => { img.onload = () => { const canvas = document.createElement('canvas'); const MAX = 1000; let w = img.width, h = img.height; if(w>MAX){ h*=MAX/w; w=MAX; } canvas.width=w; canvas.height=h; canvas.getContext('2d').drawImage(img,0,0,w,h); resolve(canvas.toDataURL('image/jpeg', 0.8)); }; }); let existing = await getImageFromDB(claveBase); if(!existing.includes(compressed)) { existing.push(compressed); await saveImageToDB(claveBase, existing); } processed++; progress.innerText = `Cargando: ${processed}/${files.length}`; } renderAll(); setTimeout(() => progress.innerText = "", 4000); }
-        async function renderAdminTable() { const container = document.getElementById('products-table'); let html = `<table style="width:100%; border-collapse:collapse; margin-top:20px; text-align:left; font-size:0.8rem;"><tr style="border-bottom:2px solid var(--dark);"><th style="padding:10px;">Clave</th><th>Nombre</th><th>Precio</th><th>Fotos</th><th>Acciones</th></tr>`; for (const p of products) { const imgs = await getImageFromDB(p.clave.toUpperCase().trim()); const total = imgs.length + (p.fotos ? p.fotos.length : 0); html += `<tr style="border-bottom:1px solid #eee;"><td style="padding:10px; font-weight:700;">${p.clave}</td><td>${p.nombre}</td><td>$${p.precioVenta.toLocaleString()}</td><td>${total > 0 ? '✅ ('+total+')' : '❌'}</td><td><button onclick="deleteProd('${p.clave}')" style="color:red; background:none; border:none; cursor:pointer;">Borrar</button></td></tr>`; } html += "</table>"; container.innerHTML = html; }
-        async function deleteProd(c) { if(confirm("Eliminar?")) { products = products.filter(p => p.clave !== c); saveLocalData(); const tx = db.transaction(STORE_NAME, "readwrite"); tx.objectStore(STORE_NAME).delete(c.toUpperCase().trim()); renderAll(); } }
         function showNotify(msg) { const n = document.getElementById('notification'); n.innerText = msg; n.style.transform = "translateX(-50%) translateY(0)"; setTimeout(() => n.style.transform = "translateX(-50%) translateY(100px)", 3000); }
-        function scrollToCatalog() { document.getElementById('catalog-title').scrollIntoView({ behavior: 'smooth' }); }
     </script>
 </body>
 </html>
