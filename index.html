@@ -127,7 +127,7 @@
                     <button class="btn btn-primary" style="margin-top:15px; width:100%;" onclick="syncWithExcel()">Sincronizar</button>
                 </div>
                 <div style="background:var(--slate-100); padding:20px; border-radius:12px;">
-                    <label>Carga Multi-Imagen (Auto-Compresión)</label>
+                    <label>Carga Multi-Imagen (Sin límite de memoria)</label>
                     <p style="font-size:0.7rem; margin-bottom:10px;">Nombre archivo = Clave (ej: PESA01.jpg)</p>
                     <input type="file" id="bulk-images" multiple accept="image/*" style="width:100%;">
                     <div id="upload-progress" style="font-size: 0.8rem; margin-top: 10px; color: var(--primary);"></div>
@@ -178,13 +178,49 @@
             SHEET: "https://docs.google.com/spreadsheets/d/1X8yB6wRqJ6Z3h7K9L0M2N1P4Q5R6S7T8U9V0W1X2Y3Z4A5B6C7D8E9F0G1H2/edit"
         };
 
+        // --- MOTOR DE BASE DE DATOS (IndexedDB) ---
+        const DB_NAME = "MundoColchonetasDB";
+        const STORE_NAME = "images";
+        let db;
+
+        async function initDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, 1);
+                request.onupgradeneeded = (e) => {
+                    e.target.result.createObjectStore(STORE_NAME);
+                };
+                request.onsuccess = (e) => {
+                    db = e.target.result;
+                    resolve();
+                };
+                request.onerror = () => reject("Error abriendo base de datos");
+            });
+        }
+
+        async function saveImageToDB(key, dataArray) {
+            return new Promise((resolve) => {
+                const tx = db.transaction(STORE_NAME, "readwrite");
+                tx.objectStore(STORE_NAME).put(dataArray, key);
+                tx.oncomplete = () => resolve();
+            });
+        }
+
+        async function getImageFromDB(key) {
+            return new Promise((resolve) => {
+                const tx = db.transaction(STORE_NAME, "readonly");
+                const request = tx.objectStore(STORE_NAME).get(key);
+                request.onsuccess = () => resolve(request.result || []);
+            });
+        }
+
+        // --- ESTADO GLOBAL ---
         let products = [];
-        let productImages = {}; 
         let cart = [];
         let currentCategory = 'all';
         let isAdmin = false;
 
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
+            await initDB();
             loadLocalData();
             if(localStorage.getItem('adminSession')) {
                 isAdmin = true;
@@ -200,29 +236,24 @@
             if (saved) {
                 const data = JSON.parse(saved);
                 products = data.products || [];
-                productImages = data.productImages || {};
             }
         }
 
         function saveLocalData() {
-            try {
-                localStorage.setItem('mundoColchonetas_v5', JSON.stringify({ products, productImages }));
-            } catch (e) {
-                alert("Error: La memoria del navegador está llena. Intenta subir imágenes más pequeñas o menos cantidad.");
-            }
+            // Solo guardamos productos en LocalStorage, las imágenes van a IndexedDB
+            localStorage.setItem('mundoColchonetas_v5', JSON.stringify({ products }));
         }
 
-        // FUNCIÓN CRÍTICA: Compresión de imágenes para asegurar visualización
+        // --- COMPRESIÓN DE IMAGEN ---
         async function compressImage(base64Str) {
             return new Promise((resolve) => {
                 const img = new Image();
                 img.src = base64Str;
                 img.onload = () => {
                     const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 800;
+                    const MAX_WIDTH = 1000;
                     let width = img.width;
                     let height = img.height;
-
                     if (width > MAX_WIDTH) {
                         height *= MAX_WIDTH / width;
                         width = MAX_WIDTH;
@@ -231,14 +262,15 @@
                     canvas.height = height;
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
-                    resolve(canvas.toDataURL('image/jpeg', 0.7)); // Comprimido al 70%
+                    resolve(canvas.toDataURL('image/jpeg', 0.8));
                 };
             });
         }
 
-        function renderAll() {
+        // --- RENDERIZADO ---
+        async function renderAll() {
             renderCategories();
-            renderProducts();
+            await renderProducts();
             if(isAdmin) renderAdminTable();
             updateCartUI();
         }
@@ -255,19 +287,20 @@
 
         function filterCat(c) { currentCategory = c; renderAll(); }
 
-        function renderProducts() {
+        async function renderProducts() {
             const container = document.getElementById('products-container');
             const filtered = currentCategory === 'all' ? products : products.filter(p => p.categoria === currentCategory);
             
-            container.innerHTML = filtered.map(p => {
+            let html = "";
+            for (const p of filtered) {
                 const claveNorm = p.clave.toUpperCase().trim();
-                const imgs = productImages[claveNorm] || [];
+                const imgs = await getImageFromDB(claveNorm);
                 const mainImg = imgs.length > 0 ? imgs[0] : null;
                 
-                return `
+                html += `
                 <div class="product-card" onclick="openDetail('${p.clave}')">
                     <div class="product-image-container">
-                        ${mainImg ? `<img src="${mainImg}" onerror="this.src='https://via.placeholder.com/300?text=Error+Imagen'">` : '<i class="fas fa-dumbbell fa-3x" style="color:#ddd"></i>'}
+                        ${mainImg ? `<img src="${mainImg}">` : '<i class="fas fa-dumbbell fa-3x" style="color:#ddd"></i>'}
                     </div>
                     <div style="flex:1">
                         <p style="font-size:0.7rem; color:var(--primary); font-weight:700;">${p.categoria}</p>
@@ -280,21 +313,22 @@
                         </div>
                     </div>
                 </div>`;
-            }).join('');
+            }
+            container.innerHTML = html;
         }
 
-        function openDetail(clave) {
+        async function openDetail(clave) {
             const claveNorm = clave.toUpperCase().trim();
             const p = products.find(i => i.clave.toUpperCase().trim() === claveNorm);
-            const imgs = productImages[claveNorm] || [];
+            const imgs = await getImageFromDB(claveNorm);
             const container = document.getElementById('detail-content');
             
             container.innerHTML = `
                 <div class="detail-gallery">
-                    <img src="${imgs[0] || ''}" class="main-img" id="active-detail-img" onerror="this.src='https://via.placeholder.com/400?text=Sin+Imagen'">
+                    <img src="${imgs[0] || ''}" class="main-img" id="active-detail-img">
                     <div class="thumb-container" style="display:flex; gap:10px; overflow-x:auto; margin-top:10px;">
                         ${imgs.map((img, idx) => `
-                            <img src="${img}" class="thumb ${idx===0?'active':''}" onclick="changeDetailImg(this)" style="width:60px; height:60px; object-fit:cover; border-radius:8px; cursor:pointer;">
+                            <img src="${img}" class="thumb ${idx===0?'active':''}" onclick="changeDetailImg(this)">
                         `).join('')}
                     </div>
                 </div>
@@ -335,19 +369,20 @@
                 });
 
                 const compressed = await compressImage(base64);
-
-                if(!productImages[clave]) productImages[clave] = [];
-                if(!productImages[clave].includes(compressed)) {
-                    productImages[clave].push(compressed);
+                
+                // Obtenemos lo que ya existe en DB para esa clave
+                let existingImgs = await getImageFromDB(clave);
+                if(!existingImgs.includes(compressed)) {
+                    existingImgs.push(compressed);
+                    await saveImageToDB(clave, existingImgs);
                 }
                 
                 processed++;
-                progress.innerText = `Procesando: ${processed} de ${files.length}...`;
+                progress.innerText = `Cargando en base de datos: ${processed} de ${files.length}...`;
             }
             
-            saveLocalData();
             renderAll();
-            progress.innerText = "¡Carga completada!";
+            progress.innerText = "¡Imágenes guardadas correctamente!";
             setTimeout(() => progress.innerText = "", 3000);
         }
 
@@ -434,22 +469,35 @@
             } catch (e) { alert("Error al conectar con Google Sheets."); }
         }
 
-        function renderAdminTable() {
+        async function renderAdminTable() {
             const container = document.getElementById('products-table');
-            container.innerHTML = `<table style="width:100%; border-collapse:collapse; margin-top:20px; text-align:left;">
-                <tr style="border-bottom:2px solid var(--primary);"><th style="padding:10px;">Clave</th><th>Nombre</th><th>Precio</th><th>Fotos</th><th>Acciones</th></tr>
-                ${products.map(p => {
-                    const count = (productImages[p.clave.toUpperCase().trim()] || []).length;
-                    return `
+            let html = `<table style="width:100%; border-collapse:collapse; margin-top:20px; text-align:left;">
+                <tr style="border-bottom:2px solid var(--primary);"><th style="padding:10px;">Clave</th><th>Nombre</th><th>Precio</th><th>Fotos</th><th>Acciones</th></tr>`;
+            
+            for (const p of products) {
+                const imgs = await getImageFromDB(p.clave.toUpperCase().trim());
+                html += `
                     <tr style="border-bottom:1px solid #eee;">
                         <td style="padding:10px; font-weight:700;">${p.clave}</td><td>${p.nombre}</td><td>$${p.precioVenta}</td>
-                        <td>${count > 0 ? '✅ ('+count+')' : '❌'}</td>
+                        <td>${imgs.length > 0 ? '✅ ('+imgs.length+')' : '❌'}</td>
                         <td><button onclick="deleteProd('${p.clave}')" style="color:red; background:none; border:none; cursor:pointer;">Borrar</button></td>
                     </tr>`;
-                }).join('')}</table>`;
+            }
+            html += "</table>";
+            container.innerHTML = html;
         }
 
-        function deleteProd(c) { if(confirm("¿Eliminar producto?")) { products = products.filter(p => p.clave !== c); saveLocalData(); renderAll(); } }
+        async function deleteProd(c) { 
+            if(confirm("¿Eliminar producto?")) { 
+                products = products.filter(p => p.clave !== c); 
+                saveLocalData(); 
+                // También borramos imágenes de DB
+                const tx = db.transaction(STORE_NAME, "readwrite");
+                tx.objectStore(STORE_NAME).delete(c.toUpperCase().trim());
+                renderAll(); 
+            } 
+        }
+
         function showNotify(msg) { const n = document.getElementById('notification'); n.innerText = msg; n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 3000); }
         function scrollToCatalog() { document.getElementById('catalog-title').scrollIntoView({ behavior: 'smooth' }); }
     </script>
