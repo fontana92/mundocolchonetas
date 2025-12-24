@@ -39,6 +39,13 @@
         .header-content { display: flex; justify-content: space-between; align-items: center; }
         .logo-svg { height: 50px; width: auto; display: block; }
 
+        .social-header { display: flex; gap: 15px; margin-right: 20px; }
+        .social-icon { 
+            color: var(--dark); font-size: 1.4rem; transition: var(--transition); 
+            text-decoration: none; 
+        }
+        .social-icon:hover { color: var(--primary); filter: drop-shadow(0 0 8px var(--primary-glow)); transform: translateY(-3px); }
+
         /* BANNER COSMIC LUXURY */
         .hero-banner {
             margin: 20px 0 60px;
@@ -67,7 +74,7 @@
         @keyframes float-logo { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-20px) scale(1.02); } }
         .hero-tagline { color: var(--white); font-size: 1rem; font-weight: 300; letter-spacing: 6px; text-transform: uppercase; margin-top: 25px; opacity: 0.7; }
 
-        /* CATALOGO BENTO */
+        /* CATALOGO */
         .category-nav { display: flex; gap: 12px; margin-bottom: 40px; overflow-x: auto; padding: 10px 0; scrollbar-width: none; }
         .cat-btn {
             padding: 12px 28px; border-radius: 99px; border: 1px solid var(--border);
@@ -94,15 +101,25 @@
         .modal.active { display: flex; }
         .modal-content { background: var(--white); width: 100%; max-width: 950px; padding: 50px; border-radius: var(--radius-lg); position: relative; max-height: 90vh; overflow-y: auto; }
         .close-modal { position: absolute; top: 25px; right: 25px; font-size: 2.5rem; cursor: pointer; color: var(--dark); }
-
         .detail-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 50px; }
         .main-img-box { width: 100%; height: 450px; object-fit: contain; background: var(--slate-100); border-radius: var(--radius-md); }
         
         /* ADMIN & CART */
         .admin-panel { background: var(--white); border: 2px solid var(--dark); border-radius: var(--radius-lg); padding: 40px; margin: 40px 0; display: none; }
         .admin-panel.visible { display: block; }
+        
         .cart-sidebar { position: fixed; top: 0; right: -450px; width: 420px; height: 100vh; background: var(--white); z-index: 2000; border-left: 5px solid var(--dark); transition: var(--transition); padding: 40px; display: flex; flex-direction: column; }
         .cart-sidebar.active { right: 0; }
+
+        /* SHIPPING CALCULATOR UI */
+        .shipping-box { 
+            background: var(--slate-100); padding: 20px; border-radius: 15px; margin-bottom: 20px;
+            border: 1px solid var(--border);
+        }
+        .shipping-box label { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: var(--slate-500); display: block; margin-bottom: 8px; }
+        .shipping-input-group { display: flex; gap: 10px; }
+        .shipping-input { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--border); font-weight: 600; }
+        .btn-calc { background: var(--primary); color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: 600; }
 
         .wa-float { position: fixed; bottom: 30px; right: 30px; width: 65px; height: 65px; background: #25D366; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4); z-index: 900; text-decoration: none; }
 
@@ -123,10 +140,14 @@
                 </svg>
             </div>
             <div style="display: flex; gap: 20px; align-items: center;">
+                <div class="social-header">
+                    <a href="https://facebook.com" target="_blank" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://instagram.com" target="_blank" class="social-icon"><i class="fab fa-instagram"></i></a>
+                </div>
                 <button class="cat-btn" onclick="toggleCart()" style="background: var(--dark); color: white; padding: 10px 25px;">
                     <i class="fas fa-shopping-bag"></i> <span id="header-cart-count" style="margin-left:8px;">0</span>
                 </button>
-                <button class="cat-btn" id="logout-btn" onclick="logout()" style="display:none;">Cerrar Sesión</button>
+                <button class="cat-btn" id="logout-btn" onclick="logout()" style="display:none;">Salir</button>
             </div>
         </div>
     </header>
@@ -157,7 +178,6 @@
             </button>
         </div>
 
-        <!-- PANEL ADMIN -->
         <section class="admin-panel" id="admin-panel">
             <h2 style="margin-bottom: 30px; font-size: 2rem;">Consola de Gestión</h2>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-bottom: 40px;">
@@ -185,7 +205,7 @@
     </div>
 
     <div class="modal" id="login-modal">
-        <div class="modal-content" style="max-width: 420px; text-align: center;">
+        <div class="modal-content" style="max-width: 420px; text-align: center; padding: 50px;">
             <h3 style="margin-bottom:25px; font-weight: 800;">Panel de Control</h3>
             <input type="text" id="login-username" placeholder="Usuario" style="width:100%; padding:15px; margin-bottom:15px; border-radius:12px; border:1px solid #ddd;">
             <input type="password" id="login-password" placeholder="Contraseña" style="width:100%; padding:15px; margin-bottom:25px; border-radius:12px; border:1px solid #ddd;">
@@ -199,7 +219,26 @@
             <button onclick="toggleCart()" style="background:none; border:none; font-size:2rem; cursor:pointer;">&times;</button>
         </div>
         <div id="cart-items" style="flex:1; overflow-y:auto;"></div>
-        <div style="padding-top:30px; border-top:3px solid var(--dark);">
+        
+        <!-- CALCULADORA DE ENVÍO -->
+        <div class="shipping-box">
+            <label>Calcular Envío (Código Postal)</label>
+            <div class="shipping-input-group">
+                <input type="text" id="shipping-cp" class="shipping-input" placeholder="Ej: 1629">
+                <button class="btn-calc" onclick="calculateShipping()">Calcular</button>
+            </div>
+            <p id="shipping-result" style="font-size: 0.85rem; margin-top: 10px; font-weight: 600; color: var(--primary);"></p>
+        </div>
+
+        <div style="padding-top:20px; border-top:3px solid var(--dark);">
+            <div style="display:flex; justify-content:space-between; margin-bottom:5px; font-size:0.9rem;">
+                <span>Subtotal</span>
+                <span id="cart-subtotal">$0</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:15px; font-size:0.9rem; color: var(--primary);">
+                <span>Envío</span>
+                <span id="cart-shipping-fee">$0</span>
+            </div>
             <div style="display:flex; justify-content:space-between; margin-bottom:25px; font-weight:800; font-size:1.6rem;">
                 <span>Total</span>
                 <span id="cart-total">$0</span>
@@ -219,9 +258,20 @@
             SHEET: "https://docs.google.com/spreadsheets/d/1X8yB6wRqJ6Z3h7K9L0M2N1P4Q5R6S7T8U9V0W1X2Y3Z4A5B6C7D8E9F0G1H2/edit"
         };
 
+        // TARIFAS DE ENVÍO
+        const SHIPPING_RATES = {
+            "1629": { loc: "Pilar", price: 8000 },
+            "1635": { loc: "Presidente Derqui", price: 8000 },
+            "1669": { loc: "Del Viso", price: 10000 },
+            "1667": { loc: "Manuel Alberti", price: 10000 },
+            "1625": { loc: "Escobar", price: 15000 },
+            "1627": { loc: "Matheu", price: 15000 },
+            "1648": { loc: "Tigre", price: 20000 }
+        };
+
         const DB_NAME = "MundoColchonetasDB";
         const STORE_NAME = "images";
-        let db;
+        let db, products = [], cart = [], currentCategory = 'all', isAdminLoggedIn = false, shippingFee = 0, currentLoc = "";
 
         async function initDB() {
             return new Promise((resolve) => {
@@ -246,11 +296,6 @@
                 request.onsuccess = () => resolve(request.result || []);
             });
         }
-
-        let products = [];
-        let cart = [];
-        let currentCategory = 'all';
-        let isAdminLoggedIn = false;
 
         document.addEventListener('DOMContentLoaded', async () => {
             await initDB();
@@ -381,6 +426,24 @@
             showNotify(`Añadido: ${p.nombre}`);
         }
 
+        function calculateShipping() {
+            const cp = document.getElementById('shipping-cp').value.trim();
+            const result = document.getElementById('shipping-result');
+            
+            if (SHIPPING_RATES[cp]) {
+                shippingFee = SHIPPING_RATES[cp].price;
+                currentLoc = SHIPPING_RATES[cp].loc;
+                result.innerText = `✅ Envíos a ${currentLoc}: $${shippingFee.toLocaleString()}`;
+                result.style.color = "var(--primary)";
+            } else {
+                shippingFee = 0;
+                currentLoc = "";
+                result.innerText = "❌ CP no disponible para envío local. Consultar por WhatsApp.";
+                result.style.color = "#ff4444";
+            }
+            updateCartUI();
+        }
+
         function updateCartUI() {
             const container = document.getElementById('cart-items');
             container.innerHTML = cart.map((item) => `
@@ -388,7 +451,12 @@
                     <div style="flex:1"><h4>${item.nombre}</h4><p style="color:var(--primary); font-weight:800;">$${item.precioVenta.toLocaleString()} x ${item.qty}</p></div>
                     <button onclick="removeFromCart('${item.clave}')" style="background:none; border:none; color:red; cursor:pointer;"><i class="fas fa-trash-alt"></i></button>
                 </div>`).join('');
-            const total = cart.reduce((acc, i) => acc + (i.precioVenta * i.qty), 0);
+            
+            const subtotal = cart.reduce((acc, i) => acc + (i.precioVenta * i.qty), 0);
+            const total = subtotal + shippingFee;
+
+            document.getElementById('cart-subtotal').innerText = `$${subtotal.toLocaleString()}`;
+            document.getElementById('cart-shipping-fee').innerText = `$${shippingFee.toLocaleString()}`;
             document.getElementById('cart-total').innerText = `$${total.toLocaleString()}`;
             document.getElementById('header-cart-count').innerText = cart.length;
         }
@@ -399,7 +467,9 @@
             if (cart.length === 0) return;
             let msg = "Hola Mundo Colchonetas! 🪐 Pedido:\n\n";
             cart.forEach(i => msg += `• ${i.nombre} (x${i.qty})\n`);
-            msg += `\nTotal: ${document.getElementById('cart-total').innerText}`;
+            msg += `\n💰 Subtotal: ${document.getElementById('cart-subtotal').innerText}`;
+            if(shippingFee > 0) msg += `\n🚚 Envío (${currentLoc}): $${shippingFee.toLocaleString()}`;
+            msg += `\n⭐ TOTAL: ${document.getElementById('cart-total').innerText}`;
             window.open(`https://wa.me/5491168705261?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
@@ -447,7 +517,7 @@
                 <tr style="border-bottom:2px solid var(--dark);"><th style="padding:15px;">Clave</th><th>Producto</th><th>Precio</th><th>Fotos</th><th>Acciones</th></tr>`;
             for (const p of products) {
                 const imgs = await getImageFromDB(p.clave.toUpperCase().trim());
-                html += `<tr style="border-bottom:1px solid #eee;"><td style="padding:15px; font-weight:700;">${p.clave}</td><td>${p.nombre}</td><td>$${p.precioVenta.toLocaleString()}</td><td>${imgs.length > 0 ? '✅ ('+imgs.length+')' : '❌'}</td><td><button onclick="deleteProd('${p.clave}')" style="color:red; background:none; border:none; cursor:pointer;">Borrar</button></td></tr>`;
+                html += `<tr style="border-bottom:1px solid #eee;"><td style="padding:15px; font-weight:700;">${p.clave}</td><td>${p.nombre}</td><td>$${p.precioVenta.toLocaleString()}</td><td>${imgs.length > 0 ? '✅ ('+imgs.length+')' : '❌'}</td><td><button onclick="deleteProd('${p.clave}')" style="color:red; background:none; border:none; cursor:pointer; font-weight:700;">Eliminar</button></td></tr>`;
             }
             html += "</table>";
             container.innerHTML = html;
