@@ -37,6 +37,13 @@
         }
         .header-content { display: flex; justify-content: space-between; align-items: center; }
         .logo-svg { height: 35px; width: auto; display: block; }
+        @media (min-width: 768px) { .logo-svg { height: 45px; } }
+
+        /* REDES SOCIALES */
+        .social-header { display: flex; gap: 15px; margin-right: 15px; }
+        .social-icon { color: var(--dark); font-size: 1.3rem; transition: var(--transition); text-decoration: none; }
+        .social-icon:hover { color: var(--primary); filter: drop-shadow(0 0 8px var(--primary-glow)); transform: translateY(-3px); }
+        @media (max-width: 480px) { .social-header { display: none; } }
 
         /* BANNER COSMIC */
         .hero-banner {
@@ -108,6 +115,7 @@
 
         .wa-float { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: #25D366; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4); z-index: 900; text-decoration: none; }
 
+        /* ADMIN PANEL */
         .admin-panel { background: var(--white); border: 2px solid var(--dark); border-radius: var(--radius-lg); padding: 20px; margin: 30px 0; display: none; }
         .admin-panel.visible { display: block; }
         .form-input { width: 100%; padding: 12px; margin-top: 10px; border-radius: 10px; border: 1px solid var(--border); font-size: 16px; }
@@ -128,6 +136,10 @@
                 </svg>
             </div>
             <div style="display: flex; gap: 10px; align-items: center;">
+                <div class="social-header">
+                    <a href="https://facebook.com" target="_blank" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://instagram.com" target="_blank" class="social-icon"><i class="fab fa-instagram"></i></a>
+                </div>
                 <button class="cat-btn" onclick="toggleCart()" style="background: var(--dark); color: white; padding: 8px 15px;">
                     <i class="fas fa-shopping-bag"></i> <span id="header-cart-count" style="margin-left:5px;">0</span>
                 </button>
@@ -141,10 +153,10 @@
             <div class="stars"></div>
             <div class="hero-content">
                 <div class="hero-logo-box">
-                    <!-- LOGO REPARADO: ViewBox 180 de alto para evitar cortes -->
+                    <!-- LOGO SVG CORREGIDO -->
                     <svg width="100%" height="180" viewBox="0 0 450 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="225" cy="60" r="40" fill="#8e44ad"/>
-                        <ellipse cx="225" cy="60" rx="80" ry="20" stroke="white" stroke-width="3" transform="rotate(-15 225 60)"/>
+                        <circle cx="225" cy="55" r="42" fill="#8e44ad"/>
+                        <ellipse cx="225" cy="55" rx="85" ry="20" stroke="white" stroke-width="3" transform="rotate(-15 225 55)"/>
                         <text x="50%" y="125" text-anchor="middle" font-family="Inter" font-weight="300" font-size="42" fill="white" letter-spacing="8">MUNDO</text>
                         <text x="50%" y="175" text-anchor="middle" font-family="Inter" font-weight="800" font-size="48" fill="white" letter-spacing="2">COLCHONETAS</text>
                     </svg>
@@ -160,13 +172,17 @@
         </div>
 
         <div style="text-align: center; margin: 60px 0;">
-            <button class="cat-btn" onclick="checkAdminAccess()">
+            <button class="cat-btn" onclick="checkAdminAccess()" id="admin-main-btn">
                 <i class="fas fa-user-shield"></i> Administración
             </button>
         </div>
 
+        <!-- PANEL ADMIN -->
         <section class="admin-panel" id="admin-panel">
-            <h2 style="margin-bottom: 20px;">Gestión de Catálogo</h2>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <h2 style="font-size: 1.5rem;">Gestión de Catálogo</h2>
+                <button class="cat-btn" onclick="checkAdminAccess()" style="background:#eee;">Cerrar Panel</button>
+            </div>
             <div style="background:var(--slate-100); padding:20px; border-radius:15px; margin-bottom: 20px;">
                 <label style="font-weight:700;">Enlace Google Sheets</label>
                 <input type="text" id="excel-url" class="form-input" placeholder="URL del Excel...">
@@ -241,17 +257,6 @@
         const DB_NAME = "MundoColchonetasDB", STORE_NAME = "images";
         let db, products = [], cart = [], currentCategory = 'all', isAdminLoggedIn = false, shippingFee = 0, currentLoc = "";
 
-        // Inicialización Forzada
-        async function init() {
-            try {
-                await initDB();
-                loadLocalData();
-                await renderAll();
-                // Sincronización silenciosa después de mostrar lo local
-                syncWithExcel(true);
-            } catch(e) { console.error("Error init", e); }
-        }
-
         async function initDB() {
             return new Promise((resolve) => {
                 const request = indexedDB.open(DB_NAME, 1);
@@ -271,6 +276,25 @@
             });
         }
 
+        document.addEventListener('DOMContentLoaded', async () => {
+            await initDB();
+            
+            // CARGA LOCAL INMEDIATA
+            loadLocalData();
+            await renderAll();
+
+            // SINCRONIZACIÓN SILENCIOSA DE FONDO (Si hay internet)
+            if (navigator.onLine) {
+                syncWithExcel(true);
+            }
+
+            if(localStorage.getItem('adminSession') === 'active') {
+                isAdminLoggedIn = true;
+                document.getElementById('logout-btn').style.display = 'block';
+            }
+            document.getElementById('excel-url').value = CONFIG.SHEET;
+        });
+
         function loadLocalData() {
             const saved = localStorage.getItem('mundoColchonetas_v5');
             if (saved) products = JSON.parse(saved).products || [];
@@ -281,12 +305,13 @@
         async function renderAll() {
             renderCategories();
             await renderProducts();
-            if(isAdminLoggedIn) renderAdminTable();
+            if(isAdminLoggedIn && document.getElementById('admin-panel').classList.contains('visible')) renderAdminTable();
             updateCartUI();
         }
 
         function renderCategories() {
             const container = document.getElementById('categories-container');
+            if(!container) return;
             const cats = ['all', ...new Set(products.map(p => p.categoria))];
             container.innerHTML = cats.map(c => `<button class="cat-btn ${currentCategory === c ? 'active' : ''}" onclick="filterCat('${c}')">${c.toUpperCase()}</button>`).join('');
         }
@@ -295,6 +320,7 @@
 
         async function renderProducts() {
             const container = document.getElementById('products-container');
+            if(!container) return;
             const filtered = currentCategory === 'all' ? products : products.filter(p => p.categoria === currentCategory);
             
             if(filtered.length === 0) {
@@ -354,11 +380,13 @@
         function changeImg(el) { document.getElementById('active-detail-img').src = el.src; el.parentElement.querySelectorAll('img').forEach(i => i.style.borderColor = 'transparent'); el.style.borderColor = 'var(--primary)'; }
 
         async function syncWithExcel(silent = false) {
-            const url = document.getElementById('excel-url').value || CONFIG.SHEET;
+            const urlInput = document.getElementById('excel-url');
+            const url = (urlInput && urlInput.value) ? urlInput.value : CONFIG.SHEET;
             try {
                 const sheetId = url.split('/d/')[1].split('/')[0];
                 const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`;
                 const res = await fetch(csvUrl);
+                if(!res.ok) throw new Error();
                 const csvText = await res.text();
                 const rows = csvText.split(/\r?\n/).slice(1);
                 products = rows.map(row => {
@@ -409,19 +437,22 @@
 
         function removeFromCart(clave) { cart = cart.filter(i => i.clave !== clave); updateCartUI(); }
         function checkoutViaWhatsApp() { if (cart.length === 0) return; let msg = "Hola Mundo Colchonetas! 🪐 Pedido:\n\n"; cart.forEach(i => msg += `• ${i.nombre} (x${i.qty})\n`); msg += `\nTOTAL: ${document.getElementById('cart-total').innerText}`; window.open(`https://wa.me/5491168705261?text=${encodeURIComponent(msg)}`, '_blank'); }
-        function checkAdminAccess() { if (isAdminLoggedIn) document.getElementById('admin-panel').classList.toggle('visible'); else document.getElementById('login-modal').classList.add('active'); }
-        function login() { const u = document.getElementById('login-username').value, p = document.getElementById('login-password').value; if (u === CONFIG.ADMIN.user && p === CONFIG.ADMIN.pass) { isAdminLoggedIn = true; localStorage.setItem('adminSession', 'active'); document.getElementById('login-modal').classList.remove('active'); document.getElementById('admin-panel').classList.add('visible'); renderAdminTable(); } else alert("Error"); }
+        
+        function checkAdminAccess() { 
+            if (isAdminLoggedIn) {
+                const panel = document.getElementById('admin-panel');
+                panel.classList.toggle('visible');
+                if(panel.classList.contains('visible')) renderAdminTable();
+            } else {
+                document.getElementById('login-modal').classList.add('active'); 
+            }
+        }
+        
+        function login() { const u = document.getElementById('login-username').value, p = document.getElementById('login-password').value; if (u === CONFIG.ADMIN.user && p === CONFIG.ADMIN.pass) { isAdminLoggedIn = true; localStorage.setItem('adminSession', 'active'); document.getElementById('login-modal').classList.remove('active'); document.getElementById('admin-panel').classList.add('visible'); renderAdminTable(); document.getElementById('logout-btn').style.display = 'block'; } else alert("Error"); }
         function logout() { localStorage.removeItem('adminSession'); isAdminLoggedIn = false; document.getElementById('admin-panel').classList.remove('visible'); document.getElementById('logout-btn').style.display = 'none'; }
         function showNotify(msg) { const n = document.getElementById('notification'); n.innerText = msg; n.style.transform = "translateX(-50%) translateY(0)"; setTimeout(() => n.style.transform = "translateX(-50%) translateY(100px)", 3000); }
         async function renderAdminTable() { const container = document.getElementById('products-table'); let html = `<table style="width:100%; border-collapse:collapse; margin-top:20px; text-align:left; font-size:0.8rem;"><tr style="border-bottom:2px solid var(--dark);"><th style="padding:10px;">Clave</th><th>Producto</th><th>Precio</th><th>Fotos</th><th>Acciones</th></tr>`; for (const p of products) { const imgs = await getImageFromDB(p.clave.toUpperCase().trim()); const total = imgs.length + (p.fotos ? p.fotos.length : 0); html += `<tr style="border-bottom:1px solid #eee;"><td style="padding:10px; font-weight:700;">${p.clave}</td><td>${p.nombre}</td><td>$${p.precioVenta.toLocaleString()}</td><td>${total > 0 ? '✅' : '❌'}</td><td><button onclick="deleteProd('${p.clave}')" style="color:red; background:none; border:none; cursor:pointer;">Borrar</button></td></tr>`; } html += "</table>"; container.innerHTML = html; }
         async function deleteProd(c) { if(confirm("¿Eliminar?")) { products = products.filter(p => p.clave !== c); saveLocalData(); await renderAll(); } }
-
-        // Arranque
-        init().then(() => {
-            const loader = document.getElementById('loader-overlay');
-            loader.style.opacity = '0';
-            setTimeout(() => loader.style.display = 'none', 500);
-        });
     </script>
 </body>
 </html>
