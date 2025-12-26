@@ -126,19 +126,19 @@
 
         <div class="category-nav" id="categories-container"></div>
         <div class="bento-grid" id="products-container">
-             <p id="status-msg" style="text-align:center; grid-column: 1/-1; padding: 50px; color:#999;">Iniciando catálogo fitness...</p>
+             <p id="status-msg" style="text-align:center; grid-column: 1/-1; padding: 50px; color:#999;">Sincronizando catálogo...</p>
         </div>
 
         <div style="text-align: center; margin: 40px 0;">
-            <button class="cat-btn" onclick="checkAdminAccess()">Acceso Administración</button>
+            <button class="cat-btn" onclick="checkAdminAccess()">Administración</button>
         </div>
 
         <section class="admin-panel" id="admin-panel">
             <h3>Panel de Control</h3>
             <div style="margin-top:15px;">
-                <label style="font-size:0.8rem; font-weight:700;">URL de Google Sheets (Publicado como CSV):</label>
-                <input type="text" id="excel-url" class="form-input" placeholder="https://docs.google.com/spreadsheets/d/...">
-                <button class="cat-btn active" style="margin-top:15px; width:100%;" onclick="syncWithExcel()">Sincronizar Datos</button>
+                <label style="font-size:0.8rem; font-weight:700;">URL de Google Sheets:</label>
+                <input type="text" id="excel-url" class="form-input" placeholder="Pega aquí la URL de tu Excel">
+                <button class="cat-btn active" style="margin-top:15px; width:100%;" onclick="syncWithExcel()">Actualizar Ahora</button>
             </div>
         </section>
     </main>
@@ -152,10 +152,10 @@
         <div id="cart-items" style="flex:1; overflow-y:auto;"></div>
         
         <div class="shipping-box">
-            <label style="font-weight:700; font-size:0.8rem;">Calcular Envío (CP)</label>
+            <label style="font-weight:700; font-size:0.8rem;">Cotizar Envío (CP)</label>
             <div style="display:flex; gap:5px; margin-top:5px;">
                 <input type="text" id="shipping-cp" class="form-input" style="margin:0;" placeholder="Ej: 1629">
-                <button class="cat-btn active" onclick="calculateShipping()">Ver</button>
+                <button class="cat-btn active" onclick="calculateShipping()">Calcular</button>
             </div>
             <p id="shipping-result" style="font-size:0.75rem; margin-top:5px; color:var(--primary); font-weight:600;"></p>
         </div>
@@ -164,7 +164,7 @@
             <div style="display:flex; justify-content:space-between; font-size:0.9rem;"><span>Subtotal</span><span id="cart-subtotal">$0</span></div>
             <div style="display:flex; justify-content:space-between; font-size:0.9rem; color:var(--primary);"><span>Envío</span><span id="cart-shipping-fee">$0</span></div>
             <div style="display:flex; justify-content:space-between; font-weight:800; font-size:1.4rem; margin:10px 0;"><span>Total</span><span id="cart-total">$0</span></div>
-            <button class="cat-btn active" style="width:100%; padding:18px;" onclick="checkoutViaWhatsApp()">Enviar Pedido por WhatsApp</button>
+            <button class="cat-btn active" style="width:100%; padding:18px;" onclick="checkoutViaWhatsApp()">Pedir por WhatsApp</button>
         </div>
     </div>
 
@@ -176,37 +176,30 @@
     <a href="https://wa.me/5491168705261" class="wa-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
     <script>
+        // ==========================================
+        // CONFIGURACIÓN: PEGA TU URL AQUÍ ABAJO
+        // ==========================================
         const CONFIG = {
             ADMIN: { user: "admin", pass: "mundo123" },
             KEY: "mundo_colch_vFinal_Robust",
-            DEFAULT_URL: "https://docs.google.com/spreadsheets/d/1X8yB6wRqJ6Z3h7K9L0M2N1P4Q5R6S7T8U9V0W1X2Y3Z4A5B6C7D8E9F0G1H2/edit"
+            // PEGA TU URL DE GOOGLE SHEETS ENTRE LAS COMILLAS:
+            MASTER_URL: "https://docs.google.com/spreadsheets/d/1PgR9SiRaMMHkjTpmX6rKeg5CI4_J-UqXNxypt2p6mog/edit?usp=sharing"
         };
 
         const SHIPPING_RATES = { "1629": 8000, "1635": 8000, "1669": 10000, "1667": 10000, "1625": 15000, "1627": 15000, "1648": 20000 };
         let products = [], cart = [], currentCategory = 'todos', isAdminLoggedIn = false, shippingFee = 0;
 
-        // PARSER PROFESIONAL DE CSV (Evita el desorden de columnas)
+        // ALGORITMO DE PARSING (EVITA DESORDEN)
         function parseCSV(text) {
-            const rows = [];
-            let row = [];
-            let cell = '';
-            let inQuotes = false;
+            const rows = []; let row = []; let cell = ''; let inQuotes = false;
             for (let i = 0; i < text.length; i++) {
-                const char = text[i];
-                const nextChar = text[i+1];
-                if (char === '"' && inQuotes && nextChar === '"') { cell += '"'; i++; }
-                else if (char === '"') { inQuotes = !inQuotes; }
+                const char = text[i]; const next = text[i+1];
+                if (char === '"' && inQuotes && next === '"') { cell += '"'; i++; }
+                else if (char === '"') inQuotes = !inQuotes;
                 else if (char === ',' && !inQuotes) { row.push(cell); cell = ''; }
-                else if (char === '\r' || char === '\n') {
-                    if (!inQuotes) {
-                        if (cell !== '' || row.length > 0) {
-                            row.push(cell);
-                            rows.push(row);
-                            row = [];
-                            cell = '';
-                        }
-                    } else { cell += char; }
-                } else { cell += char; }
+                else if ((char === '\r' || char === '\n') && !inQuotes) {
+                    if (cell !== '' || row.length > 0) { row.push(cell); rows.push(row); row = []; cell = ''; }
+                } else cell += char;
             }
             if (cell !== '' || row.length > 0) { row.push(cell); rows.push(row); }
             return rows;
@@ -216,44 +209,42 @@
             const local = localStorage.getItem(CONFIG.KEY);
             if (local) { products = JSON.parse(local); renderAll(); }
             if (localStorage.getItem('adminSession') === 'active') { isAdminLoggedIn = true; document.getElementById('logout-btn').style.display = 'block'; }
-            document.getElementById('excel-url').value = localStorage.getItem('sheet_url') || CONFIG.DEFAULT_URL;
+            
+            // Usar URL guardada o la Master por defecto
+            const savedUrl = localStorage.getItem('sheet_url') || CONFIG.MASTER_URL;
+            document.getElementById('excel-url').value = savedUrl;
+            
             syncWithExcel(true);
         });
 
         async function syncWithExcel(silent = false) {
-            const urlInput = document.getElementById('excel-url').value || CONFIG.DEFAULT_URL;
+            const urlInput = document.getElementById('excel-url').value || CONFIG.MASTER_URL;
             const statusMsg = document.getElementById('status-msg');
             
             try {
                 const sheetIdMatch = urlInput.match(/\/d\/(.+?)\//);
-                if (!sheetIdMatch) throw new Error("URL no válida");
+                if (!sheetIdMatch) throw new Error("URL No válida");
                 const sheetId = sheetIdMatch[1];
                 
-                // URL DE EXPORTACIÓN DIRECTA (Más compatible con móviles)
+                // Intento de descarga forzada para móviles
                 const exportUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=0&cachebuster=${Date.now()}`;
 
-                const response = await fetch(exportUrl, { cache: "no-store" });
-                if (!response.ok) throw new Error("Error de red");
+                const response = await fetch(exportUrl, { mode: 'cors', cache: 'no-store' });
+                if (!response.ok) throw new Error("Error de conexión");
                 
                 const csvText = await response.text();
                 const rows = parseCSV(csvText);
 
-                if (rows.length < 2) throw new Error("Archivo vacío");
+                if (rows.length < 2) throw new Error("Sin datos");
 
                 const newProducts = rows.slice(1).map(cols => {
-                    // Mapeo estricto de columnas para evitar desorden
                     if (cols.length < 6) return null;
                     const pBase = parseFloat(cols[5]) || 0;
                     const desc = parseFloat(cols[10]) || 0;
                     return {
-                        clave: cols[0],
-                        nombre: cols[2],
-                        stock: cols[3],
-                        precio: pBase,
-                        categoria: cols[7] || 'Otros',
-                        descripcion: cols[8] || '',
-                        oferta: cols[9] === 'SI',
-                        precioOferta: desc > 0 ? Math.round(pBase * (1 - desc/100)) : pBase,
+                        clave: cols[0], nombre: cols[2], stock: cols[3], precio: pBase,
+                        categoria: cols[7] || 'Otros', descripcion: cols[8] || '',
+                        oferta: cols[9] === 'SI', precioOferta: desc > 0 ? Math.round(pBase * (1 - desc/100)) : pBase,
                         fotos: cols[11] ? cols[11].split(',').map(f => f.trim()) : []
                     };
                 }).filter(p => p !== null && p.clave !== "");
@@ -263,12 +254,12 @@
                     localStorage.setItem(CONFIG.KEY, JSON.stringify(products));
                     localStorage.setItem('sheet_url', urlInput);
                     renderAll();
-                    if(!silent) showNotify("Catálogo Sincronizado");
+                    if(!silent) showNotify("Sincronizado");
                 }
             } catch (e) {
-                console.error("Sync Error:", e);
-                if (!silent) alert("Error al sincronizar. Revisa que el Excel esté publicado como CSV.");
-                if (statusMsg && products.length === 0) statusMsg.innerText = "Error al conectar. Intenta recargar.";
+                console.error(e);
+                if (!silent) alert("Error: Revisa que el Excel esté 'Publicado en la Web' como CSV.");
+                if (statusMsg && products.length === 0) statusMsg.innerText = "Error al conectar. Verifica tu internet.";
             }
         }
 
