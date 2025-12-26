@@ -85,16 +85,20 @@
         .modal-content { background: var(--white); width: 100%; max-width: 900px; padding: 30px; border-radius: var(--radius-lg); position: relative; max-height: 90vh; overflow-y: auto; }
         .close-modal { position: absolute; top: 15px; right: 20px; font-size: 2rem; cursor: pointer; color: var(--dark); z-index: 100; }
 
-        .cart-sidebar { position: fixed; top: 0; right: -100%; width: 100%; max-width: 400px; height: 100vh; background: var(--white); z-index: 2000; transition: var(--transition); padding: 25px; display: flex; flex-direction: column; box-shadow: -10px 0 30px rgba(0,0,0,0.1); }
+        .cart-sidebar { position: fixed; top: 0; right: -100%; width: 100%; max-width: 420px; height: 100vh; background: var(--white); z-index: 2000; transition: var(--transition); padding: 25px; display: flex; flex-direction: column; box-shadow: -10px 0 30px rgba(0,0,0,0.1); border-left: 5px solid var(--dark); }
         .cart-sidebar.active { right: 0; }
 
-        .wa-float { position: fixed; bottom: 25px; right: 25px; width: 60px; height: 60px; background: #25D366; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4); z-index: 900; text-decoration: none; }
+        .shipping-box { background: var(--slate-100); padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid var(--border); }
+        .shipping-input-group { display: flex; gap: 8px; margin-top: 10px; }
+        .shipping-input { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--border); font-size: 16px; }
+        .btn-calc { background: var(--primary); color: white; border: none; padding: 0 15px; border-radius: 8px; cursor: pointer; font-weight: 600; }
 
-        .admin-panel { background: var(--slate-100); border-radius: var(--radius-lg); padding: 25px; margin: 30px 0; display: none; }
+        .admin-panel { background: var(--white); border: 2px solid var(--dark); border-radius: var(--radius-lg); padding: 25px; margin: 30px 0; display: none; }
         .admin-panel.visible { display: block; }
         .form-input { width: 100%; padding: 12px; margin-top: 10px; border-radius: 10px; border: 1px solid var(--border); font-size: 16px; }
 
         #notification { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(150px); background: var(--dark); color: white; padding: 12px 30px; border-radius: 99px; z-index: 3000; transition: var(--transition); font-weight: 500; }
+        .wa-float { position: fixed; bottom: 25px; right: 25px; width: 60px; height: 60px; background: #25D366; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4); z-index: 900; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -113,6 +117,7 @@
                 <button class="cat-btn" onclick="toggleCart()" style="background: var(--dark); color: white; padding: 10px 18px;">
                     <i class="fas fa-shopping-bag"></i> <span id="header-cart-count" style="margin-left:5px;">0</span>
                 </button>
+                <button class="cat-btn" id="logout-btn" onclick="logout()" style="display:none; padding: 10px 15px;">Salir</button>
             </div>
         </div>
     </header>
@@ -134,9 +139,9 @@
         </section>
 
         <div class="category-nav" id="categories-container"></div>
-        
+        <h2 style="margin-bottom: 20px; font-weight: 800; font-size: 1.5rem; letter-spacing: -0.04em;">Nuestra Colección</h2>
         <div class="bento-grid" id="products-container">
-             <p style="text-align:center; grid-column: 1/-1; padding: 50px; color:#999;">Cargando catálogo...</p>
+             <p style="text-align:center; grid-column: 1/-1; padding: 50px; color:#999;">Cargando catálogo premium...</p>
         </div>
 
         <div style="text-align: center; margin: 60px 0;">
@@ -145,14 +150,22 @@
             </button>
         </div>
 
+        <!-- PANEL ADMIN RECONSTRUIDO -->
         <section class="admin-panel" id="admin-panel">
-            <h3>Configuración</h3>
-            <input type="text" id="excel-id" class="form-input" placeholder="ID de la Hoja de Google">
-            <button class="cat-btn active" style="margin-top:15px; width:100%;" onclick="syncWithExcel()">Sincronizar</button>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <h2>Gestión de Catálogo</h2>
+                <button class="cat-btn" onclick="checkAdminAccess()" style="background:#eee;">Cerrar</button>
+            </div>
+            <div style="background:var(--slate-100); padding:20px; border-radius:15px;">
+                <label style="font-weight:700;">Enlace Google Sheets (URL Completa)</label>
+                <input type="text" id="excel-url" class="form-input" placeholder="Pega la URL del Excel aquí...">
+                <button class="cat-btn active" style="margin-top:15px; width:100%;" onclick="syncWithExcel()">Sincronizar Ahora</button>
+            </div>
+            <div id="admin-table-container" style="margin-top:20px; overflow-x:auto;"></div>
         </section>
     </main>
 
-    <!-- MODALES -->
+    <!-- MODAL DETALLE -->
     <div class="modal" id="detail-modal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeModal('detail-modal')">&times;</span>
@@ -160,157 +173,131 @@
         </div>
     </div>
 
+    <!-- LOGIN RECONSTRUIDO (Usuario y Pass) -->
     <div class="modal" id="login-modal">
         <div class="modal-content" style="max-width: 400px; text-align: center;">
             <h3>Acceso Admin</h3>
-            <input type="password" id="admin-pass" placeholder="Contraseña" class="form-input">
-            <button class="cat-btn active" style="width:100%; margin-top:20px;" onclick="login()">Entrar</button>
+            <input type="text" id="login-username" placeholder="Usuario" class="form-input">
+            <input type="password" id="login-password" placeholder="Contraseña" class="form-input" style="margin-top:10px;">
+            <button class="cat-btn active" style="width:100%; margin-top:20px; padding:15px;" onclick="login()">Entrar</button>
         </div>
     </div>
 
-    <!-- CARRITO -->
+    <!-- CARRITO RECONSTRUIDO (Con Cotizador) -->
     <div class="cart-sidebar" id="cart-sidebar">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
             <h2 style="font-weight: 800;">Tu Pedido</h2>
             <button onclick="toggleCart()" style="background:none; border:none; font-size:2rem; cursor:pointer;">&times;</button>
         </div>
         <div id="cart-items" style="flex:1; overflow-y:auto;"></div>
-        <div style="padding-top:20px; border-top:1px solid var(--border);">
-            <div style="display:flex; justify-content:space-between; margin-bottom:20px; font-weight:800; font-size:1.4rem;">
-                <span>Total</span>
-                <span id="cart-total">$0</span>
+
+        <div class="shipping-box">
+            <label style="font-weight: 700; font-size: 0.9rem;">Calcular Envío (CP)</label>
+            <div class="shipping-input-group">
+                <input type="text" id="shipping-cp" class="shipping-input" placeholder="Ej: 1629">
+                <button class="btn-calc" onclick="calculateShipping()">Ver</button>
             </div>
-            <button class="cat-btn active" style="width:100%; padding:20px;" onclick="checkoutViaWhatsApp()">Enviar Pedido</button>
+            <p id="shipping-result" style="font-size: 0.8rem; margin-top: 8px; font-weight: 600; color: var(--primary);"></p>
+        </div>
+
+        <div style="padding-top:20px; border-top:2px solid var(--dark);">
+            <div style="display:flex; justify-content:space-between; margin-bottom:5px; font-size:0.9rem;"><span>Subtotal</span><span id="cart-subtotal">$0</span></div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-size:0.9rem; color: var(--primary);"><span>Envío</span><span id="cart-shipping-fee">$0</span></div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:20px; font-weight:800; font-size:1.4rem;"><span>Total</span><span id="cart-total">$0</span></div>
+            <button class="cat-btn active" style="width:100%; padding:20px; font-size:1rem;" onclick="checkoutViaWhatsApp()">
+                <i class="fab fa-whatsapp"></i> Confirmar Pedido
+            </button>
         </div>
     </div>
 
-    <div id="notification">Añadido!</div>
+    <div id="notification">¡Añadido!</div>
     <a href="https://wa.me/5491168705261" class="wa-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
     <script>
-        // CONFIGURACIÓN
         const CONFIG = {
-            ADMIN_PASS: "mundo123",
-            // ID por defecto de tu Google Sheets
-            DEFAULT_ID: "1X8yB6wRqJ6Z3h7K9L0M2N1P4Q5R6S7T8U9V0W1X2Y3Z4A5B6C7D8E9F0G1H2", 
-            KEY: "mundo_colch_data"
+            ADMIN: { user: "admin", pass: "mundo123" },
+            DEFAULT_SHEET: "https://docs.google.com/spreadsheets/d/1X8yB6wRqJ6Z3h7K9L0M2N1P4Q5R6S7T8U9V0W1X2Y3Z4A5B6C7D8E9F0G1H2/edit",
+            KEY: "mundo_colch_vFinal"
         };
 
-        let products = [];
-        let cart = [];
-        let currentCategory = 'todos';
+        const SHIPPING_RATES = { "1629": 8000, "1635": 8000, "1669": 10000, "1667": 10000, "1625": 15000, "1627": 15000, "1648": 20000 };
 
-        // INICIO
+        let products = [], cart = [], currentCategory = 'todos', isAdminLoggedIn = false, shippingFee = 0;
+
         window.addEventListener('DOMContentLoaded', () => {
-            // Cargar lo que haya en memoria primero para que no esté vacío
             const local = localStorage.getItem(CONFIG.KEY);
-            if (local) {
-                products = JSON.parse(local);
-                renderAll();
-            }
-            // Sincronizar inmediatamente
-            syncWithExcel();
+            if (local) { products = JSON.parse(local); renderAll(); }
+            if (localStorage.getItem('adminSession') === 'active') { isAdminLoggedIn = true; document.getElementById('logout-btn').style.display = 'block'; }
+            document.getElementById('excel-url').value = localStorage.getItem('sheet_url') || CONFIG.DEFAULT_SHEET;
+            syncWithExcel(true);
         });
 
-        // FUNCIÓN DE CONEXIÓN CORREGIDA PARA MÓVILES
-        async function syncWithExcel() {
-            const sheetId = document.getElementById('excel-id').value || CONFIG.DEFAULT_ID;
-            
-            // Usamos el endpoint de exportación directa que es más compatible con móviles
-            // Añadimos un timestamp (&t=...) para evitar que el móvil use datos viejos guardados en caché
-            const url = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&t=${new Date().getTime()}`;
-
+        // SOLUCIÓN DEFINITIVA: Sincronización robusta y parsing sin errores
+        async function syncWithExcel(silent = false) {
+            const url = document.getElementById('excel-url').value || CONFIG.DEFAULT_SHEET;
             try {
-                const response = await fetch(url);
-                if (!response.ok) throw new Error("No se pudo obtener el archivo");
-                const csvData = await response.text();
+                // Extraer ID del Excel de la URL completa
+                const sheetId = url.match(/\/d\/(.+?)\//)[1];
+                // Usamos export?format=csv y un cache-buster para móviles
+                const exportUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&t=${Date.now()}`;
+
+                const res = await fetch(exportUrl);
+                const csvText = await res.text();
                 
-                // Procesamiento de filas robusto
-                const rows = csvData.split(/\r?\n/).map(row => {
+                // Regex avanzado para no desordenar columnas (ignora comas dentro de comillas)
+                const rows = csvText.split(/\r?\n/).map(row => {
                     return row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(cell => cell.replace(/^"|"$/g, '').trim());
                 });
 
-                if (rows.length < 2) return;
-
-                const newProducts = rows.slice(1).map(cols => {
-                    if (cols.length < 5 || !cols[0]) return null;
-                    
-                    const pVenta = parseFloat(cols[5]) || 0;
+                products = rows.slice(1).map(cols => {
+                    if (cols.length < 6 || !cols[0]) return null;
+                    const pV = parseFloat(cols[5]) || 0;
                     const desc = parseFloat(cols[10]) || 0;
-
                     return {
-                        clave: cols[0],
-                        nombre: cols[2],
-                        stock: cols[3],
-                        precio: pVenta,
-                        categoria: cols[7] || 'Otros',
-                        descripcion: cols[8] || '',
-                        oferta: cols[9] === 'SI',
-                        precioOferta: desc > 0 ? Math.round(pVenta * (1 - desc/100)) : pVenta,
+                        clave: cols[0], nombre: cols[2], stock: cols[3], precio: pV,
+                        categoria: cols[7] || 'Otros', descripcion: cols[8] || '',
+                        oferta: cols[9] === 'SI', precioOferta: desc > 0 ? Math.round(pV * (1 - desc/100)) : pV,
                         fotos: cols[11] ? cols[11].split(',').map(f => f.trim()) : []
                     };
                 }).filter(p => p !== null);
 
-                if (newProducts.length > 0) {
-                    products = newProducts;
-                    localStorage.setItem(CONFIG.KEY, JSON.stringify(products));
-                    renderAll();
-                }
-            } catch (err) {
-                console.error("Error de conexión:", err);
-                // Si falla el fetch, al menos tenemos los productos del LocalStorage
-                if (products.length > 0) renderAll();
-            }
+                localStorage.setItem(CONFIG.KEY, JSON.stringify(products));
+                localStorage.setItem('sheet_url', url);
+                renderAll();
+                if(!silent) showNotify("Catálogo Sincronizado");
+            } catch (e) { console.error(e); if(!silent) alert("Error al conectar. Verifica que el Excel esté 'Publicado en la Web'."); }
         }
 
-        function renderAll() {
-            renderCategories();
-            renderProducts();
-        }
+        function renderAll() { renderCategories(); renderProducts(); if(isAdminLoggedIn) renderAdminTable(); }
 
         function renderCategories() {
             const container = document.getElementById('categories-container');
             const cats = ['todos', ...new Set(products.map(p => p.categoria))];
-            container.innerHTML = cats.map(c => `
-                <button class="cat-btn ${currentCategory === c ? 'active' : ''}" onclick="filterCat('${c}')">
-                    ${c.toUpperCase()}
-                </button>
-            `).join('');
+            container.innerHTML = cats.map(c => `<button class="cat-btn ${currentCategory === c ? 'active' : ''}" onclick="filterCat('${c}')">${c.toUpperCase()}</button>`).join('');
         }
 
-        function filterCat(c) {
-            currentCategory = c;
-            renderAll();
-        }
+        function filterCat(c) { currentCategory = c; renderAll(); }
 
         function renderProducts() {
             const container = document.getElementById('products-container');
             const filtered = currentCategory === 'todos' ? products : products.filter(p => p.categoria === currentCategory);
-            
-            if (filtered.length === 0) {
-                container.innerHTML = `<p style="grid-column:1/-1; text-align:center; padding:50px;">Cargando productos...</p>`;
-                return;
-            }
+            if (filtered.length === 0) { container.innerHTML = `<p style="grid-column:1/-1; text-align:center; padding:50px;">Cargando productos...</p>`; return; }
 
             container.innerHTML = filtered.map(p => {
                 const precioFinal = p.oferta ? p.precioOferta : p.precio;
                 return `
                 <div class="product-card" onclick="openDetail('${p.clave}')">
-                    <div class="product-image-container">
-                        ${p.fotos[0] ? `<img src="${p.fotos[0]}" loading="lazy">` : '<i class="fas fa-image fa-2x" style="color:#eee"></i>'}
-                    </div>
+                    <div class="product-image-container">${p.fotos[0] ? `<img src="${p.fotos[0]}" loading="lazy">` : '<i class="fas fa-image fa-2x" style="color:#eee"></i>'}</div>
                     <div style="flex:1">
                         <p style="font-size:0.7rem; color:var(--primary); font-weight:700; text-transform:uppercase;">${p.categoria}</p>
-                        <h3 style="font-size:1rem; margin:5px 0 15px 0; font-weight:600;">${p.nombre}</h3>
+                        <h3 style="font-size:1rem; margin:5px 0 15px 0; font-weight:600; line-height:1.2;">${p.nombre}</h3>
                         <div style="display:flex; justify-content:space-between; align-items:center;">
                             <span class="current-price">$${precioFinal.toLocaleString()}</span>
-                            <div class="btn-add-circle" onclick="event.stopPropagation(); addToCart('${p.clave}')">
-                                <i class="fas fa-plus"></i>
-                            </div>
+                            <div class="btn-add-circle" onclick="event.stopPropagation(); addToCart('${p.clave}')"><i class="fas fa-plus"></i></div>
                         </div>
                     </div>
-                </div>
-            `}).join('');
+                </div>`;
+            }).join('');
         }
 
         function openDetail(clave) {
@@ -319,18 +306,15 @@
             const precioFinal = p.oferta ? p.precioOferta : p.precio;
             document.getElementById('detail-content').innerHTML = `
                 <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:30px;">
-                    <div class="product-image-container" style="height:350px;">
-                        <img src="${p.fotos[0] || ''}" style="width:100%; height:100%; object-fit:contain;">
-                    </div>
+                    <div class="product-image-container" style="height:350px;"><img src="${p.fotos[0] || ''}" style="width:100%; height:100%; object-fit:contain;"></div>
                     <div>
                         <p style="color:var(--primary); font-weight:700;">${p.categoria}</p>
-                        <h2 style="font-size:1.8rem; margin:10px 0;">${p.nombre}</h2>
+                        <h2 style="font-size:1.8rem; margin:10px 0; font-weight:800;">${p.nombre}</h2>
                         <p style="color:var(--slate-500); margin-bottom:20px;">${p.descripcion}</p>
                         <div style="font-size:2rem; font-weight:800; margin-bottom:25px;">$${precioFinal.toLocaleString()}</div>
                         <button class="cat-btn active" style="width:100%; padding:18px;" onclick="addToCart('${p.clave}')">Añadir al Carrito</button>
                     </div>
-                </div>
-            `;
+                </div>`;
             document.getElementById('detail-modal').classList.add('active');
         }
 
@@ -342,59 +326,83 @@
             showNotify("¡Añadido!");
         }
 
+        function calculateShipping() {
+            const cp = document.getElementById('shipping-cp').value.trim();
+            const result = document.getElementById('shipping-result');
+            if (SHIPPING_RATES[cp]) {
+                shippingFee = SHIPPING_RATES[cp];
+                result.innerText = `✅ Envío disponible: $${shippingFee.toLocaleString()}`;
+            } else {
+                shippingFee = 0;
+                result.innerText = "❌ CP fuera de zona o no válido.";
+            }
+            updateCartUI();
+        }
+
         function updateCartUI() {
             const container = document.getElementById('cart-items');
-            let total = 0;
+            let subtotal = 0;
             container.innerHTML = cart.map(item => {
                 const p = item.oferta ? item.precioOferta : item.precio;
-                total += p * item.qty;
+                subtotal += p * item.qty;
                 return `
                     <div style="display:flex; gap:15px; margin-bottom:15px; align-items:center; background:var(--slate-100); padding:10px; border-radius:12px;">
                         <div style="flex:1">
-                            <h4 style="font-size:0.9rem;">${item.nombre}</h4>
-                            <p style="font-weight:700;">$${p.toLocaleString()} x ${item.qty}</p>
+                            <h4 style="font-size:0.9rem; font-weight:700;">${item.nombre}</h4>
+                            <p style="font-weight:700; color:var(--primary);">$${p.toLocaleString()} x ${item.qty}</p>
                         </div>
                         <button onclick="removeFromCart('${item.clave}')" style="border:none; color:red; background:none; cursor:pointer;"><i class="fas fa-trash"></i></button>
-                    </div>
-                `;
+                    </div>`;
             }).join('');
-            document.getElementById('cart-total').innerText = `$${total.toLocaleString()}`;
+            document.getElementById('cart-subtotal').innerText = `$${subtotal.toLocaleString()}`;
+            document.getElementById('cart-shipping-fee').innerText = `$${shippingFee.toLocaleString()}`;
+            document.getElementById('cart-total').innerText = `$${(subtotal + shippingFee).toLocaleString()}`;
             document.getElementById('header-cart-count').innerText = cart.reduce((acc, i) => acc + i.qty, 0);
         }
 
-        function removeFromCart(clave) {
-            cart = cart.filter(i => i.clave !== clave);
-            updateCartUI();
-        }
+        function removeFromCart(clave) { cart = cart.filter(i => i.clave !== clave); updateCartUI(); }
 
         function checkoutViaWhatsApp() {
             if(cart.length === 0) return;
             let msg = "Hola Mundo Colchonetas! 🪐 Pedido:\n\n";
             cart.forEach(i => msg += `• ${i.nombre} (x${i.qty})\n`);
-            msg += `\nTOTAL: ${document.getElementById('cart-total').innerText}`;
+            if(shippingFee > 0) msg += `\nEnvío: $${shippingFee.toLocaleString()}`;
+            msg += `\n*TOTAL: ${document.getElementById('cart-total').innerText}*`;
             window.open(`https://wa.me/5491168705261?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
-        function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('active'); }
-        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-        function showNotify(msg) {
-            const n = document.getElementById('notification');
-            n.innerText = msg;
-            n.style.transform = "translateX(-50%) translateY(0)";
-            setTimeout(() => n.style.transform = "translateX(-50%) translateY(150px)", 2000);
-        }
-
-        function checkAdminAccess() {
-            if(localStorage.getItem('admin') === 'true') document.getElementById('admin-panel').classList.toggle('visible');
-            else document.getElementById('login-modal').classList.add('active');
-        }
-
         function login() {
-            if(document.getElementById('admin-pass').value === CONFIG.ADMIN_PASS) {
-                localStorage.setItem('admin', 'true');
+            const u = document.getElementById('login-username').value;
+            const p = document.getElementById('login-password').value;
+            if(u === CONFIG.ADMIN.user && p === CONFIG.ADMIN.pass) {
+                isAdminLoggedIn = true;
+                localStorage.setItem('adminSession', 'active');
                 document.getElementById('login-modal').classList.remove('active');
                 document.getElementById('admin-panel').classList.add('visible');
-            }
+                document.getElementById('logout-btn').style.display = 'block';
+                renderAdminTable();
+            } else { alert("Credenciales incorrectas"); }
+        }
+
+        function logout() { isAdminLoggedIn = false; localStorage.removeItem('adminSession'); location.reload(); }
+        function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        function checkAdminAccess() { if(isAdminLoggedIn) document.getElementById('admin-panel').classList.toggle('visible'); else document.getElementById('login-modal').classList.add('active'); }
+        function showNotify(msg) { const n = document.getElementById('notification'); n.innerText = msg; n.style.transform = "translateX(-50%) translateY(0)"; setTimeout(() => n.style.transform = "translateX(-50%) translateY(150px)", 2000); }
+
+        function renderAdminTable() {
+            const container = document.getElementById('admin-table-container');
+            let html = `<table style="width:100%; border-collapse:collapse; font-size:0.8rem;">
+                <tr style="border-bottom:2px solid black; text-align:left;">
+                    <th style="padding:10px;">Clave</th><th>Nombre</th><th>Precio</th><th>Categoría</th>
+                </tr>`;
+            products.forEach(p => {
+                html += `<tr style="border-bottom:1px solid #eee;">
+                    <td style="padding:10px;">${p.clave}</td><td>${p.nombre}</td><td>$${p.precio}</td><td>${p.categoria}</td>
+                </tr>`;
+            });
+            html += `</table>`;
+            container.innerHTML = html;
         }
     </script>
 </body>
