@@ -255,21 +255,36 @@
         document.addEventListener('DOMContentLoaded', async () => {
             await initDB();
             
-            // 1. MOSTRAR DATOS LOCALES DE INMEDIATO (Sin esperar a la red)
+            // 1. MOSTRAR DATOS LOCALES DE INMEDIATO
             loadLocalData();
-            await renderAll();
-
-            // 2. QUITAR LOADER RÁPIDO (Carga fluida)
+            
+            // Mostrar productos inmediatamente con datos locales
+            await renderProducts();
+            renderCategories();
+            updateCartUI();
+            
+            // 2. QUITAR LOADER RÁPIDO
             setTimeout(() => {
                 const loader = document.getElementById('loader-overlay');
                 loader.style.opacity = '0';
                 setTimeout(() => loader.style.display = 'none', 500);
-            }, 1000);
+            }, 800);
 
-            // 3. ACTUALIZAR EN SEGUNDO PLANO (Silencioso)
-            if (navigator.onLine) {
-                syncWithExcel(true);
-            }
+            // 3. ACTUALIZAR EN SEGUNDO PLANO - Con retardo para móviles
+            setTimeout(async () => {
+                if (navigator.onLine) {
+                    try {
+                        await syncWithExcel(true);
+                        // Solo actualizar UI si cambió algo
+                        if (products.length > 0) {
+                            renderCategories();
+                            await renderProducts();
+                        }
+                    } catch (e) {
+                        console.log("Actualización en segundo plano falló");
+                    }
+                }
+            }, 2000);
 
             if(localStorage.getItem('adminSession') === 'active') {
                 isAdminLoggedIn = true;
@@ -299,40 +314,65 @@
             container.innerHTML = cats.map(c => `<button class="cat-btn ${currentCategory === c ? 'active' : ''}" onclick="filterCat('${c}')">${c.toUpperCase()}</button>`).join('');
         }
 
-        async function filterCat(c) { currentCategory = c; await renderAll(); }
+        async function filterCat(c) { currentCategory = c; await renderProducts(); }
 
         async function renderProducts() {
             const container = document.getElementById('products-container');
             if(!container) return;
+            
+            // Mostrar estado de carga solo si no hay productos locales
+            if (products.length === 0) {
+                container.innerHTML = `<p style="text-align:center; grid-column: 1/-1; padding: 50px; color: #999;">
+                    Cargando catálogo...
+                </p>`;
+                return;
+            }
+            
             const filtered = currentCategory === 'all' ? products : products.filter(p => p.categoria === currentCategory);
             
-            if(filtered.length === 0 && products.length > 0) {
-                container.innerHTML = `<p style="text-align:center; grid-column: 1/-1; padding: 50px;">No hay productos en esta categoría.</p>`;
-                return;
-            } else if (products.length === 0) {
-                container.innerHTML = `<p style="text-align:center; grid-column: 1/-1; padding: 50px; color: #999;">Buscando catálogo...</p>`;
+            if(filtered.length === 0) {
+                container.innerHTML = `<p style="text-align:center; grid-column: 1/-1; padding: 50px;">
+                    No hay productos en esta categoría.
+                </p>`;
                 return;
             }
 
             let html = "";
-            for (const p of filtered) {
-                const localImgs = await getImageFromDB(p.clave.toUpperCase().trim());
-                const allImgs = [...(p.fotos || []), ...localImgs];
+            // Procesar productos de forma optimizada para móviles
+            const productsToShow = filtered.slice(0, 15);
+            
+            for (const p of productsToShow) {
+                const claveUpper = p.clave.toUpperCase().trim();
+                
+                // Usar imágenes de Google Sheets directamente para carga rápida
+                const allImgs = p.fotos || [];
                 const mainImg = allImgs.length > 0 ? allImgs[0] : null;
                 
                 html += `
-                <div class="product-card" onclick="openDetail('${p.clave}')">
-                    <div class="product-image-container">${mainImg ? `<img src="${mainImg}">` : '<i class="fas fa-planet-ring fa-3x" style="color:#ddd"></i>'}</div>
+                <div class="product-card" onclick="openDetail('${claveUpper}')">
+                    <div class="product-image-container">
+                        ${mainImg ? 
+                            `<img src="${mainImg}" loading="lazy" alt="${p.nombre}">` : 
+                            '<i class="fas fa-planet-ring fa-3x" style="color:#ddd"></i>'
+                        }
+                    </div>
                     <div style="flex:1">
-                        <p style="font-size:0.7rem; color:var(--primary); font-weight:700; text-transform:uppercase;">${p.categoria}</p>
+                        <p style="font-size:0.7rem; color:var(--primary); font-weight:700; text-transform:uppercase;">
+                            ${p.categoria}
+                        </p>
                         <h3 style="font-size:1rem; line-height:1.2; margin-bottom:10px;">${p.nombre}</h3>
                         <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <span class="current-price">$${(p.oferta === 'SI' ? p.precioOferta : p.precioVenta).toLocaleString()}</span>
-                            <div class="btn-add-circle" onclick="event.stopPropagation(); addToCart('${p.clave}')"><i class="fas fa-plus"></i></div>
+                            <span class="current-price">
+                                $${(p.oferta === 'SI' ? p.precioOferta : p.precioVenta).toLocaleString()}
+                            </span>
+                            <div class="btn-add-circle" onclick="event.stopPropagation(); addToCart('${claveUpper}')">
+                                <i class="fas fa-plus"></i>
+                            </div>
                         </div>
                     </div>
                 </div>`;
             }
+            
             container.innerHTML = html;
         }
 
@@ -392,8 +432,10 @@
                 if(newProducts.length > 0) {
                     products = newProducts;
                     saveLocalData();
-                    await renderAll();
-                    if(!silent) showNotify("Catálogo Sincronizado!");
+                    if(!silent) {
+                        await renderAll();
+                        showNotify("Catálogo Sincronizado!");
+                    }
                 }
             } catch (e) { if(!silent) alert("Error Sheets"); }
         }
