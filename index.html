@@ -59,10 +59,10 @@
         @keyframes space-move { from { transform: translateY(0); } to { transform: translateY(-50%); } }
 
         .hero-content { text-align: center; z-index: 10; padding: 0 15px; width: 100%; }
-        .hero-logo-box svg { width: 100%; max-width: 350px; height: auto; }
+        .hero-logo-box svg { width: 100%; max-width: 400px; height: auto; display: block; margin: 0 auto; }
         .hero-logo-box { animation: float-logo 6s ease-in-out infinite; filter: drop-shadow(0 0 30px var(--primary-glow)); }
         @keyframes float-logo { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-        .hero-tagline { color: var(--white); font-size: 0.7rem; font-weight: 300; letter-spacing: 3px; text-transform: uppercase; margin-top: 10px; opacity: 0.7; }
+        .hero-tagline { color: var(--white); font-size: 0.7rem; font-weight: 300; letter-spacing: 4px; text-transform: uppercase; margin-top: 10px; opacity: 0.7; }
         @media (min-width: 768px) { .hero-tagline { font-size: 1rem; letter-spacing: 6px; margin-top: 25px; } }
 
         /* CATALOGO */
@@ -108,15 +108,19 @@
         @media (min-width: 480px) { .cart-sidebar { width: 400px; right: -420px; border-left: 5px solid var(--dark); } }
         .cart-sidebar.active { right: 0; }
 
+        .shipping-box { background: var(--slate-100); padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid var(--border); }
+        .shipping-input-group { display: flex; gap: 8px; }
+        .shipping-input { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--border); font-size: 0.9rem; }
+        .btn-calc { background: var(--primary); color: white; border: none; padding: 0 15px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+
         .wa-float { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: #25D366; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4); z-index: 900; text-decoration: none; }
 
         .admin-panel { background: var(--white); border: 2px solid var(--dark); border-radius: var(--radius-lg); padding: 20px; margin: 30px 0; display: none; }
         .admin-panel.visible { display: block; }
-        .form-input { width: 100%; padding: 12px; margin-top: 10px; border-radius: 10px; border: 1px solid var(--border); font-size: 16px; } /* font 16px evita zoom en iPhone */
+        .form-input { width: 100%; padding: 12px; margin-top: 10px; border-radius: 10px; border: 1px solid var(--border); font-size: 16px; }
 
         #notification { position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%) translateY(150px); background: var(--dark); color: white; padding: 10px 25px; border-radius: 99px; z-index: 3000; transition: var(--transition); font-weight: 500; font-size: 0.9rem; pointer-events: none; }
         
-        /* LOADING INDICATOR */
         #loader-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: var(--white); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.5s; }
         .spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -124,10 +128,9 @@
 </head>
 <body>
 
-    <!-- Pantalla de carga para celulares -->
     <div id="loader-overlay">
         <div class="spinner"></div>
-        <p style="margin-top: 15px; font-weight: 600; font-size: 0.9rem; letter-spacing: 1px;">SINCRONIZANDO MUNDO COLCHONETAS...</p>
+        <p style="margin-top: 15px; font-weight: 600; font-size: 0.9rem; letter-spacing: 1px;">CARGANDO MUNDO COLCHONETAS...</p>
     </div>
 
     <header>
@@ -154,7 +157,8 @@
             <div class="stars"></div>
             <div class="hero-content">
                 <div class="hero-logo-box">
-                    <svg width="100%" height="120" viewBox="0 0 450 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- LOGO REPARADO: viewBox de 150 de alto para evitar cortes -->
+                    <svg width="100%" height="150" viewBox="0 0 450 150" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="225" cy="40" r="35" fill="#8e44ad"/>
                         <ellipse cx="225" cy="40" rx="60" ry="15" stroke="white" stroke-width="3" transform="rotate(-15 225 40)"/>
                         <text x="50%" y="95" text-anchor="middle" font-family="Inter" font-weight="300" font-size="38" fill="white" letter-spacing="8">MUNDO</text>
@@ -178,7 +182,7 @@
         <section class="admin-panel" id="admin-panel">
             <h2 style="margin-bottom: 20px;">Gestión de Catálogo</h2>
             <div style="background:var(--slate-100); padding:20px; border-radius:15px; margin-bottom: 20px;">
-                <label style="font-weight:700;">Enlace Google Sheets</label>
+                <label style="font-weight:700; font-size: 0.9rem;">Enlace Google Sheets</label>
                 <input type="text" id="excel-url" class="form-input" placeholder="https://docs.google.com/spreadsheets/d/...">
                 <button class="cat-btn active" style="margin-top:15px; width:100%;" onclick="syncWithExcel()">Sincronizar Ahora</button>
             </div>
@@ -195,7 +199,7 @@
     </div>
 
     <div class="modal" id="login-modal">
-        <div class="modal-content" style="max-width: 400px; text-align: center;">
+        <div class="modal-content" style="max-width: 420px; text-align: center; padding: 40px 25px;">
             <h3>Acceso Admin</h3>
             <input type="text" id="login-username" placeholder="Usuario" class="form-input">
             <input type="password" id="login-password" placeholder="Contraseña" class="form-input" style="margin-bottom: 20px;">
@@ -250,17 +254,22 @@
 
         document.addEventListener('DOMContentLoaded', async () => {
             await initDB();
-            loadLocalData();
             
-            // INTENTO DE SINCRONIZACIÓN MAESTRA
+            // 1. CARGAMOS LO QUE HAYA EN MEMORIA PRIMERO (Para que no se vea vacío)
+            loadLocalData();
+            await renderAll();
+
+            // 2. BUSCAMOS ACTUALIZACIONES EN SEGUNDO PLANO
             try {
                 await syncWithExcel(true);
             } catch(e) {
-                console.log("Offline mode o error sync");
+                console.log("Error sync");
             } finally {
-                // Quitar pantalla de carga
-                document.getElementById('loader-overlay').style.opacity = '0';
-                setTimeout(() => document.getElementById('loader-overlay').style.display = 'none', 500);
+                // Quitar pantalla de carga tras renderizar
+                setTimeout(() => {
+                    document.getElementById('loader-overlay').style.opacity = '0';
+                    setTimeout(() => document.getElementById('loader-overlay').style.display = 'none', 500);
+                }, 800);
             }
 
             if(localStorage.getItem('adminSession') === 'active') {
@@ -269,7 +278,6 @@
             }
             
             document.getElementById('excel-url').value = CONFIG.SHEET;
-            await renderAll();
         });
 
         function loadLocalData() {
@@ -288,6 +296,7 @@
 
         function renderCategories() {
             const container = document.getElementById('categories-container');
+            if(!container) return;
             const cats = ['all', ...new Set(products.map(p => p.categoria))];
             container.innerHTML = cats.map(c => `<button class="cat-btn ${currentCategory === c ? 'active' : ''}" onclick="filterCat('${c}')">${c.toUpperCase()}</button>`).join('');
         }
@@ -296,10 +305,14 @@
 
         async function renderProducts() {
             const container = document.getElementById('products-container');
+            if(!container) return;
             const filtered = currentCategory === 'all' ? products : products.filter(p => p.categoria === currentCategory);
             
-            if(filtered.length === 0) {
-                container.innerHTML = `<p style="text-align:center; grid-column: 1/-1; padding: 50px;">Buscando productos en la nube...</p>`;
+            if(filtered.length === 0 && products.length > 0) {
+                container.innerHTML = `<p style="text-align:center; grid-column: 1/-1; padding: 50px;">No hay productos en esta categoría.</p>`;
+                return;
+            } else if (products.length === 0) {
+                container.innerHTML = `<p style="text-align:center; grid-column: 1/-1; padding: 50px;">Sincronizando productos...</p>`;
                 return;
             }
 
@@ -396,9 +409,21 @@
         function removeFromCart(clave) { cart = cart.filter(i => i.clave !== clave); updateCartUI(); }
         function checkoutViaWhatsApp() { if (cart.length === 0) return; let msg = "Hola Mundo Colchonetas! 🪐 Pedido:\n\n"; cart.forEach(i => msg += `• ${i.nombre} (x${i.qty})\n`); msg += `\nTOTAL: ${document.getElementById('cart-total').innerText}`; window.open(`https://wa.me/5491168705261?text=${encodeURIComponent(msg)}`, '_blank'); }
         function checkAdminAccess() { if (isAdminLoggedIn) document.getElementById('admin-panel').classList.toggle('visible'); else document.getElementById('login-modal').classList.add('active'); }
-        function login() { const u = document.getElementById('login-username').value, p = document.getElementById('login-password').value; if (u === CONFIG.ADMIN.user && p === CONFIG.ADMIN.pass) { isAdminLoggedIn = true; localStorage.setItem('adminSession', 'active'); document.getElementById('login-modal').classList.remove('active'); document.getElementById('admin-panel').classList.add('visible'); renderAdminTable(); } else alert("Error"); }
+        
+        function login() { 
+            const u = document.getElementById('login-username').value, p = document.getElementById('login-password').value; 
+            if (u === CONFIG.ADMIN.user && p === CONFIG.ADMIN.pass) { 
+                isAdminLoggedIn = true; 
+                localStorage.setItem('adminSession', 'active'); 
+                document.getElementById('login-modal').classList.remove('active'); 
+                document.getElementById('admin-panel').classList.add('visible'); 
+                document.getElementById('logout-btn').style.display = 'block';
+                renderAdminTable(); 
+            } else alert("Error"); 
+        }
+        
         function logout() { localStorage.removeItem('adminSession'); isAdminLoggedIn = false; document.getElementById('admin-panel').classList.remove('visible'); document.getElementById('logout-btn').style.display = 'none'; }
-        function showNotify(msg) { const n = document.getElementById('notification'); n.innerText = msg; n.style.transform = "translateX(-50%) translateY(0)"; setTimeout(() => n.style.transform = "translateX(-50%) translateY(150px)", 3000); }
+        function showNotify(msg) { const n = document.getElementById('notification'); n.innerText = msg; n.style.transform = "translateX(-50%) translateY(0)"; setTimeout(() => n.style.transform = "translateX(-50%) translateY(100px)", 3000); }
         async function renderAdminTable() { const container = document.getElementById('products-table'); let html = `<table style="width:100%; border-collapse:collapse; margin-top:20px; text-align:left; font-size:0.8rem;"><tr style="border-bottom:2px solid var(--dark);"><th style="padding:10px;">Clave</th><th>Producto</th><th>Precio</th><th>Fotos</th><th>Acciones</th></tr>`; for (const p of products) { const imgs = await getImageFromDB(p.clave.toUpperCase().trim()); const total = imgs.length + (p.fotos ? p.fotos.length : 0); html += `<tr style="border-bottom:1px solid #eee;"><td style="padding:10px; font-weight:700;">${p.clave}</td><td>${p.nombre}</td><td>$${p.precioVenta.toLocaleString()}</td><td>${total > 0 ? '✅ ('+total+')' : '❌'}</td><td><button onclick="deleteProd('${p.clave}')" style="color:red; background:none; border:none; cursor:pointer;">Borrar</button></td></tr>`; } html += "</table>"; container.innerHTML = html; }
         async function deleteProd(c) { if(confirm("¿Eliminar producto?")) { products = products.filter(p => p.clave !== c); saveLocalData(); await renderAll(); } }
         function scrollToCatalog() { document.getElementById('catalog-title').scrollIntoView({ behavior: 'smooth' }); }
