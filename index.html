@@ -84,7 +84,7 @@
         .modal.active { display: flex; }
         .modal-content { background: var(--white); width: 100%; max-width: 900px; padding: 30px; border-radius: var(--radius-lg); position: relative; max-height: 90vh; overflow-y: auto; }
 
-        .admin-panel { background: #fdfdfd; border: 2px solid var(--dark); border-radius: var(--radius-lg); padding: 25px; margin: 30px 0; display: none; }
+        .admin-panel { background: #fff; border: 2px solid var(--dark); border-radius: var(--radius-lg); padding: 25px; margin: 30px 0; display: none; }
         .admin-panel.visible { display: block; }
         .form-input { width: 100%; padding: 12px; margin-top: 10px; border-radius: 10px; border: 1px solid var(--border); font-size: 16px; }
 
@@ -96,7 +96,7 @@
 
     <header>
         <div class="container header-content">
-            <svg class="logo-svg" viewBox="0 0 450 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg class="logo-svg" viewBox="0 0 450 100" fill="none">
                 <circle cx="210" cy="35" r="28" fill="#8e44ad"/>
                 <ellipse cx="210" cy="35" rx="45" ry="12" stroke="black" stroke-width="3" transform="rotate(-15 210 35)"/>
                 <text x="10" y="45" font-family="Inter" font-weight="300" font-size="42" fill="black" letter-spacing="-2">MUNDO</text>
@@ -126,28 +126,31 @@
 
         <div class="category-nav" id="categories-container"></div>
         <div class="bento-grid" id="products-container">
-             <p id="loading-msg" style="text-align:center; grid-column: 1/-1; padding: 50px; color:#999;">Conectando con el inventario...</p>
+             <p id="status-msg" style="text-align:center; grid-column: 1/-1; padding: 50px; color:#999;">Iniciando catálogo fitness...</p>
         </div>
 
         <div style="text-align: center; margin: 40px 0;">
-            <button class="cat-btn" onclick="checkAdminAccess()">Administración</button>
+            <button class="cat-btn" onclick="checkAdminAccess()">Acceso Administración</button>
         </div>
 
         <section class="admin-panel" id="admin-panel">
-            <h3>Configuración de Sincronización</h3>
-            <p style="font-size:0.8rem; color:#666; margin-bottom:10px;">Pega la URL completa de tu Google Sheets:</p>
-            <input type="text" id="excel-url" class="form-input" placeholder="https://docs.google.com/spreadsheets/d/...">
-            <button class="cat-btn active" style="margin-top:15px; width:100%;" onclick="syncWithExcel()">Sincronizar Catálogo</button>
+            <h3>Panel de Control</h3>
+            <div style="margin-top:15px;">
+                <label style="font-size:0.8rem; font-weight:700;">URL de Google Sheets (Publicado como CSV):</label>
+                <input type="text" id="excel-url" class="form-input" placeholder="https://docs.google.com/spreadsheets/d/...">
+                <button class="cat-btn active" style="margin-top:15px; width:100%;" onclick="syncWithExcel()">Sincronizar Datos</button>
+            </div>
         </section>
     </main>
 
     <!-- CARRITO -->
     <div class="cart-sidebar" id="cart-sidebar">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-            <h2 style="font-weight: 800;">Tu Pedido</h2>
-            <button onclick="toggleCart()" style="background:none; border:none; font-size:2rem;">&times;</button>
+            <h2 style="font-weight: 800;">Tu Carrito</h2>
+            <button onclick="toggleCart()" style="background:none; border:none; font-size:2rem; cursor:pointer;">&times;</button>
         </div>
         <div id="cart-items" style="flex:1; overflow-y:auto;"></div>
+        
         <div class="shipping-box">
             <label style="font-weight:700; font-size:0.8rem;">Calcular Envío (CP)</label>
             <div style="display:flex; gap:5px; margin-top:5px;">
@@ -156,30 +159,58 @@
             </div>
             <p id="shipping-result" style="font-size:0.75rem; margin-top:5px; color:var(--primary); font-weight:600;"></p>
         </div>
+
         <div style="padding-top:15px; border-top:2px solid var(--dark);">
             <div style="display:flex; justify-content:space-between; font-size:0.9rem;"><span>Subtotal</span><span id="cart-subtotal">$0</span></div>
             <div style="display:flex; justify-content:space-between; font-size:0.9rem; color:var(--primary);"><span>Envío</span><span id="cart-shipping-fee">$0</span></div>
             <div style="display:flex; justify-content:space-between; font-weight:800; font-size:1.4rem; margin:10px 0;"><span>Total</span><span id="cart-total">$0</span></div>
-            <button class="cat-btn active" style="width:100%; padding:18px;" onclick="checkoutViaWhatsApp()">Confirmar Pedido</button>
+            <button class="cat-btn active" style="width:100%; padding:18px;" onclick="checkoutViaWhatsApp()">Enviar Pedido por WhatsApp</button>
         </div>
     </div>
 
     <!-- MODALES -->
     <div class="modal" id="detail-modal"><div class="modal-content"><span onclick="closeModal('detail-modal')" style="position:absolute; top:15px; right:20px; font-size:2rem; cursor:pointer;">&times;</span><div id="detail-content"></div></div></div>
-    <div class="modal" id="login-modal"><div class="modal-content" style="max-width:400px; text-align:center;"><h3>Acceso Admin</h3><input type="text" id="login-u" placeholder="Usuario" class="form-input"><input type="password" id="login-p" placeholder="Contraseña" class="form-input"><button class="cat-btn active" style="width:100%; margin-top:20px;" onclick="login()">Entrar</button></div></div>
+    <div class="modal" id="login-modal"><div class="modal-content" style="max-width:400px; text-align:center;"><h3>Login Admin</h3><input type="text" id="login-u" placeholder="Usuario" class="form-input"><input type="password" id="login-p" placeholder="Contraseña" class="form-input"><button class="cat-btn active" style="width:100%; margin-top:20px;" onclick="login()">Entrar</button></div></div>
 
-    <div id="notification">Añadido!</div>
+    <div id="notification">¡Añadido!</div>
     <a href="https://wa.me/5491168705261" class="wa-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
     <script>
         const CONFIG = {
             ADMIN: { user: "admin", pass: "mundo123" },
-            DEFAULT_URL: "https://docs.google.com/spreadsheets/d/1X8yB6wRqJ6Z3h7K9L0M2N1P4Q5R6S7T8U9V0W1X2Y3Z4A5B6C7D8E9F0G1H2/edit",
-            KEY: "mundo_colch_vFinal"
+            KEY: "mundo_colch_vFinal_Robust",
+            DEFAULT_URL: "https://docs.google.com/spreadsheets/d/1X8yB6wRqJ6Z3h7K9L0M2N1P4Q5R6S7T8U9V0W1X2Y3Z4A5B6C7D8E9F0G1H2/edit"
         };
 
         const SHIPPING_RATES = { "1629": 8000, "1635": 8000, "1669": 10000, "1667": 10000, "1625": 15000, "1627": 15000, "1648": 20000 };
         let products = [], cart = [], currentCategory = 'todos', isAdminLoggedIn = false, shippingFee = 0;
+
+        // PARSER PROFESIONAL DE CSV (Evita el desorden de columnas)
+        function parseCSV(text) {
+            const rows = [];
+            let row = [];
+            let cell = '';
+            let inQuotes = false;
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                const nextChar = text[i+1];
+                if (char === '"' && inQuotes && nextChar === '"') { cell += '"'; i++; }
+                else if (char === '"') { inQuotes = !inQuotes; }
+                else if (char === ',' && !inQuotes) { row.push(cell); cell = ''; }
+                else if (char === '\r' || char === '\n') {
+                    if (!inQuotes) {
+                        if (cell !== '' || row.length > 0) {
+                            row.push(cell);
+                            rows.push(row);
+                            row = [];
+                            cell = '';
+                        }
+                    } else { cell += char; }
+                } else { cell += char; }
+            }
+            if (cell !== '' || row.length > 0) { row.push(cell); rows.push(row); }
+            return rows;
+        }
 
         window.addEventListener('DOMContentLoaded', () => {
             const local = localStorage.getItem(CONFIG.KEY);
@@ -190,55 +221,54 @@
         });
 
         async function syncWithExcel(silent = false) {
-            const url = document.getElementById('excel-url').value || CONFIG.DEFAULT_URL;
-            const loadingMsg = document.getElementById('loading-msg');
+            const urlInput = document.getElementById('excel-url').value || CONFIG.DEFAULT_URL;
+            const statusMsg = document.getElementById('status-msg');
             
             try {
-                const sheetIdMatch = url.match(/\/d\/(.+?)\//);
-                if (!sheetIdMatch) throw new Error("URL de Google Sheets inválida.");
-                
+                const sheetIdMatch = urlInput.match(/\/d\/(.+?)\//);
+                if (!sheetIdMatch) throw new Error("URL no válida");
                 const sheetId = sheetIdMatch[1];
-                // Intentamos forzar la descarga del CSV con un cache-buster
-                const exportUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=0&t=${Date.now()}`;
-
-                const res = await fetch(exportUrl);
-                if (!res.ok) throw new Error("No se pudo acceder al archivo. ¿Está 'Publicado en la Web'?");
                 
-                const csvText = await res.text();
-                
-                // Parsing robusto
-                const rows = csvText.split(/\r?\n/).map(row => {
-                    return row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(cell => cell.replace(/^"|"$/g, '').trim());
-                });
+                // URL DE EXPORTACIÓN DIRECTA (Más compatible con móviles)
+                const exportUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=0&cachebuster=${Date.now()}`;
 
-                // Validamos si hay datos reales
+                const response = await fetch(exportUrl, { cache: "no-store" });
+                if (!response.ok) throw new Error("Error de red");
+                
+                const csvText = await response.text();
+                const rows = parseCSV(csvText);
+
+                if (rows.length < 2) throw new Error("Archivo vacío");
+
                 const newProducts = rows.slice(1).map(cols => {
-                    if (cols.length < 6 || !cols[0]) return null;
-                    const pV = parseFloat(cols[5]) || 0;
+                    // Mapeo estricto de columnas para evitar desorden
+                    if (cols.length < 6) return null;
+                    const pBase = parseFloat(cols[5]) || 0;
                     const desc = parseFloat(cols[10]) || 0;
                     return {
-                        clave: cols[0], nombre: cols[2], stock: cols[3], precio: pV,
-                        categoria: cols[7] || 'Otros', descripcion: cols[8] || '',
-                        oferta: cols[9] === 'SI', precioOferta: desc > 0 ? Math.round(pV * (1 - desc/100)) : pV,
+                        clave: cols[0],
+                        nombre: cols[2],
+                        stock: cols[3],
+                        precio: pBase,
+                        categoria: cols[7] || 'Otros',
+                        descripcion: cols[8] || '',
+                        oferta: cols[9] === 'SI',
+                        precioOferta: desc > 0 ? Math.round(pBase * (1 - desc/100)) : pBase,
                         fotos: cols[11] ? cols[11].split(',').map(f => f.trim()) : []
                     };
-                }).filter(p => p !== null);
+                }).filter(p => p !== null && p.clave !== "");
 
-                if (newProducts.length === 0) {
-                    if (!silent) alert("El archivo se leyó pero no se encontraron productos. Revisa que los datos empiecen en la segunda fila.");
-                    return;
+                if (newProducts.length > 0) {
+                    products = newProducts;
+                    localStorage.setItem(CONFIG.KEY, JSON.stringify(products));
+                    localStorage.setItem('sheet_url', urlInput);
+                    renderAll();
+                    if(!silent) showNotify("Catálogo Sincronizado");
                 }
-
-                products = newProducts;
-                localStorage.setItem(CONFIG.KEY, JSON.stringify(products));
-                localStorage.setItem('sheet_url', url);
-                renderAll();
-                if(!silent) showNotify("Catálogo Sincronizado");
-
             } catch (e) {
-                console.error(e);
-                if (!silent) alert("Error: " + e.message);
-                if (loadingMsg) loadingMsg.innerText = "Error al cargar. Verifica la conexión.";
+                console.error("Sync Error:", e);
+                if (!silent) alert("Error al sincronizar. Revisa que el Excel esté publicado como CSV.");
+                if (statusMsg && products.length === 0) statusMsg.innerText = "Error al conectar. Intenta recargar.";
             }
         }
 
@@ -256,21 +286,21 @@
             const container = document.getElementById('products-container');
             const filtered = currentCategory === 'todos' ? products : products.filter(p => p.categoria === currentCategory);
             
-            if (filtered.length === 0 && products.length > 0) {
-                container.innerHTML = `<p style="grid-column:1/-1; text-align:center; padding:50px;">No hay productos en esta categoría.</p>`;
+            if (filtered.length === 0) {
+                container.innerHTML = `<p style="grid-column:1/-1; text-align:center; padding:50px;">Cargando catálogo...</p>`;
                 return;
             }
 
             container.innerHTML = filtered.map(p => {
-                const precioFinal = p.oferta ? p.precioOferta : p.precio;
+                const pFinal = p.oferta ? p.precioOferta : p.precio;
                 return `
                 <div class="product-card" onclick="openDetail('${p.clave}')">
                     <div class="product-image-container">${p.fotos[0] ? `<img src="${p.fotos[0]}" loading="lazy">` : '<i class="fas fa-image fa-2x" style="color:#eee"></i>'}</div>
                     <div style="flex:1">
                         <p style="font-size:0.7rem; color:var(--primary); font-weight:700; text-transform:uppercase;">${p.categoria}</p>
-                        <h3 style="font-size:1rem; margin:5px 0 15px 0; font-weight:600;">${p.nombre}</h3>
+                        <h3 style="font-size:1rem; margin:5px 0 15px 0; font-weight:600; line-height:1.2;">${p.nombre}</h3>
                         <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <span class="current-price">$${precioFinal.toLocaleString()}</span>
+                            <span class="current-price">$${pFinal.toLocaleString()}</span>
                             <div class="btn-add-circle" onclick="event.stopPropagation(); addToCart('${p.clave}')"><i class="fas fa-plus"></i></div>
                         </div>
                     </div>
@@ -281,7 +311,7 @@
         function openDetail(clave) {
             const p = products.find(i => i.clave === clave);
             if(!p) return;
-            const precioFinal = p.oferta ? p.precioOferta : p.precio;
+            const pFinal = p.oferta ? p.precioOferta : p.precio;
             document.getElementById('detail-content').innerHTML = `
                 <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:30px;">
                     <div class="product-image-container" style="height:350px;"><img src="${p.fotos[0] || ''}" style="width:100%; height:100%; object-fit:contain;"></div>
@@ -289,7 +319,7 @@
                         <p style="color:var(--primary); font-weight:700;">${p.categoria}</p>
                         <h2 style="font-size:1.8rem; margin:10px 0; font-weight:800;">${p.nombre}</h2>
                         <p style="color:var(--slate-500); margin-bottom:20px;">${p.descripcion}</p>
-                        <div style="font-size:2rem; font-weight:800; margin-bottom:25px;">$${precioFinal.toLocaleString()}</div>
+                        <div style="font-size:2rem; font-weight:800; margin-bottom:25px;">$${pFinal.toLocaleString()}</div>
                         <button class="cat-btn active" style="width:100%; padding:18px;" onclick="addToCart('${p.clave}')">Añadir al Carrito</button>
                     </div>
                 </div>`;
@@ -298,36 +328,36 @@
 
         function addToCart(clave) {
             const p = products.find(i => i.clave === clave);
-            const item = cart.find(i => i.clave === clave);
-            if(item) item.qty++; else cart.push({...p, qty: 1});
+            const exist = cart.find(i => i.clave === clave);
+            if(exist) exist.qty++; else cart.push({...p, qty: 1});
             updateCartUI();
             showNotify("¡Añadido!");
         }
 
         function calculateShipping() {
             const cp = document.getElementById('shipping-cp').value.trim();
-            const result = document.getElementById('shipping-result');
+            const res = document.getElementById('shipping-result');
             if (SHIPPING_RATES[cp]) {
                 shippingFee = SHIPPING_RATES[cp];
-                result.innerText = `✅ Envío: $${shippingFee.toLocaleString()}`;
+                res.innerText = `✅ Envío a zona: $${shippingFee.toLocaleString()}`;
             } else {
                 shippingFee = 0;
-                result.innerText = "❌ CP no disponible para envío local.";
+                res.innerText = "❌ CP no disponible para envío local.";
             }
             updateCartUI();
         }
 
         function updateCartUI() {
             const container = document.getElementById('cart-items');
-            let subtotal = 0;
+            let sub = 0;
             container.innerHTML = cart.map(item => {
                 const p = item.oferta ? item.precioOferta : item.precio;
-                subtotal += p * item.qty;
+                sub += p * item.qty;
                 return `<div style="display:flex; gap:15px; margin-bottom:15px; align-items:center; background:var(--slate-100); padding:10px; border-radius:12px;"><div style="flex:1"><h4 style="font-size:0.9rem; font-weight:700;">${item.nombre}</h4><p style="font-weight:700; color:var(--primary);">$${p.toLocaleString()} x ${item.qty}</p></div><button onclick="removeFromCart('${item.clave}')" style="border:none; color:red; background:none; cursor:pointer;"><i class="fas fa-trash"></i></button></div>`;
             }).join('');
-            document.getElementById('cart-subtotal').innerText = `$${subtotal.toLocaleString()}`;
+            document.getElementById('cart-subtotal').innerText = `$${sub.toLocaleString()}`;
             document.getElementById('cart-shipping-fee').innerText = `$${shippingFee.toLocaleString()}`;
-            document.getElementById('cart-total').innerText = `$${(subtotal + shippingFee).toLocaleString()}`;
+            document.getElementById('cart-total').innerText = `$${(sub + shippingFee).toLocaleString()}`;
             document.getElementById('header-cart-count').innerText = cart.reduce((acc, i) => acc + i.qty, 0);
         }
 
