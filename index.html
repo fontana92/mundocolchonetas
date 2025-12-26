@@ -92,9 +92,22 @@
         @media (min-width: 768px) { .modal-content { padding: 50px; } }
         .close-modal { position: absolute; top: 10px; right: 15px; font-size: 2rem; cursor: pointer; color: var(--dark); z-index: 100; }
 
+        .detail-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        @media (min-width: 850px) { .detail-grid { grid-template-columns: 1.2fr 1fr; gap: 50px; } }
+        .main-img-box { width: 100%; height: 280px; object-fit: contain; background: var(--slate-100); border-radius: var(--radius-md); }
+        
+        /* CARRITO */
         .cart-sidebar { position: fixed; top: 0; right: -100%; width: 100%; height: 100vh; background: var(--white); z-index: 2000; transition: var(--transition); padding: 20px; display: flex; flex-direction: column; }
         @media (min-width: 480px) { .cart-sidebar { width: 400px; right: -420px; border-left: 5px solid var(--dark); } }
         .cart-sidebar.active { right: 0; }
+
+        /* ENVÍOS */
+        .shipping-box { background: var(--slate-100); padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid var(--border); }
+        .shipping-input-group { display: flex; gap: 8px; }
+        .shipping-input { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--border); font-size: 16px; }
+        .btn-calc { background: var(--primary); color: white; border: none; padding: 0 15px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+
+        .wa-float { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: #25D366; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4); z-index: 900; text-decoration: none; }
 
         .admin-panel { background: var(--white); border: 2px solid var(--dark); border-radius: var(--radius-lg); padding: 20px; margin: 30px 0; display: none; }
         .admin-panel.visible { display: block; }
@@ -102,14 +115,17 @@
 
         #notification { position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%) translateY(150px); background: var(--dark); color: white; padding: 10px 25px; border-radius: 99px; z-index: 3000; transition: var(--transition); font-weight: 500; font-size: 0.9rem; pointer-events: none; }
         
-        #sync-indicator { position: fixed; bottom: 20px; left: 20px; background: var(--dark); color: white; padding: 8px 15px; border-radius: 50px; font-size: 0.7rem; font-weight: 600; z-index: 800; display: none; align-items: center; gap: 8px; box-shadow: var(--shadow); }
-        .dot { width: 8px; height: 8px; background: var(--primary); border-radius: 50%; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.2); } 100% { opacity: 1; transform: scale(1); } }
+        #loader-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: var(--white); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.5s; opacity: 1; }
+        .spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <div id="sync-indicator"><div class="dot"></div> ACTUALIZANDO...</div>
+    <div id="loader-overlay">
+        <div class="spinner"></div>
+        <p style="margin-top: 15px; font-weight: 600; font-size: 0.8rem; letter-spacing: 1px;">SINCRONIZANDO...</p>
+    </div>
 
     <header>
         <div class="container header-content">
@@ -135,8 +151,7 @@
             <div class="stars"></div>
             <div class="hero-content">
                 <div class="hero-logo-box">
-                    <!-- LOGO REPARADO: viewBox 180 de alto para que no se corten las letras -->
-                    <svg width="100%" height="180" viewBox="0 0 450 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="100%" height="160" viewBox="0 0 450 180" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="225" cy="55" r="38" fill="#8e44ad"/>
                         <ellipse cx="225" cy="55" rx="75" ry="18" stroke="white" stroke-width="3" transform="rotate(-15 225 55)"/>
                         <text x="50%" y="125" text-anchor="middle" font-family="Inter" font-weight="300" font-size="42" fill="white" letter-spacing="8">MUNDO</text>
@@ -191,7 +206,26 @@
             <button onclick="toggleCart()" style="background:none; border:none; font-size:2rem; cursor:pointer;">&times;</button>
         </div>
         <div id="cart-items" style="flex:1; overflow-y:auto;"></div>
+
+        <!-- COTIZADOR DE ENVÍO -->
+        <div class="shipping-box">
+            <label>Calcular Envío (CP)</label>
+            <div class="shipping-input-group">
+                <input type="text" id="shipping-cp" class="shipping-input" placeholder="Ej: 1629">
+                <button class="btn-calc" onclick="calculateShipping()">Ver</button>
+            </div>
+            <p id="shipping-result" style="font-size: 0.75rem; margin-top: 8px; font-weight: 600; color: var(--primary);"></p>
+        </div>
+
         <div style="padding-top:15px; border-top:2px solid var(--dark);">
+            <div style="display:flex; justify-content:space-between; margin-bottom:5px; font-size:0.85rem;">
+                <span>Subtotal</span>
+                <span id="cart-subtotal">$0</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-size:0.85rem; color: var(--primary);">
+                <span>Envío</span>
+                <span id="cart-shipping-fee">$0</span>
+            </div>
             <div style="display:flex; justify-content:space-between; margin-bottom:20px; font-weight:800; font-size:1.4rem;">
                 <span>Total</span>
                 <span id="cart-total">$0</span>
@@ -209,8 +243,10 @@
             SHEET: "https://docs.google.com/spreadsheets/d/1X8yB6wRqJ6Z3h7K9L0M2N1P4Q5R6S7T8U9V0W1X2Y3Z4A5B6C7D8E9F0G1H2/edit"
         };
 
+        const SHIPPING_RATES = { "1629": { loc: "Pilar", price: 8000 }, "1635": { loc: "Derqui", price: 8000 }, "1669": { loc: "Del Viso", price: 10000 }, "1667": { loc: "Manuel Alberti", price: 10000 }, "1625": { loc: "Escobar", price: 15000 }, "1627": { loc: "Matheu", price: 15000 }, "1648": { loc: "Tigre", price: 20000 } };
+
         const DB_NAME = "MundoColchonetasDB", STORE_NAME = "images";
-        let db, products = [], cart = [], currentCategory = 'all', isAdminLoggedIn = false;
+        let db, products = [], cart = [], currentCategory = 'all', isAdminLoggedIn = false, shippingFee = 0, currentLoc = "";
 
         async function initDB() {
             return new Promise((resolve) => {
@@ -234,17 +270,19 @@
         document.addEventListener('DOMContentLoaded', async () => {
             await initDB();
             
-            // 1. CARGA LOCAL INSTANTÁNEA (Prioridad #1)
+            // 1. CARGA LOCAL PRIORITARIA
             loadLocalData();
             await renderAll();
 
-            // 2. SINCRONIZACIÓN SILENCIOSA DE FONDO
-            if (navigator.onLine) {
-                document.getElementById('sync-indicator').style.display = 'flex';
-                syncWithExcel(true).finally(() => {
-                    document.getElementById('sync-indicator').style.display = 'none';
-                });
-            }
+            // 2. SINCRONIZACIÓN SILENCIOSA
+            try {
+                await syncWithExcel(true);
+            } catch(e) { console.log("Sync background failed"); }
+            
+            // Quitar loader
+            const loader = document.getElementById('loader-overlay');
+            loader.style.opacity = '0';
+            setTimeout(() => loader.style.display = 'none', 500);
 
             if(localStorage.getItem('adminSession') === 'active') {
                 isAdminLoggedIn = true;
@@ -282,7 +320,7 @@
             const filtered = currentCategory === 'all' ? products : products.filter(p => p.categoria === currentCategory);
             
             if(filtered.length === 0) {
-                container.innerHTML = `<p style="text-align:center; grid-column: 1/-1; padding: 50px; color:#999;">No hay productos guardados.</p>`;
+                container.innerHTML = `<p style="text-align:center; grid-column: 1/-1; padding: 50px; color:#999;">${products.length > 0 ? 'No hay productos en esta categoría.' : 'Cargando productos...'}</p>`;
                 return;
             }
 
@@ -340,21 +378,13 @@
         async function syncWithExcel(silent = false) {
             const urlInput = document.getElementById('excel-url');
             const url = (urlInput && urlInput.value) ? urlInput.value : CONFIG.SHEET;
-            
             try {
                 const sheetId = url.split('/d/')[1].split('/')[0];
                 const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`;
-                
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 6000); // 6 seg timeout
-
-                const res = await fetch(csvUrl, { signal: controller.signal });
-                clearTimeout(timeoutId);
-
+                const res = await fetch(csvUrl);
                 if(!res.ok) throw new Error();
                 const csvText = await res.text();
                 const rows = csvText.split(/\r?\n/).slice(1);
-                
                 const newProducts = rows.map(row => {
                     const cols = row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
                     if(!cols || cols.length < 6) return null;
@@ -375,15 +405,37 @@
                     await renderAll();
                     if(!silent) showNotify("Catálogo Actualizado!");
                 }
-            } catch (e) { 
-                if(!silent) alert("Error: No se pudo conectar con la nube."); 
-            }
+            } catch (e) { if(!silent) alert("Error de conexión"); }
         }
 
         function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('active'); }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
         function addToCart(clave) { const p = products.find(i => i.clave === clave); if(!p) return; const exist = cart.find(i => i.clave === clave); if (exist) exist.qty++; else cart.push({ ...p, qty: 1 }); updateCartUI(); showNotify(`Añadido!`); }
-        function updateCartUI() { const container = document.getElementById('cart-items'); container.innerHTML = cart.map((item) => `<div style="display:flex; gap:12px; margin-bottom:12px; background:var(--slate-100); padding:15px; border-radius:15px;"><div style="flex:1"><h4 style="font-size:0.9rem; font-weight:700;">${item.nombre}</h4><p style="color:var(--primary); font-weight:800; font-size:1rem;">$${(item.oferta === 'SI' ? item.precioOferta : item.precioVenta).toLocaleString()} x ${item.qty}</p></div><button onclick="removeFromCart('${item.clave}')" style="background:none; border:none; color:red; cursor:pointer;"><i class="fas fa-trash-alt"></i></button></div>`).join(''); const total = cart.reduce((acc, i) => acc + ((i.oferta === 'SI' ? i.precioOferta : i.precioVenta) * i.qty), 0); document.getElementById('cart-total').innerText = `$${total.toLocaleString()}`; document.getElementById('header-cart-count').innerText = cart.length; }
+
+        function calculateShipping() {
+            const cp = document.getElementById('shipping-cp').value.trim();
+            const result = document.getElementById('shipping-result');
+            if (SHIPPING_RATES[cp]) {
+                shippingFee = SHIPPING_RATES[cp].price;
+                currentLoc = SHIPPING_RATES[cp].loc;
+                result.innerText = `✅ Envíos a ${currentLoc}: $${shippingFee.toLocaleString()}`;
+            } else {
+                shippingFee = 0; currentLoc = "";
+                result.innerText = "❌ CP no disponible para envío local.";
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cart-items');
+            container.innerHTML = cart.map((item) => `<div style="display:flex; gap:12px; margin-bottom:12px; background:var(--slate-100); padding:15px; border-radius:15px;"><div style="flex:1"><h4 style="font-size:0.9rem; font-weight:700;">${item.nombre}</h4><p style="color:var(--primary); font-weight:800; font-size:1rem;">$${(item.oferta === 'SI' ? item.precioOferta : item.precioVenta).toLocaleString()} x ${item.qty}</p></div><button onclick="removeFromCart('${item.clave}')" style="background:none; border:none; color:red; cursor:pointer;"><i class="fas fa-trash-alt"></i></button></div>`).join('');
+            const subtotal = cart.reduce((acc, i) => acc + ((i.oferta === 'SI' ? i.precioOferta : i.precioVenta) * i.qty), 0);
+            document.getElementById('cart-subtotal').innerText = `$${subtotal.toLocaleString()}`;
+            document.getElementById('cart-shipping-fee').innerText = `$${shippingFee.toLocaleString()}`;
+            document.getElementById('cart-total').innerText = `$${(subtotal + shippingFee).toLocaleString()}`;
+            document.getElementById('header-cart-count').innerText = cart.length;
+        }
+
         function removeFromCart(clave) { cart = cart.filter(i => i.clave !== clave); updateCartUI(); }
         function checkoutViaWhatsApp() { if (cart.length === 0) return; let msg = "Hola Mundo Colchonetas! 🪐 Pedido:\n\n"; cart.forEach(i => msg += `• ${i.nombre} (x${i.qty})\n`); msg += `\nTOTAL: ${document.getElementById('cart-total').innerText}`; window.open(`https://wa.me/5491168705261?text=${encodeURIComponent(msg)}`, '_blank'); }
         function checkAdminAccess() { if (isAdminLoggedIn) document.getElementById('admin-panel').classList.toggle('visible'); else document.getElementById('login-modal').classList.add('active'); }
@@ -391,7 +443,7 @@
         function logout() { localStorage.removeItem('adminSession'); isAdminLoggedIn = false; document.getElementById('admin-panel').classList.remove('visible'); document.getElementById('logout-btn').style.display = 'none'; }
         function showNotify(msg) { const n = document.getElementById('notification'); n.innerText = msg; n.style.transform = "translateX(-50%) translateY(0)"; setTimeout(() => n.style.transform = "translateX(-50%) translateY(100px)", 3000); }
         async function renderAdminTable() { const container = document.getElementById('products-table'); let html = `<table style="width:100%; border-collapse:collapse; margin-top:20px; text-align:left; font-size:0.8rem;"><tr style="border-bottom:2px solid var(--dark);"><th style="padding:10px;">Clave</th><th>Producto</th><th>Precio</th><th>Fotos</th><th>Acciones</th></tr>`; for (const p of products) { const imgs = await getImageFromDB(p.clave.toUpperCase().trim()); const total = imgs.length + (p.fotos ? p.fotos.length : 0); html += `<tr style="border-bottom:1px solid #eee;"><td style="padding:10px; font-weight:700;">${p.clave}</td><td>${p.nombre}</td><td>$${p.precioVenta.toLocaleString()}</td><td>${total > 0 ? '✅' : '❌'}</td><td><button onclick="deleteProd('${p.clave}')" style="color:red; background:none; border:none; cursor:pointer;">Borrar</button></td></tr>`; } html += "</table>"; container.innerHTML = html; }
-        async function deleteProd(c) { if(confirm("¿Eliminar?")) { products = products.filter(p => p.clave !== c); saveLocalData(); await renderAll(); } }
+        async function deleteProd(c) { if(confirm("Eliminar?")) { products = products.filter(p => p.clave !== c); saveLocalData(); await renderAll(); } }
     </script>
 </body>
 </html>
