@@ -37,7 +37,6 @@
         }
         .header-content { display: flex; justify-content: space-between; align-items: center; }
         .logo-svg { height: 35px; width: auto; display: block; }
-        @media (min-width: 768px) { .logo-svg { height: 45px; } }
 
         /* BANNER COSMIC */
         .hero-banner {
@@ -59,7 +58,7 @@
         @keyframes space-move { from { transform: translateY(0); } to { transform: translateY(-50%); } }
 
         .hero-content { text-align: center; z-index: 10; padding: 0 15px; width: 100%; }
-        .hero-logo-box svg { width: 100%; max-width: 400px; height: auto; display: block; margin: 0 auto; }
+        .hero-logo-box svg { width: 100%; max-width: 380px; height: auto; display: block; margin: 0 auto; }
         .hero-logo-box { animation: float-logo 6s ease-in-out infinite; filter: drop-shadow(0 0 30px var(--primary-glow)); }
         @keyframes float-logo { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
         .hero-tagline { color: var(--white); font-size: 0.7rem; font-weight: 300; letter-spacing: 4px; text-transform: uppercase; margin-top: 10px; opacity: 0.7; }
@@ -92,10 +91,16 @@
         @media (min-width: 768px) { .modal-content { padding: 50px; } }
         .close-modal { position: absolute; top: 10px; right: 15px; font-size: 2rem; cursor: pointer; color: var(--dark); z-index: 100; }
 
+        .detail-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        @media (min-width: 850px) { .detail-grid { grid-template-columns: 1.2fr 1fr; gap: 50px; } }
+        .main-img-box { width: 100%; height: 280px; object-fit: contain; background: var(--slate-100); border-radius: var(--radius-md); }
+        
+        /* CARRITO */
         .cart-sidebar { position: fixed; top: 0; right: -100%; width: 100%; height: 100vh; background: var(--white); z-index: 2000; transition: var(--transition); padding: 20px; display: flex; flex-direction: column; }
         @media (min-width: 480px) { .cart-sidebar { width: 400px; right: -420px; border-left: 5px solid var(--dark); } }
         .cart-sidebar.active { right: 0; }
 
+        /* COTIZADOR */
         .shipping-box { background: var(--slate-100); padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid var(--border); }
         .shipping-input-group { display: flex; gap: 8px; }
         .shipping-input { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--border); font-size: 16px; }
@@ -108,18 +113,9 @@
         .form-input { width: 100%; padding: 12px; margin-top: 10px; border-radius: 10px; border: 1px solid var(--border); font-size: 16px; }
 
         #notification { position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%) translateY(150px); background: var(--dark); color: white; padding: 10px 25px; border-radius: 99px; z-index: 3000; transition: var(--transition); font-weight: 500; font-size: 0.9rem; pointer-events: none; }
-        
-        #loader-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: var(--white); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.5s; opacity: 1; }
-        .spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
-
-    <div id="loader-overlay">
-        <div class="spinner"></div>
-        <p style="margin-top: 15px; font-weight: 600; font-size: 0.8rem; letter-spacing: 1px;">CARGANDO...</p>
-    </div>
 
     <header>
         <div class="container header-content">
@@ -145,10 +141,10 @@
             <div class="stars"></div>
             <div class="hero-content">
                 <div class="hero-logo-box">
-                    <!-- LOGO REPARADO: viewBox 180 de alto para que no se corten las letras -->
+                    <!-- LOGO REPARADO: ViewBox 180 de alto para evitar cortes -->
                     <svg width="100%" height="180" viewBox="0 0 450 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="225" cy="55" r="42" fill="#8e44ad"/>
-                        <ellipse cx="225" cy="55" rx="85" ry="20" stroke="white" stroke-width="3" transform="rotate(-15 225 55)"/>
+                        <circle cx="225" cy="60" r="40" fill="#8e44ad"/>
+                        <ellipse cx="225" cy="60" rx="80" ry="20" stroke="white" stroke-width="3" transform="rotate(-15 225 60)"/>
                         <text x="50%" y="125" text-anchor="middle" font-family="Inter" font-weight="300" font-size="42" fill="white" letter-spacing="8">MUNDO</text>
                         <text x="50%" y="175" text-anchor="middle" font-family="Inter" font-weight="800" font-size="48" fill="white" letter-spacing="2">COLCHONETAS</text>
                     </svg>
@@ -159,7 +155,9 @@
 
         <div class="category-nav" id="categories-container"></div>
         <h2 style="margin-bottom: 20px; font-weight: 800; font-size: 1.5rem; letter-spacing: -0.04em;" id="catalog-title">Nuestra Colección</h2>
-        <div class="bento-grid" id="products-container"></div>
+        <div class="bento-grid" id="products-container">
+             <p style="text-align:center; grid-column: 1/-1; padding: 50px; color:#999;">Cargando catálogo...</p>
+        </div>
 
         <div style="text-align: center; margin: 60px 0;">
             <button class="cat-btn" onclick="checkAdminAccess()">
@@ -202,6 +200,7 @@
         </div>
         <div id="cart-items" style="flex:1; overflow-y:auto;"></div>
 
+        <!-- COTIZADOR DE ENVÍO -->
         <div class="shipping-box">
             <label>Calcular Envío (CP)</label>
             <div class="shipping-input-group">
@@ -212,9 +211,18 @@
         </div>
 
         <div style="padding-top:15px; border-top:2px solid var(--dark);">
-            <div style="display:flex; justify-content:space-between; margin-bottom:5px; font-size:0.85rem;"><span>Subtotal</span><span id="cart-subtotal">$0</span></div>
-            <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-size:0.85rem; color: var(--primary);"><span>Envío</span><span id="cart-shipping-fee">$0</span></div>
-            <div style="display:flex; justify-content:space-between; margin-bottom:20px; font-weight:800; font-size:1.4rem;"><span>Total</span><span id="cart-total">$0</span></div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:5px; font-size:0.85rem;">
+                <span>Subtotal</span>
+                <span id="cart-subtotal">$0</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-size:0.85rem; color: var(--primary);">
+                <span>Envío</span>
+                <span id="cart-shipping-fee">$0</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:20px; font-weight:800; font-size:1.4rem;">
+                <span>Total</span>
+                <span id="cart-total">$0</span>
+            </div>
             <button class="cat-btn active" style="width:100%; padding:18px;" onclick="checkoutViaWhatsApp()"><i class="fab fa-whatsapp"></i> Enviar Pedido</button>
         </div>
     </div>
@@ -230,135 +238,97 @@
 
         const SHIPPING_RATES = { "1629": { loc: "Pilar", price: 8000 }, "1635": { loc: "Derqui", price: 8000 }, "1669": { loc: "Del Viso", price: 10000 }, "1667": { loc: "Manuel Alberti", price: 10000 }, "1625": { loc: "Escobar", price: 15000 }, "1627": { loc: "Matheu", price: 15000 }, "1648": { loc: "Tigre", price: 20000 } };
 
-        let products = [], cart = [], currentCategory = 'all', isAdminLoggedIn = false, shippingFee = 0, currentLoc = "";
+        const DB_NAME = "MundoColchonetasDB", STORE_NAME = "images";
+        let db, products = [], cart = [], currentCategory = 'all', isAdminLoggedIn = false, shippingFee = 0, currentLoc = "";
 
-        document.addEventListener('DOMContentLoaded', async () => {
-            // 1. QUITAR LOADER INMEDIATAMENTE (más rápido)
-            setTimeout(() => {
-                const loader = document.getElementById('loader-overlay');
-                loader.style.opacity = '0';
-                setTimeout(() => loader.style.display = 'none', 500);
-            }, 500);
+        // Inicialización Forzada
+        async function init() {
+            try {
+                await initDB();
+                loadLocalData();
+                await renderAll();
+                // Sincronización silenciosa después de mostrar lo local
+                syncWithExcel(true);
+            } catch(e) { console.error("Error init", e); }
+        }
 
-            // 2. CARGAR DATOS LOCALES PRIMERO
-            loadLocalData();
-            
-            // 3. MOSTRAR PRODUCTOS INMEDIATAMENTE
-            renderCategories();
-            renderProducts();
-            updateCartUI();
+        async function initDB() {
+            return new Promise((resolve) => {
+                const request = indexedDB.open(DB_NAME, 1);
+                request.onupgradeneeded = (e) => e.target.result.createObjectStore(STORE_NAME);
+                request.onsuccess = (e) => { db = e.target.result; resolve(); };
+                request.onerror = () => resolve();
+            });
+        }
 
-            // 4. INTENTAR ACTUALIZAR DEL SHEET
-            setTimeout(() => {
-                if (navigator.onLine) {
-                    syncWithExcel(true);
-                }
-            }, 1000);
-
-            if(localStorage.getItem('adminSession') === 'active') {
-                isAdminLoggedIn = true;
-                document.getElementById('logout-btn').style.display = 'block';
-            }
-            document.getElementById('excel-url').value = CONFIG.SHEET;
-        });
+        async function getImageFromDB(key) {
+            return new Promise((resolve) => {
+                if(!db) return resolve([]);
+                const tx = db.transaction(STORE_NAME, "readonly");
+                const request = tx.objectStore(STORE_NAME).get(key);
+                request.onsuccess = () => resolve(request.result || []);
+                request.onerror = () => resolve([]);
+            });
+        }
 
         function loadLocalData() {
             const saved = localStorage.getItem('mundoColchonetas_v5');
-            if (saved) {
-                try {
-                    products = JSON.parse(saved).products || [];
-                } catch (e) {
-                    products = [];
-                }
-            }
+            if (saved) products = JSON.parse(saved).products || [];
         }
 
-        function saveLocalData() { 
-            localStorage.setItem('mundoColchonetas_v5', JSON.stringify({ products })); 
-        }
+        function saveLocalData() { localStorage.setItem('mundoColchonetas_v5', JSON.stringify({ products })); }
 
-        function renderAll() {
+        async function renderAll() {
             renderCategories();
-            renderProducts();
+            await renderProducts();
+            if(isAdminLoggedIn) renderAdminTable();
             updateCartUI();
-            if(isAdminLoggedIn && document.getElementById('admin-panel').classList.contains('visible')) {
-                renderAdminTable();
-            }
         }
 
         function renderCategories() {
             const container = document.getElementById('categories-container');
-            if(!container || products.length === 0) {
-                if(container) container.innerHTML = '';
-                return;
-            }
             const cats = ['all', ...new Set(products.map(p => p.categoria))];
             container.innerHTML = cats.map(c => `<button class="cat-btn ${currentCategory === c ? 'active' : ''}" onclick="filterCat('${c}')">${c.toUpperCase()}</button>`).join('');
         }
 
-        function filterCat(c) { 
-            currentCategory = c; 
-            renderProducts(); 
-        }
+        async function filterCat(c) { currentCategory = c; await renderAll(); }
 
-        function renderProducts() {
+        async function renderProducts() {
             const container = document.getElementById('products-container');
-            if(!container) return;
-            
-            // Mostrar productos locales inmediatamente
-            if (products.length === 0) {
-                container.innerHTML = `<p style="text-align:center; grid-column: 1/-1; padding: 50px; color: #999;">
-                    Cargando catálogo...
-                </p>`;
-                return;
-            }
-            
             const filtered = currentCategory === 'all' ? products : products.filter(p => p.categoria === currentCategory);
             
             if(filtered.length === 0) {
-                container.innerHTML = `<p style="text-align:center; grid-column: 1/-1; padding: 50px;">
-                    No hay productos en esta categoría.
-                </p>`;
+                container.innerHTML = `<p style="text-align:center; grid-column: 1/-1; padding: 50px; color:#999;">${products.length > 0 ? 'No hay productos aquí.' : 'Conectando con el catálogo...'}</p>`;
                 return;
             }
 
             let html = "";
             for (const p of filtered) {
-                const allImgs = p.fotos || [];
+                const localImgs = await getImageFromDB(p.clave.toUpperCase().trim());
+                const allImgs = [...(p.fotos || []), ...localImgs];
                 const mainImg = allImgs.length > 0 ? allImgs[0] : null;
                 
                 html += `
                 <div class="product-card" onclick="openDetail('${p.clave}')">
-                    <div class="product-image-container">
-                        ${mainImg ? 
-                            `<img src="${mainImg}" alt="${p.nombre}">` : 
-                            '<i class="fas fa-planet-ring fa-3x" style="color:#ddd"></i>'
-                        }
-                    </div>
+                    <div class="product-image-container">${mainImg ? `<img src="${mainImg}">` : '<i class="fas fa-planet-ring fa-3x" style="color:#ddd"></i>'}</div>
                     <div style="flex:1">
-                        <p style="font-size:0.7rem; color:var(--primary); font-weight:700; text-transform:uppercase;">
-                            ${p.categoria}
-                        </p>
+                        <p style="font-size:0.7rem; color:var(--primary); font-weight:700; text-transform:uppercase;">${p.categoria}</p>
                         <h3 style="font-size:1rem; line-height:1.2; margin-bottom:10px;">${p.nombre}</h3>
                         <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <span class="current-price">
-                                $${(p.oferta === 'SI' ? p.precioOferta : p.precioVenta).toLocaleString()}
-                            </span>
-                            <div class="btn-add-circle" onclick="event.stopPropagation(); addToCart('${p.clave}')">
-                                <i class="fas fa-plus"></i>
-                            </div>
+                            <span class="current-price">$${(p.oferta === 'SI' ? p.precioOferta : p.precioVenta).toLocaleString()}</span>
+                            <div class="btn-add-circle" onclick="event.stopPropagation(); addToCart('${p.clave}')"><i class="fas fa-plus"></i></div>
                         </div>
                     </div>
                 </div>`;
             }
-            
             container.innerHTML = html;
         }
 
-        function openDetail(clave) {
+        async function openDetail(clave) {
             const p = products.find(i => i.clave.toUpperCase().trim() === clave.toUpperCase().trim());
             if(!p) return;
-            const allImgs = p.fotos || [];
+            const localImgs = await getImageFromDB(clave.toUpperCase().trim());
+            const allImgs = [...(p.fotos || []), ...localImgs];
             const container = document.getElementById('detail-content');
             container.innerHTML = `
                 <div class="detail-grid">
@@ -381,88 +351,37 @@
             document.getElementById('detail-modal').classList.add('active');
         }
 
-        function changeImg(el) { 
-            document.getElementById('active-detail-img').src = el.src; 
-            el.parentElement.querySelectorAll('img').forEach(i => i.style.borderColor = 'transparent'); 
-            el.style.borderColor = 'var(--primary)'; 
-        }
+        function changeImg(el) { document.getElementById('active-detail-img').src = el.src; el.parentElement.querySelectorAll('img').forEach(i => i.style.borderColor = 'transparent'); el.style.borderColor = 'var(--primary)'; }
 
         async function syncWithExcel(silent = false) {
-            const urlInput = document.getElementById('excel-url');
-            const url = (urlInput && urlInput.value) ? urlInput.value : CONFIG.SHEET;
-            
-            // Mostrar estado de carga si no es silencioso
-            if (!silent) {
-                const container = document.getElementById('products-container');
-                if (container) {
-                    container.innerHTML = `<p style="text-align:center; grid-column: 1/-1; padding: 50px; color: #999;">
-                        Sincronizando catálogo...
-                    </p>`;
-                }
-            }
-            
+            const url = document.getElementById('excel-url').value || CONFIG.SHEET;
             try {
                 const sheetId = url.split('/d/')[1].split('/')[0];
                 const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`;
                 const res = await fetch(csvUrl);
-                if(!res.ok) throw new Error("Error al cargar el sheet");
-                
                 const csvText = await res.text();
                 const rows = csvText.split(/\r?\n/).slice(1);
-                
-                const newProducts = [];
-                for (let row of rows) {
-                    if (!row.trim()) continue;
-                    
+                products = rows.map(row => {
                     const cols = row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
-                    if(!cols || cols.length < 6) continue;
-                    
+                    if(!cols || cols.length < 6) return null;
                     const clean = (val) => val ? val.replace(/^"|"$/g, '').trim() : '';
                     const pV = parseInt(clean(cols[5])) || 0;
                     const desc = parseInt(clean(cols[10])) || 0;
-                    
-                    newProducts.push({ 
-                        clave: clean(cols[0]), 
-                        nombre: clean(cols[2]), 
-                        cantidad: parseInt(clean(cols[3])) || 0, 
-                        precioVenta: pV, 
-                        categoria: clean(cols[7]) || 'OTROS', 
-                        descripcion: clean(cols[8]) || '',
-                        oferta: clean(cols[9]), 
-                        descuento: desc, 
-                        precioOferta: Math.round(pV * (1 - desc/100)),
+                    return { 
+                        clave: clean(cols[0]), nombre: clean(cols[2]), cantidad: parseInt(clean(cols[3])) || 0, 
+                        precioVenta: pV, categoria: clean(cols[7]) || 'OTROS', descripcion: clean(cols[8]) || '',
+                        oferta: clean(cols[9]), descuento: desc, precioOferta: Math.round(pV * (1 - desc/100)),
                         fotos: cols[11] ? clean(cols[11]).split(',').map(l => l.trim()) : []
-                    });
-                }
-
-                if(newProducts.length > 0) {
-                    products = newProducts;
-                    saveLocalData();
-                    renderAll();
-                    if(!silent) showNotify("Catálogo Sincronizado!");
-                }
-            } catch (e) { 
-                console.error("Error al sincronizar:", e);
-                if(!silent) {
-                    alert("Error al cargar el catálogo. Verifica la conexión o el enlace.");
-                    // Volver a mostrar productos locales si hay error
-                    renderAll();
-                }
-            }
+                    };
+                }).filter(p => p !== null);
+                saveLocalData(); await renderAll(); 
+                if(!silent) showNotify("Catálogo Sincronizado");
+            } catch (e) { console.log("Sync failed"); }
         }
 
         function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('active'); }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-        
-        function addToCart(clave) { 
-            const p = products.find(i => i.clave === clave); 
-            if(!p) return; 
-            const exist = cart.find(i => i.clave === clave); 
-            if (exist) exist.qty++; 
-            else cart.push({ ...p, qty: 1 }); 
-            updateCartUI(); 
-            showNotify(`Añadido!`); 
-        }
+        function addToCart(clave) { const p = products.find(i => i.clave === clave); if(!p) return; const exist = cart.find(i => i.clave === clave); if (exist) exist.qty++; else cart.push({ ...p, qty: 1 }); updateCartUI(); showNotify(`Añadido!`); }
 
         function calculateShipping() {
             const cp = document.getElementById('shipping-cp').value.trim();
@@ -472,8 +391,7 @@
                 currentLoc = SHIPPING_RATES[cp].loc;
                 result.innerText = `✅ Envíos a ${currentLoc}: $${shippingFee.toLocaleString()}`;
             } else {
-                shippingFee = 0; 
-                currentLoc = "";
+                shippingFee = 0; currentLoc = "";
                 result.innerText = "❌ CP no disponible para envío local.";
             }
             updateCartUI();
@@ -489,67 +407,21 @@
             document.getElementById('header-cart-count').innerText = cart.length;
         }
 
-        function removeFromCart(clave) { 
-            cart = cart.filter(i => i.clave !== clave); 
-            updateCartUI(); 
-        }
-        
-        function checkoutViaWhatsApp() { 
-            if (cart.length === 0) return; 
-            let msg = "Hola Mundo Colchonetas! 🪐 Pedido:\n\n"; 
-            cart.forEach(i => msg += `• ${i.nombre} (x${i.qty})\n`); 
-            msg += `\nTOTAL: ${document.getElementById('cart-total').innerText}`; 
-            window.open(`https://wa.me/5491168705261?text=${encodeURIComponent(msg)}`, '_blank'); 
-        }
-        
-        function checkAdminAccess() { 
-            if (isAdminLoggedIn) document.getElementById('admin-panel').classList.toggle('visible'); 
-            else document.getElementById('login-modal').classList.add('active'); 
-        }
-        
-        function login() { 
-            const u = document.getElementById('login-username').value, p = document.getElementById('login-password').value; 
-            if (u === CONFIG.ADMIN.user && p === CONFIG.ADMIN.pass) { 
-                isAdminLoggedIn = true; 
-                localStorage.setItem('adminSession', 'active'); 
-                document.getElementById('login-modal').classList.remove('active'); 
-                document.getElementById('admin-panel').classList.add('visible'); 
-                renderAdminTable(); 
-            } else alert("Error"); 
-        }
-        
-        function logout() { 
-            localStorage.removeItem('adminSession'); 
-            isAdminLoggedIn = false; 
-            document.getElementById('admin-panel').classList.remove('visible'); 
-            document.getElementById('logout-btn').style.display = 'none'; 
-        }
-        
-        function showNotify(msg) { 
-            const n = document.getElementById('notification'); 
-            n.innerText = msg; 
-            n.style.transform = "translateX(-50%) translateY(0)"; 
-            setTimeout(() => n.style.transform = "translateX(-50%) translateY(100px)", 3000); 
-        }
-        
-        function renderAdminTable() { 
-            const container = document.getElementById('products-table'); 
-            let html = `<table style="width:100%; border-collapse:collapse; margin-top:20px; text-align:left; font-size:0.8rem;"><tr style="border-bottom:2px solid var(--dark);"><th style="padding:10px;">Clave</th><th>Producto</th><th>Precio</th><th>Fotos</th><th>Acciones</th></tr>`; 
-            for (const p of products) { 
-                const total = p.fotos ? p.fotos.length : 0; 
-                html += `<tr style="border-bottom:1px solid #eee;"><td style="padding:10px; font-weight:700;">${p.clave}</td><td>${p.nombre}</td><td>$${p.precioVenta.toLocaleString()}</td><td>${total > 0 ? '✅' : '❌'}</td><td><button onclick="deleteProd('${p.clave}')" style="color:red; background:none; border:none; cursor:pointer;">Borrar</button></td></tr>`; 
-            } 
-            html += "</table>"; 
-            container.innerHTML = html; 
-        }
-        
-        async function deleteProd(c) { 
-            if(confirm("¿Eliminar?")) { 
-                products = products.filter(p => p.clave !== c); 
-                saveLocalData(); 
-                renderAll(); 
-            } 
-        }
+        function removeFromCart(clave) { cart = cart.filter(i => i.clave !== clave); updateCartUI(); }
+        function checkoutViaWhatsApp() { if (cart.length === 0) return; let msg = "Hola Mundo Colchonetas! 🪐 Pedido:\n\n"; cart.forEach(i => msg += `• ${i.nombre} (x${i.qty})\n`); msg += `\nTOTAL: ${document.getElementById('cart-total').innerText}`; window.open(`https://wa.me/5491168705261?text=${encodeURIComponent(msg)}`, '_blank'); }
+        function checkAdminAccess() { if (isAdminLoggedIn) document.getElementById('admin-panel').classList.toggle('visible'); else document.getElementById('login-modal').classList.add('active'); }
+        function login() { const u = document.getElementById('login-username').value, p = document.getElementById('login-password').value; if (u === CONFIG.ADMIN.user && p === CONFIG.ADMIN.pass) { isAdminLoggedIn = true; localStorage.setItem('adminSession', 'active'); document.getElementById('login-modal').classList.remove('active'); document.getElementById('admin-panel').classList.add('visible'); renderAdminTable(); } else alert("Error"); }
+        function logout() { localStorage.removeItem('adminSession'); isAdminLoggedIn = false; document.getElementById('admin-panel').classList.remove('visible'); document.getElementById('logout-btn').style.display = 'none'; }
+        function showNotify(msg) { const n = document.getElementById('notification'); n.innerText = msg; n.style.transform = "translateX(-50%) translateY(0)"; setTimeout(() => n.style.transform = "translateX(-50%) translateY(100px)", 3000); }
+        async function renderAdminTable() { const container = document.getElementById('products-table'); let html = `<table style="width:100%; border-collapse:collapse; margin-top:20px; text-align:left; font-size:0.8rem;"><tr style="border-bottom:2px solid var(--dark);"><th style="padding:10px;">Clave</th><th>Producto</th><th>Precio</th><th>Fotos</th><th>Acciones</th></tr>`; for (const p of products) { const imgs = await getImageFromDB(p.clave.toUpperCase().trim()); const total = imgs.length + (p.fotos ? p.fotos.length : 0); html += `<tr style="border-bottom:1px solid #eee;"><td style="padding:10px; font-weight:700;">${p.clave}</td><td>${p.nombre}</td><td>$${p.precioVenta.toLocaleString()}</td><td>${total > 0 ? '✅' : '❌'}</td><td><button onclick="deleteProd('${p.clave}')" style="color:red; background:none; border:none; cursor:pointer;">Borrar</button></td></tr>`; } html += "</table>"; container.innerHTML = html; }
+        async function deleteProd(c) { if(confirm("¿Eliminar?")) { products = products.filter(p => p.clave !== c); saveLocalData(); await renderAll(); } }
+
+        // Arranque
+        init().then(() => {
+            const loader = document.getElementById('loader-overlay');
+            loader.style.opacity = '0';
+            setTimeout(() => loader.style.display = 'none', 500);
+        });
     </script>
 </body>
 </html>
