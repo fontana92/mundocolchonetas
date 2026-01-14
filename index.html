@@ -558,7 +558,9 @@
         </div>
 
         <section class="admin-panel" id="admin-panel">
-            <h3>Panel de Control</h3>
+            <h3>Panel de Control</h3> <button class="cat-btn" onclick="toggleAdminPanel()" style="position: absolute; top: 20px; right: 20px; z-index: 10;">
+        <i class="fas fa-times"></i> Cerrar
+    </button>
             <div style="margin-top:15px;">
                 <label style="font-size:0.8rem; font-weight:700;">URL de Google Sheets:</label>
                 <input type="text" id="excel-url" class="form-input" placeholder="Pega aquí la URL de tu Excel">
@@ -1837,7 +1839,8 @@
             } else alert("Error");
         }
 
-        function logout() { localStorage.removeItem('adminSession'); location.reload(); }
+        function logout() { localStorage.removeItem('adminSession'); location.reload(); } function toggleAdminPanel() {
+    document.getElementById('admin-panel').classList.toggle('visible');
         function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('active'); }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
         function checkAdminAccess() { if(isAdminLoggedIn) document.getElementById('admin-panel').classList.toggle('visible'); else document.getElementById('login-modal').classList.add('active'); }
