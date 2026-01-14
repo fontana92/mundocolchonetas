@@ -5,6 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Mundo Colchonetas | Premium Fitness</title>
     
+    <!-- OPTIMIZACIÓN PARA BUSCADORES - AGREGADO -->
+    <meta name="description" content="Catálogo oficial de Mundo Colchonetas - Las mejores colchonetas para yoga, pilates, fitness y camping. ✅ Calidad premium ✅ Envíos a todo el país ✅ Mejores precios del mercado">
+    <meta name="keywords" content="colchonetas, yoga, pilates, fitness, camping, deporte, ejercicio, argentina, gimnasio, entrenamiento, equipo fitness">
+    <meta name="author" content="Mundo Colchonetas">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph para redes sociales -->
+    <meta property="og:title" content="Mundo Colchonetas | Catálogo Premium de Colchonetas">
+    <meta property="og:description" content="Descubre nuestra colección de colchonetas profesionales para yoga, pilates, fitness y camping. Envíos a todo el país.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mundocolchonetas.com">
+    <meta property="og:image" content="https://mundocolchonetas.com/logo-social.jpg">
+    
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Mundo Colchonetas | Catálogo Premium">
+    <meta name="twitter:description" content="Las mejores colchonetas para tu entrenamiento. Calidad garantizada y envíos rápidos.">
+    <meta name="twitter:image" content="https://mundocolchonetas.com/logo-twitter.jpg">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://mundocolchonetas.com/favicon.png">
+    
+    <!-- Schema.org para Google -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SportsActivityLocation",
+      "name": "Mundo Colchonetas",
+      "description": "Tienda especializada en colchonetas y equipo para fitness, yoga, pilates y camping",
+      "url": "https://mundocolchonetas.com",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "AR"
+      },
+      "openingHours": "Mo-Fr 09:00-18:00"
+    }
+    </script>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -277,6 +315,163 @@
             justify-content: center;
         }
         
+        /* ESTILOS PARA BOTÓN COMPARTIR - AGREGADO */
+        .share-float {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            z-index: 900;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+        }
+        
+        .share-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+        }
+        
+        .share-container {
+            position: fixed;
+            bottom: 100px;
+            left: 25px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+            z-index: 899;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            border: 3px solid var(--primary);
+            width: 300px;
+        }
+        
+        .share-container.active {
+            display: flex;
+        }
+        
+        .share-header {
+            background: var(--primary);
+            color: white;
+            padding: 15px 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        
+        .share-buttons {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        
+        .share-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            background: var(--slate-100);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 15px 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            color: var(--dark);
+        }
+        
+        .share-button:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .share-button i {
+            font-size: 1.5rem;
+        }
+        
+        .share-button span {
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        
+        /* ESTILOS PARA POPUP DE CAPTACIÓN - AGREGADO */
+        .lead-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.3);
+            z-index: 4000;
+            width: 90%;
+            max-width: 450px;
+            overflow: hidden;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 5px solid var(--primary);
+        }
+        
+        .lead-popup.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        
+        .lead-header {
+            background: linear-gradient(135deg, var(--primary) 0%, #9b59b6 100%);
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+        }
+        
+        .lead-content {
+            padding: 30px;
+        }
+        
+        .lead-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+        
+        .lead-icon i {
+            font-size: 2.5rem;
+        }
+        
+        .lead-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            z-index: 3999;
+            display: none;
+        }
+        
+        .lead-overlay.active {
+            display: block;
+        }
+        
         @media (max-width: 480px) {
             .chatbot-container {
                 width: 300px;
@@ -288,6 +483,21 @@
             .chatbot-toggle {
                 right: 10px;
                 bottom: 90px;
+            }
+            
+            .share-float {
+                left: 10px;
+                bottom: 25px;
+            }
+            
+            .share-container {
+                left: 10px;
+                bottom: 100px;
+                width: 280px;
+            }
+            
+            .lead-popup {
+                width: 95%;
             }
         }
     </style>
@@ -410,6 +620,80 @@
         </div>
     </div>
 
+    <!-- BOTÓN DE COMPARTIR - AGREGADO -->
+    <button class="share-float" onclick="toggleShare()">
+        <i class="fas fa-share-alt"></i>
+    </button>
+    
+    <div class="share-container" id="share-container">
+        <div class="share-header">
+            ¡Comparte el catálogo!
+        </div>
+        <div class="share-buttons">
+            <a href="https://wa.me/?text=¡Mira%20el%20catálogo%20de%20Mundo%20Colchonetas!%20🎯%20Colchonetas%20profesionales%20para%20yoga,%20pilates,%20fitness%20y%20camping.%20Envíos%20a%20todo%20el%20país.%20👉%20${encodeURIComponent(window.location.href)}" target="_blank" class="share-button">
+                <i class="fab fa-whatsapp" style="color: #25D366;"></i>
+                <span>WhatsApp</span>
+            </a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=Catálogo%20Mundo%20Colchonetas%20-%20Las%20mejores%20colchonetas%20para%20tu%20entrenamiento" target="_blank" class="share-button">
+                <i class="fab fa-facebook-f" style="color: #1877F2;"></i>
+                <span>Facebook</span>
+            </a>
+            <a href="https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=🎯%20Catálogo%20Mundo%20Colchonetas%20-%20Colchonetas%20premium%20para%20yoga,%20pilates%20y%20fitness.%20¡Envíos%20rápidos!" target="_blank" class="share-button">
+                <i class="fab fa-twitter" style="color: #1DA1F2;"></i>
+                <span>Twitter</span>
+            </a>
+            <a href="https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(window.location.href)}&title=Catálogo%20Mundo%20Colchonetas&summary=Colchonetas%20profesionales%20para%20deporte%20y%20fitness" target="_blank" class="share-button">
+                <i class="fab fa-linkedin-in" style="color: #0A66C2;"></i>
+                <span>LinkedIn</span>
+            </a>
+            <a href="mailto:?subject=Te%20comparto%20el%20catálogo%20de%20Mundo%20Colchonetas&body=Hola,%20te%20comparto%20este%20catálogo%20de%20colchonetas%20profesionales:%20${encodeURIComponent(window.location.href)}" class="share-button">
+                <i class="fas fa-envelope" style="color: #EA4335;"></i>
+                <span>Email</span>
+            </a>
+            <button class="share-button" onclick="copyLink()">
+                <i class="fas fa-copy" style="color: var(--primary);"></i>
+                <span>Copiar link</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- POPUP DE CAPTACIÓN (10% OFF) - AGREGADO -->
+    <div class="lead-overlay" id="lead-overlay"></div>
+    
+    <div class="lead-popup" id="lead-popup">
+        <div class="lead-header">
+            <div class="lead-icon">
+                <i class="fas fa-gift"></i>
+            </div>
+            <h2 style="margin: 0; font-size: 1.5rem;">¡10% OFF en tu primera compra!</h2>
+            <p style="margin: 10px 0 0; opacity: 0.9; font-size: 0.9rem;">Solo para nuevos clientes</p>
+        </div>
+        <div class="lead-content">
+            <p style="text-align: center; color: var(--slate-500); margin-bottom: 25px; font-size: 0.95rem;">
+                Déjanos tu WhatsApp y te enviamos el código de descuento inmediatamente
+            </p>
+            
+            <div style="margin-bottom: 20px;">
+                <input type="tel" id="lead-whatsapp" class="form-input" placeholder="Número de WhatsApp (ej: 11 2345-6789)" style="width: 100%; padding: 15px;">
+                <p style="font-size: 0.75rem; color: var(--slate-500); margin-top: 8px; text-align: center;">
+                    Solo recibirás el código y ofertas especiales
+                </p>
+            </div>
+            
+            <button onclick="submitLead()" class="cat-btn active" style="width: 100%; padding: 16px; font-size: 1rem; font-weight: 700;">
+                <i class="fab fa-whatsapp"></i> Recibir código por WhatsApp
+            </button>
+            
+            <button onclick="closeLeadPopup()" style="width: 100%; background: none; border: 1px solid var(--border); color: var(--slate-500); padding: 15px; border-radius: 12px; margin-top: 15px; cursor: pointer; font-size: 0.9rem;">
+                No gracias, seguir navegando
+            </button>
+            
+            <p style="font-size: 0.7rem; color: var(--slate-500); text-align: center; margin-top: 20px;">
+                Al enviar, aceptas recibir el código de descuento y ofertas especiales. Sin spam.
+            </p>
+        </div>
+    </div>
+
     <div id="notification">¡Añadido!</div>
     <a href="https://wa.me/5491168705261" class="wa-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
@@ -418,7 +702,7 @@
             ADMIN: { user: "admin", pass: "mundo123" },
             KEY: "mundo_colch_vFinal_Robust",
             SALES_KEY: "mundo_colchonetas_ventas",
-            // URL Maestra corregida para compatibilidad móvil
+            LEADS_KEY: "mundo_colchonetas_leads",
             MASTER_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQX_MteY9z1Of-MIimoruabnLSCY2p1mMDl0RvYeDWivYTfXljryTikNsCGM3yFdF-PcoWo2Zyb5EiS/pub?gid=0&single=true&output=csv"
         };
 
@@ -773,7 +1057,91 @@
             }
         }
 
-        // FUNCIONES ORIGINALES DEL CATÁLOGO (con modificaciones para mostrar COMBOS primero)
+        // FUNCIONES PARA COMPARTIR - AGREGADAS
+        function toggleShare() {
+            const shareContainer = document.getElementById('share-container');
+            shareContainer.classList.toggle('active');
+        }
+
+        function copyLink() {
+            const tempInput = document.createElement('input');
+            tempInput.value = window.location.href;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            
+            showNotify('¡Link copiado!');
+            toggleShare();
+        }
+
+        // FUNCIONES PARA POPUP DE CAPTACIÓN - AGREGADAS
+        function showLeadPopup() {
+            // Verificar si ya mostró el popup o ya es cliente
+            if (localStorage.getItem('lead_popup_shown') === 'true' || localStorage.getItem('is_returning_customer') === 'true') {
+                return;
+            }
+            
+            // Mostrar después de 5 segundos
+            setTimeout(() => {
+                document.getElementById('lead-overlay').classList.add('active');
+                document.getElementById('lead-popup').classList.add('active');
+                localStorage.setItem('lead_popup_shown', 'true');
+            }, 5000);
+        }
+
+        function closeLeadPopup() {
+            document.getElementById('lead-overlay').classList.remove('active');
+            document.getElementById('lead-popup').classList.remove('active');
+        }
+
+        function submitLead() {
+            const whatsappInput = document.getElementById('lead-whatsapp');
+            const whatsapp = whatsappInput.value.trim();
+            
+            if (!whatsapp || whatsapp.length < 8) {
+                alert('Por favor ingresa un número de WhatsApp válido');
+                whatsappInput.focus();
+                return;
+            }
+            
+            // Generar código de descuento único
+            const discountCode = 'MUNDO10-' + Math.random().toString(36).substr(2, 6).toUpperCase();
+            
+            // Guardar lead en localStorage
+            const leads = JSON.parse(localStorage.getItem(CONFIG.LEADS_KEY) || '[]');
+            leads.push({
+                whatsapp: whatsapp,
+                discountCode: discountCode,
+                date: new Date().toISOString(),
+                used: false
+            });
+            localStorage.setItem(CONFIG.LEADS_KEY, JSON.stringify(leads));
+            
+            // Preparar mensaje para WhatsApp
+            const message = `🎉 ¡Felicidades ${whatsapp}! 🎉\n\n` +
+                           `Tu código de 10% OFF es:\n` +
+                           `🔑 *${discountCode}*\n\n` +
+                           `✨ **Cómo usarlo:**\n` +
+                           `1. Agrega productos al carrito\n` +
+                           `2. Al finalizar, menciona este código\n` +
+                           `3. ¡Listo! Se aplicará el descuento\n\n` +
+                           `Catálogo: ${window.location.href}\n\n` +
+                           `¡Gracias por elegir Mundo Colchonetas! 🛒`;
+            
+            // Abrir WhatsApp con el mensaje
+            const whatsappNumber = whatsapp.replace(/\D/g, '');
+            window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`, '_blank');
+            
+            // Cerrar popup y mostrar confirmación
+            closeLeadPopup();
+            showNotify('¡Código enviado a tu WhatsApp!');
+            
+            // Marcar como cliente que ya recibió descuento
+            localStorage.setItem('has_discount_code', discountCode);
+        }
+
+        // FUNCIONES ORIGINALES DEL CATÁLOGO
         function parseCSV(text) {
             const rows = []; let row = []; let cell = ''; let inQuotes = false;
             for (let i = 0; i < text.length; i++) {
@@ -796,12 +1164,16 @@
             document.getElementById('excel-url').value = savedUrl;
             syncWithExcel(true);
             
+            // Mostrar chatbot después de 10 segundos
             setTimeout(() => {
                 if (!localStorage.getItem('chatbot_shown')) {
                     toggleChatbot();
                     localStorage.setItem('chatbot_shown', 'true');
                 }
             }, 10000);
+            
+            // Mostrar popup de captación después de 5 segundos
+            showLeadPopup();
         });
 
         async function syncWithExcel(silent = false) {
