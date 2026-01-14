@@ -472,6 +472,9 @@
             display: block;
         }
         
+        /* CONTADOR INVISIBLE - ELIMINADO EL ESTILO VISIBLE */
+        /* Solo funciona en segundo plano */
+        
         @media (max-width: 480px) {
             .chatbot-container {
                 width: 300px;
@@ -503,6 +506,8 @@
     </style>
 </head>
 <body>
+
+    <!-- EL CONTADOR DE VISITAS ESTÁ INVISIBLE PERO FUNCIONANDO EN SEGUNDO PLANO -->
 
     <header>
         <div class="container header-content">
@@ -559,8 +564,18 @@
                 <input type="text" id="excel-url" class="form-input" placeholder="Pega aquí la URL de tu Excel">
                 <button class="cat-btn active" style="margin-top:15px; width:100%;" onclick="syncWithExcel()">Actualizar Datos Ahora</button>
             </div>
-            <div id="sales-report" style="margin-top: 30px;">
-                <h4>📊 Planilla de Seguimiento de Ventas</h4>
+            
+            <!-- SECCIÓN DE ESTADÍSTICAS DE VISITAS - AGREGADO -->
+            <div id="visitor-stats" style="margin-top: 30px; padding-top: 20px; border-top: 2px solid var(--border);">
+                <h4>📊 Estadísticas de Visitantes</h4>
+                <div id="visitor-data" style="margin-top: 15px;">
+                    <!-- Las estadísticas se cargarán aquí -->
+                </div>
+                <button class="cat-btn" style="margin: 10px 0;" onclick="showVisitorStats()">Ver Estadísticas Detalladas</button>
+            </div>
+            
+            <div id="sales-report" style="margin-top: 30px; padding-top: 20px; border-top: 2px solid var(--border);">
+                <h4>📈 Planilla de Seguimiento de Ventas</h4>
                 <button class="cat-btn" style="margin: 10px 0;" onclick="showSalesReport()">Mostrar Reporte de Ventas</button>
                 <div id="sales-data" style="margin-top: 15px;"></div>
             </div>
@@ -598,6 +613,15 @@
     <!-- MODALES -->
     <div class="modal" id="detail-modal"><div class="modal-content"><span onclick="closeModal('detail-modal')" style="position:absolute; top:15px; right:20px; font-size:2rem; cursor:pointer; z-index:10;">&times;</span><div id="detail-content"></div></div></div>
     <div class="modal" id="login-modal"><div class="modal-content" style="max-width:400px; text-align:center;"><h3>Login Admin</h3><input type="text" id="login-u" placeholder="Usuario" class="form-input"><input type="password" id="login-p" placeholder="Contraseña" class="form-input"><button class="cat-btn active" style="width:100%; margin-top:20px;" onclick="login()">Entrar</button></div></div>
+
+    <!-- MODAL DE ESTADÍSTICAS DE VISITAS - AGREGADO -->
+    <div class="modal" id="stats-modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <span onclick="closeModal('stats-modal')" style="position:absolute; top:15px; right:20px; font-size:2rem; cursor:pointer; z-index:10;">&times;</span>
+            <h3>📊 Estadísticas Detalladas de Visitantes</h3>
+            <div id="detailed-stats-content"></div>
+        </div>
+    </div>
 
     <!-- CHATBOT AGREGADO -->
     <button class="chatbot-toggle" onclick="toggleChatbot()">
@@ -680,6 +704,7 @@
             KEY: "mundo_colch_vFinal_Robust",
             SALES_KEY: "mundo_colchonetas_ventas",
             LEADS_KEY: "mundo_colchonetas_leads",
+            VISITORS_KEY: "mundo_colchonetas_visitors",
             MASTER_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQX_MteY9z1Of-MIimoruabnLSCY2p1mMDl0RvYeDWivYTfXljryTikNsCGM3yFdF-PcoWo2Zyb5EiS/pub?gid=0&single=true&output=csv"
         };
 
@@ -696,6 +721,214 @@
         let products = [], cart = [], currentCategory = 'todos', isAdminLoggedIn = false, shippingFee = 0, searchQuery = "";
 
         const norm = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
+
+        // FUNCIONES PARA CONTADOR DE VISITAS - AGREGADAS (INVISIBLE)
+        function trackVisitor() {
+            const today = new Date().toLocaleDateString('es-AR');
+            const now = new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+            
+            // Obtener datos existentes
+            let visitorsData = JSON.parse(localStorage.getItem(CONFIG.VISITORS_KEY)) || {
+                total: 0,
+                today: 0,
+                todayDate: today,
+                history: [],
+                dailyStats: {}
+            };
+            
+            // Reiniciar contador diario si es un nuevo día
+            if (visitorsData.todayDate !== today) {
+                visitorsData.today = 0;
+                visitorsData.todayDate = today;
+            }
+            
+            // Incrementar contadores
+            visitorsData.total++;
+            visitorsData.today++;
+            
+            // Registrar visita en historia
+            visitorsData.history.push({
+                date: today,
+                time: now,
+                timestamp: Date.now()
+            });
+            
+            // Mantener solo los últimos 1000 registros
+            if (visitorsData.history.length > 1000) {
+                visitorsData.history = visitorsData.history.slice(-1000);
+            }
+            
+            // Actualizar estadísticas diarias
+            if (!visitorsData.dailyStats[today]) {
+                visitorsData.dailyStats[today] = 0;
+            }
+            visitorsData.dailyStats[today]++;
+            
+            // Guardar en localStorage
+            localStorage.setItem(CONFIG.VISITORS_KEY, JSON.stringify(visitorsData));
+            
+            return visitorsData;
+        }
+
+        function showVisitorStats() {
+            const visitorsData = JSON.parse(localStorage.getItem(CONFIG.VISITORS_KEY)) || {
+                total: 0,
+                today: 0,
+                todayDate: new Date().toLocaleDateString('es-AR'),
+                history: [],
+                dailyStats: {}
+            };
+            
+            // Calcular estadísticas
+            const totalVisits = visitorsData.total;
+            const todayVisits = visitorsData.today;
+            const uniqueDays = Object.keys(visitorsData.dailyStats).length;
+            const avgPerDay = uniqueDays > 0 ? Math.round(totalVisits / uniqueDays) : 0;
+            
+            // Obtener últimos 7 días
+            const last7Days = {};
+            const today = new Date();
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date(today);
+                date.setDate(today.getDate() - i);
+                const dateStr = date.toLocaleDateString('es-AR');
+                last7Days[dateStr] = visitorsData.dailyStats[dateStr] || 0;
+            }
+            
+            // Crear gráfico simple de los últimos 7 días
+            let chartHTML = '<div style="margin: 20px 0; height: 150px; display: flex; align-items: flex-end; gap: 10px; border-bottom: 2px solid var(--border); padding-bottom: 20px;">';
+            const maxVisits = Math.max(...Object.values(last7Days), 1);
+            
+            Object.entries(last7Days).forEach(([date, visits]) => {
+                const height = (visits / maxVisits) * 100;
+                const dayName = new Date(date.split('/').reverse().join('-')).toLocaleDateString('es-AR', { weekday: 'short' });
+                chartHTML += `
+                    <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+                        <div style="background: linear-gradient(to top, var(--primary) 0%, #9b59b6 100%); width: 30px; height: ${height}%; border-radius: 5px 5px 0 0;"></div>
+                        <div style="font-size: 0.7rem; margin-top: 5px; font-weight: 600;">${dayName}</div>
+                        <div style="font-size: 0.8rem; font-weight: 800; color: var(--primary);">${visits}</div>
+                    </div>
+                `;
+            });
+            chartHTML += '</div>';
+            
+            // Crear HTML de estadísticas
+            const statsHTML = `
+                <div style="background: var(--slate-100); padding: 20px; border-radius: 15px; margin: 20px 0;">
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px;">
+                        <div style="text-align: center; background: white; padding: 15px; border-radius: 10px; border: 2px solid var(--primary);">
+                            <div style="font-size: 2rem; font-weight: 800; color: var(--primary);">${totalVisits}</div>
+                            <div style="font-size: 0.8rem; color: var(--slate-500);">Visitas totales</div>
+                        </div>
+                        <div style="text-align: center; background: white; padding: 15px; border-radius: 10px; border: 2px solid var(--primary);">
+                            <div style="font-size: 2rem; font-weight: 800; color: var(--primary);">${todayVisits}</div>
+                            <div style="font-size: 0.8rem; color: var(--slate-500);">Visitas hoy</div>
+                        </div>
+                        <div style="text-align: center; background: white; padding: 15px; border-radius: 10px; border: 2px solid var(--border);">
+                            <div style="font-size: 1.5rem; font-weight: 800; color: var(--dark);">${uniqueDays}</div>
+                            <div style="font-size: 0.8rem; color: var(--slate-500);">Días registrados</div>
+                        </div>
+                        <div style="text-align: center; background: white; padding: 15px; border-radius: 10px; border: 2px solid var(--border);">
+                            <div style="font-size: 1.5rem; font-weight: 800; color: var(--dark);">${avgPerDay}</div>
+                            <div style="font-size: 0.8rem; color: var(--slate-500);">Promedio por día</div>
+                        </div>
+                    </div>
+                    
+                    <h4 style="margin: 20px 0 10px 0;">📈 Últimos 7 días</h4>
+                    ${chartHTML}
+                    
+                    <h4 style="margin: 20px 0 10px 0;">🕐 Últimas visitas</h4>
+                    <div style="max-height: 200px; overflow-y: auto; background: white; border-radius: 10px; padding: 10px; border: 1px solid var(--border);">
+                        ${visitorsData.history.slice(-10).reverse().map(visit => `
+                            <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--slate-100);">
+                                <span style="font-size: 0.8rem;">${visit.date}</span>
+                                <span style="font-size: 0.8rem; color: var(--primary); font-weight: 600;">${visit.time}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button class="cat-btn active" onclick="exportVisitorData()">📥 Exportar Datos</button>
+                    <button class="cat-btn" onclick="resetVisitorData()" style="background: #ff4757; color: white;">🗑️ Reiniciar Contador</button>
+                </div>
+            `;
+            
+            document.getElementById('detailed-stats-content').innerHTML = statsHTML;
+            document.getElementById('stats-modal').classList.add('active');
+        }
+
+        function exportVisitorData() {
+            const visitorsData = JSON.parse(localStorage.getItem(CONFIG.VISITORS_KEY)) || {};
+            
+            let csv = "Fecha,Hora,Timestamp\n";
+            visitorsData.history.forEach(visit => {
+                csv += `"${visit.date}","${visit.time}",${visit.timestamp}\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `visitas_mundo_colchonetas_${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            showNotify('Datos exportados');
+        }
+
+        function resetVisitorData() {
+            if (confirm("¿Estás seguro de que deseas reiniciar TODOS los datos de visitantes? Esta acción no se puede deshacer.")) {
+                localStorage.removeItem(CONFIG.VISITORS_KEY);
+                trackVisitor(); // Iniciar nuevo registro
+                showNotify('Contador reiniciado');
+                setTimeout(() => {
+                    closeModal('stats-modal');
+                    showVisitorStats();
+                }, 1000);
+            }
+        }
+
+        // Mostrar estadísticas básicas en panel admin
+        function updateVisitorStatsInPanel() {
+            const visitorsData = JSON.parse(localStorage.getItem(CONFIG.VISITORS_KEY)) || {
+                total: 0,
+                today: 0,
+                todayDate: new Date().toLocaleDateString('es-AR'),
+                history: [],
+                dailyStats: {}
+            };
+            
+            const totalVisits = visitorsData.total;
+            const todayVisits = visitorsData.today;
+            const uniqueDays = Object.keys(visitorsData.dailyStats).length;
+            const avgPerDay = uniqueDays > 0 ? Math.round(totalVisits / uniqueDays) : 0;
+            
+            const statsHTML = `
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 15px 0;">
+                    <div style="background: var(--slate-100); padding: 12px; border-radius: 10px; text-align: center;">
+                        <div style="font-size: 1.2rem; font-weight: 800; color: var(--primary);">${totalVisits}</div>
+                        <div style="font-size: 0.7rem; color: var(--slate-500);">Total visitas</div>
+                    </div>
+                    <div style="background: var(--slate-100); padding: 12px; border-radius: 10px; text-align: center;">
+                        <div style="font-size: 1.2rem; font-weight: 800; color: var(--primary);">${todayVisits}</div>
+                        <div style="font-size: 0.7rem; color: var(--slate-500);">Visitas hoy</div>
+                    </div>
+                    <div style="background: var(--slate-100); padding: 12px; border-radius: 10px; text-align: center;">
+                        <div style="font-size: 1.1rem; font-weight: 800; color: var(--dark);">${uniqueDays}</div>
+                        <div style="font-size: 0.7rem; color: var(--slate-500);">Días registrados</div>
+                    </div>
+                    <div style="background: var(--slate-100); padding: 12px; border-radius: 10px; text-align: center;">
+                        <div style="font-size: 1.1rem; font-weight: 800; color: var(--dark);">${avgPerDay}</div>
+                        <div style="font-size: 0.7rem; color: var(--slate-500);">Promedio/día</div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('visitor-data').innerHTML = statsHTML;
+        }
 
         // DATOS DEL CHATBOT - ACTUALIZADO PARA VENDER SOLO PRODUCTOS EN STOCK
         const CHATBOT_RESPONSES = {
@@ -1179,8 +1412,14 @@
             document.getElementById('excel-url').value = savedUrl;
             syncWithExcel(true);
             
+            // INICIALIZAR CONTADOR DE VISITAS (INVISIBLE)
+            trackVisitor();
+            
             // INICIALIZAR LOS LINKS DE COMPARTIR
             updateShareLinks();
+            
+            // ACTUALIZAR ESTADÍSTICAS EN PANEL
+            updateVisitorStatsInPanel();
             
             // Mostrar chatbot después de 10 segundos
             setTimeout(() => {
@@ -1593,6 +1832,8 @@
                 isAdminLoggedIn = true; localStorage.setItem('adminSession', 'active');
                 document.getElementById('login-modal').classList.remove('active');
                 document.getElementById('admin-panel').classList.add('visible');
+                // Actualizar estadísticas cuando se abre el panel
+                updateVisitorStatsInPanel();
             } else alert("Error");
         }
 
