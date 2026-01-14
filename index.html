@@ -620,7 +620,7 @@
         </div>
     </div>
 
-    <!-- BOTÓN DE COMPARTIR - AGREGADO -->
+    <!-- BOTÓN DE COMPARTIR - AGREGADO Y CORREGIDO -->
     <button class="share-float" onclick="toggleShare()">
         <i class="fas fa-share-alt"></i>
     </button>
@@ -629,31 +629,8 @@
         <div class="share-header">
             ¡Comparte el catálogo!
         </div>
-        <div class="share-buttons">
-            <a href="https://wa.me/?text=¡Mira%20el%20catálogo%20de%20Mundo%20Colchonetas!%20🎯%20Colchonetas%20profesionales%20para%20yoga,%20pilates,%20fitness%20y%20camping.%20Envíos%20a%20todo%20el%20país.%20👉%20${encodeURIComponent(window.location.href)}" target="_blank" class="share-button">
-                <i class="fab fa-whatsapp" style="color: #25D366;"></i>
-                <span>WhatsApp</span>
-            </a>
-            <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=Catálogo%20Mundo%20Colchonetas%20-%20Las%20mejores%20colchonetas%20para%20tu%20entrenamiento" target="_blank" class="share-button">
-                <i class="fab fa-facebook-f" style="color: #1877F2;"></i>
-                <span>Facebook</span>
-            </a>
-            <a href="https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=🎯%20Catálogo%20Mundo%20Colchonetas%20-%20Colchonetas%20premium%20para%20yoga,%20pilates%20y%20fitness.%20¡Envíos%20rápidos!" target="_blank" class="share-button">
-                <i class="fab fa-twitter" style="color: #1DA1F2;"></i>
-                <span>Twitter</span>
-            </a>
-            <a href="https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(window.location.href)}&title=Catálogo%20Mundo%20Colchonetas&summary=Colchonetas%20profesionales%20para%20deporte%20y%20fitness" target="_blank" class="share-button">
-                <i class="fab fa-linkedin-in" style="color: #0A66C2;"></i>
-                <span>LinkedIn</span>
-            </a>
-            <a href="mailto:?subject=Te%20comparto%20el%20catálogo%20de%20Mundo%20Colchonetas&body=Hola,%20te%20comparto%20este%20catálogo%20de%20colchonetas%20profesionales:%20${encodeURIComponent(window.location.href)}" class="share-button">
-                <i class="fas fa-envelope" style="color: #EA4335;"></i>
-                <span>Email</span>
-            </a>
-            <button class="share-button" onclick="copyLink()">
-                <i class="fas fa-copy" style="color: var(--primary);"></i>
-                <span>Copiar link</span>
-            </button>
+        <div class="share-buttons" id="share-buttons">
+            <!-- Los links se generarán dinámicamente -->
         </div>
     </div>
 
@@ -1057,10 +1034,48 @@
             }
         }
 
-        // FUNCIONES PARA COMPARTIR - AGREGADAS
+        // FUNCIONES PARA COMPARTIR - AGREGADAS Y CORREGIDAS
         function toggleShare() {
             const shareContainer = document.getElementById('share-container');
             shareContainer.classList.toggle('active');
+            
+            // Asegurarse de que los links estén actualizados
+            updateShareLinks();
+        }
+
+        function updateShareLinks() {
+            const currentUrl = window.location.href;
+            const encodedUrl = encodeURIComponent(currentUrl);
+            const messageText = encodeURIComponent("¡Mira el catálogo de Mundo Colchonetas! 🎯 Colchonetas profesionales para yoga, pilates, fitness y camping. Envíos a todo el país. 👉 ");
+            
+            const shareButtonsHTML = `
+                <a href="https://wa.me/?text=${messageText}${encodedUrl}" target="_blank" class="share-button">
+                    <i class="fab fa-whatsapp" style="color: #25D366;"></i>
+                    <span>WhatsApp</span>
+                </a>
+                <a href="https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=Catálogo%20Mundo%20Colchonetas%20-%20Las%20mejores%20colchonetas%20para%20tu%20entrenamiento" target="_blank" class="share-button">
+                    <i class="fab fa-facebook-f" style="color: #1877F2;"></i>
+                    <span>Facebook</span>
+                </a>
+                <a href="https://twitter.com/intent/tweet?url=${encodedUrl}&text=🎯%20Catálogo%20Mundo%20Colchonetas%20-%20Colchonetas%20premium%20para%20yoga,%20pilates%20y%20fitness.%20¡Envíos%20rápidos!" target="_blank" class="share-button">
+                    <i class="fab fa-twitter" style="color: #1DA1F2;"></i>
+                    <span>Twitter</span>
+                </a>
+                <a href="https://www.linkedin.com/shareArticle?mini=true&url=${encodedUrl}&title=Catálogo%20Mundo%20Colchonetas&summary=Colchonetas%20profesionales%20para%20deporte%20y%20fitness" target="_blank" class="share-button">
+                    <i class="fab fa-linkedin-in" style="color: #0A66C2;"></i>
+                    <span>LinkedIn</span>
+                </a>
+                <a href="mailto:?subject=Te%20comparto%20el%20catálogo%20de%20Mundo%20Colchonetas&body=Hola,%20te%20comparto%20este%20catálogo%20de%20colchonetas%20profesionales:%20${encodedUrl}" class="share-button">
+                    <i class="fas fa-envelope" style="color: #EA4335;"></i>
+                    <span>Email</span>
+                </a>
+                <button class="share-button" onclick="copyLink()">
+                    <i class="fas fa-copy" style="color: var(--primary);"></i>
+                    <span>Copiar link</span>
+                </button>
+            `;
+            
+            document.getElementById('share-buttons').innerHTML = shareButtonsHTML;
         }
 
         function copyLink() {
@@ -1163,6 +1178,9 @@
             const savedUrl = localStorage.getItem('sheet_url') || CONFIG.MASTER_URL;
             document.getElementById('excel-url').value = savedUrl;
             syncWithExcel(true);
+            
+            // INICIALIZAR LOS LINKS DE COMPARTIR
+            updateShareLinks();
             
             // Mostrar chatbot después de 10 segundos
             setTimeout(() => {
