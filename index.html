@@ -405,76 +405,6 @@
             font-weight: 600;
         }
         
-        /* ESTILOS PARA POPUP DE CAPTACIÓN - AGREGADO */
-        .lead-popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.9);
-            background: white;
-            border-radius: 25px;
-            box-shadow: 0 25px 80px rgba(0,0,0,0.3);
-            z-index: 4000;
-            width: 90%;
-            max-width: 450px;
-            overflow: hidden;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 5px solid var(--primary);
-        }
-        
-        .lead-popup.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translate(-50%, -50%) scale(1);
-        }
-        
-        .lead-header {
-            background: linear-gradient(135deg, var(--primary) 0%, #9b59b6 100%);
-            color: white;
-            padding: 25px 30px;
-            text-align: center;
-        }
-        
-        .lead-content {
-            padding: 30px;
-        }
-        
-        .lead-icon {
-            width: 80px;
-            height: 80px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-        }
-        
-        .lead-icon i {
-            font-size: 2.5rem;
-        }
-        
-        .lead-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(10px);
-            z-index: 3999;
-            display: none;
-        }
-        
-        .lead-overlay.active {
-            display: block;
-        }
-        
-        /* CONTADOR INVISIBLE - ELIMINADO EL ESTILO VISIBLE */
-        /* Solo funciona en segundo plano */
-        
         @media (max-width: 480px) {
             .chatbot-container {
                 width: 300px;
@@ -497,10 +427,6 @@
                 left: 10px;
                 bottom: 100px;
                 width: 280px;
-            }
-            
-            .lead-popup {
-                width: 95%;
             }
         }
     </style>
@@ -658,43 +584,6 @@
         </div>
     </div>
 
-    <!-- POPUP DE CAPTACIÓN (10% OFF) - AGREGADO -->
-    <div class="lead-overlay" id="lead-overlay"></div>
-    
-    <div class="lead-popup" id="lead-popup">
-        <div class="lead-header">
-            <div class="lead-icon">
-                <i class="fas fa-gift"></i>
-            </div>
-            <h2 style="margin: 0; font-size: 1.5rem;">¡10% OFF en tu primera compra!</h2>
-            <p style="margin: 10px 0 0; opacity: 0.9; font-size: 0.9rem;">Solo para nuevos clientes</p>
-        </div>
-        <div class="lead-content">
-            <p style="text-align: center; color: var(--slate-500); margin-bottom: 25px; font-size: 0.95rem;">
-                Déjanos tu WhatsApp y te enviamos el código de descuento inmediatamente
-            </p>
-            
-            <div style="margin-bottom: 20px;">
-                <input type="tel" id="lead-whatsapp" class="form-input" placeholder="Número de WhatsApp (ej: 11 2345-6789)" style="width: 100%; padding: 15px;">
-                <p style="font-size: 0.75rem; color: var(--slate-500); margin-top: 8px; text-align: center;">
-                    Solo recibirás el código y ofertas especiales
-                </p>
-            </div>
-            
-            <button onclick="submitLead()" class="cat-btn active" style="width: 100%; padding: 16px; font-size: 1rem; font-weight: 700;">
-                <i class="fab fa-whatsapp"></i> Recibir código por WhatsApp
-            </button>
-            
-            <button onclick="closeLeadPopup()" style="width: 100%; background: none; border: 1px solid var(--border); color: var(--slate-500); padding: 15px; border-radius: 12px; margin-top: 15px; cursor: pointer; font-size: 0.9rem;">
-                No gracias, seguir navegando
-            </button>
-            
-            <p style="font-size: 0.7rem; color: var(--slate-500); text-align: center; margin-top: 20px;">
-                Al enviar, aceptas recibir el código de descuento y ofertas especiales. Sin spam.
-            </p>
-        </div>
-    </div>
-
     <div id="notification">¡Añadido!</div>
     <a href="https://wa.me/5491168705261" class="wa-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
@@ -722,7 +611,7 @@
 
         const norm = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
 
-        // FUNCIONES PARA CONTADOR DE VISITAS - AGREGADAS (INVISIBLE)
+        // FUNCIONES PARA CONTADOR DE VISITAS - CORREGIDAS
         function trackVisitor() {
             const today = new Date().toLocaleDateString('es-AR');
             const now = new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
@@ -736,7 +625,7 @@
                 dailyStats: {}
             };
             
-            // Reiniciar contador diario si es un nuevo día
+            // Reiniciar contador diario si es un nuevo día (CORREGIDO)
             if (visitorsData.todayDate !== today) {
                 visitorsData.today = 0;
                 visitorsData.todayDate = today;
@@ -758,7 +647,7 @@
                 visitorsData.history = visitorsData.history.slice(-1000);
             }
             
-            // Actualizar estadísticas diarias
+            // Actualizar estadísticas diarias (CORREGIDO)
             if (!visitorsData.dailyStats[today]) {
                 visitorsData.dailyStats[today] = 0;
             }
@@ -1323,72 +1212,6 @@
             toggleShare();
         }
 
-        // FUNCIONES PARA POPUP DE CAPTACIÓN - AGREGADAS
-        function showLeadPopup() {
-            // Verificar si ya mostró el popup o ya es cliente
-            if (localStorage.getItem('lead_popup_shown') === 'true' || localStorage.getItem('is_returning_customer') === 'true') {
-                return;
-            }
-            
-            // Mostrar después de 5 segundos
-            setTimeout(() => {
-                document.getElementById('lead-overlay').classList.add('active');
-                document.getElementById('lead-popup').classList.add('active');
-                localStorage.setItem('lead_popup_shown', 'true');
-            }, 5000);
-        }
-
-        function closeLeadPopup() {
-            document.getElementById('lead-overlay').classList.remove('active');
-            document.getElementById('lead-popup').classList.remove('active');
-        }
-
-        function submitLead() {
-            const whatsappInput = document.getElementById('lead-whatsapp');
-            const whatsapp = whatsappInput.value.trim();
-            
-            if (!whatsapp || whatsapp.length < 8) {
-                alert('Por favor ingresa un número de WhatsApp válido');
-                whatsappInput.focus();
-                return;
-            }
-            
-            // Generar código de descuento único
-            const discountCode = 'MUNDO10-' + Math.random().toString(36).substr(2, 6).toUpperCase();
-            
-            // Guardar lead en localStorage
-            const leads = JSON.parse(localStorage.getItem(CONFIG.LEADS_KEY) || '[]');
-            leads.push({
-                whatsapp: whatsapp,
-                discountCode: discountCode,
-                date: new Date().toISOString(),
-                used: false
-            });
-            localStorage.setItem(CONFIG.LEADS_KEY, JSON.stringify(leads));
-            
-            // Preparar mensaje para WhatsApp
-            const message = `🎉 ¡Felicidades ${whatsapp}! 🎉\n\n` +
-                           `Tu código de 10% OFF es:\n` +
-                           `🔑 *${discountCode}*\n\n` +
-                           `✨ **Cómo usarlo:**\n` +
-                           `1. Agrega productos al carrito\n` +
-                           `2. Al finalizar, menciona este código\n` +
-                           `3. ¡Listo! Se aplicará el descuento\n\n` +
-                           `Catálogo: ${window.location.href}\n\n` +
-                           `¡Gracias por elegir Mundo Colchonetas! 🛒`;
-            
-            // Abrir WhatsApp con el mensaje
-            const whatsappNumber = whatsapp.replace(/\D/g, '');
-            window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`, '_blank');
-            
-            // Cerrar popup y mostrar confirmación
-            closeLeadPopup();
-            showNotify('¡Código enviado a tu WhatsApp!');
-            
-            // Marcar como cliente que ya recibió descuento
-            localStorage.setItem('has_discount_code', discountCode);
-        }
-
         // FUNCIONES ORIGINALES DEL CATÁLOGO
         function parseCSV(text) {
             const rows = []; let row = []; let cell = ''; let inQuotes = false;
@@ -1428,9 +1251,6 @@
                     localStorage.setItem('chatbot_shown', 'true');
                 }
             }, 10000);
-            
-            // Mostrar popup de captación después de 5 segundos
-            showLeadPopup();
         });
 
         async function syncWithExcel(silent = false) {
