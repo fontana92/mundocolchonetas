@@ -1485,46 +1485,61 @@
         function removeFromCart(clave) { cart = cart.filter(i => i.clave !== clave); updateCartUI(); }
 
         function checkoutViaWhatsApp() {
-            if(cart.length === 0) return;
-            
-            const customerName = document.getElementById('customer-name').value.trim();
-            if (!customerName) {
-                alert("Por favor ingresa tu nombre para continuar con el pedido.");
-                document.getElementById('customer-name').focus();
-                return;
-            }
-            
-            const cp = document.getElementById('shipping-cp').value.trim();
-            if (!cp) {
-                alert("Por favor ingresa tu código postal para calcular el envío.");
-                document.getElementById('shipping-cp').focus();
-                return;
-            }
-            
-            let shippingInfo = "";
-            if (SHIPPING_RATES[cp]) {
-                shippingInfo = `📍 Envío a ${SHIPPING_RATES[cp].loc}: $${SHIPPING_RATES[cp].price.toLocaleString()}`;
-            } else {
-                shippingInfo = "📍 Fuera del área de cobertura";
-            }
-            
-            let msg = `¡Hola Mundo Colchonetas! 🪐\n`;
-            msg += `Cliente: ${customerName}\n`;
-            msg += `Código Postal: ${cp}\n\n`;
-            msg += `📦 PEDIDO:\n`;
-            
-            cart.forEach(i => {
-                const price = i.oferta ? i.precioOferta : i.precio;
-                msg += `• ${i.nombre} (x${i.qty}) - $${(price * i.qty).toLocaleString()}\n`;
-            });
-            
-            msg += `\n${shippingInfo}\n`;
-            msg += `💰 TOTAL: ${document.getElementById('cart-total').innerText}`;
-            
-            registerSale(customerName, cp);
-            
-            window.open(`https://wa.me/5491168705261?text=${encodeURIComponent(msg)}`, '_blank');
-        }
+    if(cart.length === 0) return;
+    
+    const customerName = document.getElementById('customer-name').value.trim();
+    if (!customerName) {
+        alert("Por favor ingresa tu nombre para continuar con el pedido.")
+        document.getElementById('customer-name').focus();
+        return;
+    }
+    
+    const cp = document.getElementById('shipping-cp').value.trim();
+    if (!cp) {
+        alert("Por favor ingresa tu código postal para calcular el envío.");
+        document.getElementById('shipping-cp').focus();
+        return;
+    }
+    
+    let shippingInfo = "";
+    if (SHIPPING_RATES[cp]) {
+        shippingInfo = `📍 Envío a ${SHIPPING_RATES[cp].loc}: $${SHIPPING_RATES[cp].price.toLocaleString()}`;
+    } else {
+        shippingInfo = "📍 Fuera del área de cobertura";
+    }
+    
+    let msg = `¡Hola Mundo Colchonetas! 🪐\n`;
+    msg += `Cliente: ${customerName}\n`;
+    msg += `Código Postal: ${cp}\n\n`;
+    msg += `📦 PEDIDO:\n`;
+    
+    const itemsForSheet = [];
+    
+    cart.forEach(i => {
+        const price = i.oferta ? i.precioOferta : i.precio;
+        const subtotal = price * i.qty;
+        msg += `• ${i.nombre} (x${i.qty}) - $${subtotal.toLocaleString()}\n`;
+        
+        // Preparar datos para Google Sheets
+        itemsForSheet.push({
+            name: i.nombre,
+            quantity: i.qty,
+            unitPrice: price,
+            subtotal: subtotal
+        });
+    });
+    
+    msg += `\n${shippingInfo}\n`;
+    msg += `💰 TOTAL: ${document.getElementById('cart-total').innerText}`;
+    
+    // Registrar venta localmente
+    registerSale(customerName, cp);
+    
+    // Enviar a Google Sheets
+    sendToGoogleSheets(customerName, cp, itemsForSheet, shippingFee);
+    
+    window.open(`https://wa.me/5491168705261?text=${encodeURIComponent(msg)}`, '_blank');
+}
 
         function registerSale(customerName, cp) {
             const sale = {
@@ -1673,8 +1688,81 @@
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
         function checkAdminAccess() { if(isAdminLoggedIn) document.getElementById('admin-panel').classList.toggle('visible'); else document.getElementById('login-modal').classList.add('active'); }
         function showNotify(msg) { const n = document.getElementById('notification'); n.innerText = msg; n.style.transform = "translateX(-50%) translateY(0)"; setTimeout(() => n.style.transform = "translateX(-50%) translateY(150px)", 2000); }
+// Función para enviar pedidos a Google Sheets
+function sendToGoogleSheets(customerName, postalCode, items, shipping) {
+    const WEBAPP_URL = "PEGA_AQUI_LA_URL_DE_TU_WEB_APP"; // ← REEMPLAZA ESTO
+    
+    const total = items.reduce((acc, item) => acc + item.subtotal, 0) + shipping;
+    
+    const orderData = {
+        timestamp: new Date().toLocaleString('es-AR', { 
+            day: '2-digit', 
+            month: '2-digit', 
+            year: 'numeric', 
+            hour: '2-digit', 
+            minute: '2-digit' 
+        }),
+        customerName: customerName,
+        postalCode: postalCode,
+        items: items,
+        shipping: shipping,
+        total: total,
+        customerPhone: "Ver WhatsApp"
+    };
+    
+    fetch(WEBAPP_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData)
+    })
+    .then(response => {
+        console.log("✅ Pedido enviado a Google Sheets");
+    })
+    .catch(error => {
+        console.error("Error al enviar a Google Sheets:", error);
+    });
+}
+
+// Opcional: Función para probar la conexión con Sheets
+function testSheetsConnection() {
+    const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbypp6FkhqoDRoYxlVvjky1XOTcO1583v7kIx9zW0Xcg_rjoPlHK-jcX-Z57DeFxk5_PkA/exec"; // ← REEMPLAZA ESTO
+    
+    const testData = {
+        timestamp: new Date().toLocaleString('es-AR'),
+        customerName: "TEST",
+        postalCode: "0000",
+        items: [
+            {
+                name: "Producto de prueba",
+                quantity: 1,
+                unitPrice: 1000,
+                subtotal: 1000
+            }
+        ],
+        shipping: 0,
+        total: 1000,
+        customerPhone: "Test"
+    };
+    
+    fetch(WEBAPP_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(testData)
+    })
+    .then(() => {
+        alert("✅ Conexión exitosa con Google Sheets. Revisa tu hoja de cálculo.");
+    })
+    .catch(error => {
+        alert("❌ Error de conexión: " + error);
+    });
+}
     </script>
 </body>
 </html>
-
 
