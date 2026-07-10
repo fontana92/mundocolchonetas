@@ -658,7 +658,7 @@
         const norm = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
 
         // =======================================================
-        // FUNCIÓN PARA COMPARTIR PRODUCTO INDIVIDUAL - MEJORADA
+        // FUNCIÓN PARA COMPARTIR PRODUCTO INDIVIDUAL - CON FOTO
         // =======================================================
         function shareProduct(clave, platform) {
             const p = products.find(i => i.clave === clave);
@@ -668,24 +668,31 @@
             // URL con parámetro del producto para abrir directamente
             const productUrl = window.location.origin + window.location.pathname + '?producto=' + encodeURIComponent(clave);
             
-            // Texto corto y limpio para compartir
-            const shortText = `🪐 ${p.nombre}\n💰 $${pFinal.toLocaleString()}`;
+            // Obtener la imagen del producto (primera foto o logo por defecto)
+            const imageUrl = p.fotos && p.fotos[0] ? p.fotos[0] : 'https://mundocolchonetas.com/logo-social.jpg';
+            
+            // Texto corto con la imagen incluida para que WhatsApp la muestre en el estado
+            const shortText = `🪐 ${p.nombre}\n💰 $${pFinal.toLocaleString()}\n📷 ${imageUrl}\n👇 ${productUrl}`;
             const encodedText = encodeURIComponent(shortText);
             const encodedUrl = encodeURIComponent(productUrl);
+            const encodedImage = encodeURIComponent(imageUrl);
             
             let shareUrl = '';
             
             switch(platform) {
                 case 'whatsapp':
-                    shareUrl = `https://wa.me/?text=${encodedText}%0A👇%20${encodedUrl}`;
+                    // Incluimos la imagen en el texto para que WhatsApp la muestre
+                    shareUrl = `https://wa.me/?text=${encodedText}`;
                     break;
                     
                 case 'facebook':
-                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedText}`;
+                    // Facebook usa Open Graph, pasamos la URL con la imagen
+                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodeURIComponent(`🪐 ${p.nombre} - $${pFinal.toLocaleString()}`)}`;
                     break;
                     
                 case 'instagram':
-                    const instaMsg = `${p.nombre}\n$${pFinal.toLocaleString()}\n${productUrl}`;
+                    // Instagram: copia texto + link + imagen para pegar en historia/story
+                    const instaMsg = `${p.nombre}\n$${pFinal.toLocaleString()}\n${imageUrl}\n${productUrl}`;
                     const tempInput = document.createElement('input');
                     tempInput.value = instaMsg;
                     document.body.appendChild(tempInput);
@@ -696,7 +703,7 @@
                     return;
                     
                 case 'twitter':
-                    shareUrl = `https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`;
+                    shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(`🪐 ${p.nombre} - $${pFinal.toLocaleString()}`)}&url=${encodedUrl}`;
                     break;
                     
                 case 'linkedin':
