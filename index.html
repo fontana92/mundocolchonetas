@@ -10,19 +10,19 @@
     <meta name="author" content="Mundo Colchonetas">
     <meta name="robots" content="index, follow">
     
-    <!-- OPEN GRAPH - La imagen que se ve al compartir en WhatsApp -->
+    <!-- OPEN GRAPH -->
     <meta property="og:title" content="Mundo Colchonetas | Colchonetas Premium">
     <meta property="og:description" content="Las mejores colchonetas para yoga, pilates y fitness. Envíos a todo el país.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://mundocolchonetas.com">
-    <meta property="og:image" content="https://i.postimg.cc/t4XYZ123/logo-mundo-colchonetas.jpg">
+    <meta property="og:image" content="https://i.postimg.cc/T1wLrvhH/logo-mundo-colchonetas.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Mundo Colchonetas | Colchonetas Premium">
     <meta name="twitter:description" content="Las mejores colchonetas para tu entrenamiento.">
-    <meta name="twitter:image" content="https://i.postimg.cc/t4XYZ123/logo-mundo-colchonetas.jpg">
+    <meta name="twitter:image" content="https://i.postimg.cc/T1wLrvhH/logo-mundo-colchonetas.jpg">
     
     <link rel="icon" type="image/png" href="https://mundocolchonetas.com/favicon.png">
     
@@ -358,6 +358,220 @@
         .share-wa { background: #25D366; }
         .share-fb { background: #1877F2; }
         .share-ig { background: linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); }
+
+        /* ========================================= */
+        /* ESTILOS PARA OFERTAS DESTACADAS - ESTILO WHATSAPP */
+        /* ========================================= */
+        .ofertas-destacadas {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 15px 0 5px 0;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin: 15px 0 25px 0;
+            overflow: hidden;
+        }
+
+        .ofertas-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 15px 15px 15px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .ofertas-badge {
+            background: linear-gradient(135deg, #ff4757, #ff6b81);
+            color: white;
+            padding: 6px 18px;
+            border-radius: 99px;
+            font-weight: 800;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+        }
+
+        .ofertas-badge i {
+            font-size: 0.9rem;
+        }
+
+        .ofertas-count {
+            background: white;
+            color: #ff4757;
+            padding: 0 10px;
+            border-radius: 99px;
+            font-size: 0.7rem;
+            font-weight: 800;
+        }
+
+        .ofertas-carousel {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 10px 15px 15px 15px;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+            flex: 1;
+        }
+
+        .ofertas-carousel::-webkit-scrollbar {
+            display: none;
+        }
+
+        .oferta-item {
+            flex: 0 0 auto;
+            width: 165px;
+            background: var(--white);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+            padding: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            min-height: 185px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .oferta-item:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
+            border-color: var(--primary);
+        }
+
+        .oferta-item .badge-offer-small {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: linear-gradient(135deg, #ff4757, #ff6b81);
+            color: white;
+            padding: 3px 12px;
+            border-radius: 99px;
+            font-size: 0.65rem;
+            font-weight: 800;
+            box-shadow: 0 4px 12px rgba(255, 71, 87, 0.4);
+            z-index: 5;
+        }
+
+        .oferta-item .badge-combo {
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            background: linear-gradient(135deg, var(--primary), #a855f7);
+            color: white;
+            padding: 3px 12px;
+            border-radius: 99px;
+            font-size: 0.65rem;
+            font-weight: 800;
+            box-shadow: 0 4px 12px rgba(142, 68, 173, 0.4);
+            z-index: 5;
+        }
+
+        .oferta-item .img-container {
+            width: 85px;
+            height: 85px;
+            background: var(--slate-100);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-bottom: 8px;
+            flex-shrink: 0;
+        }
+
+        .oferta-item .img-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .oferta-item .nombre-oferta {
+            font-size: 0.7rem;
+            font-weight: 600;
+            line-height: 1.2;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            height: 34px;
+            margin-bottom: 2px;
+        }
+
+        .oferta-item .precio-oferta {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-top: 2px;
+        }
+
+        .oferta-item .precio-viejo {
+            font-size: 0.65rem;
+            text-decoration: line-through;
+            color: var(--slate-500);
+        }
+
+        .oferta-item .ver-producto {
+            font-size: 0.6rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-top: 6px;
+            background: var(--slate-100);
+            padding: 3px 14px;
+            border-radius: 99px;
+            transition: var(--transition);
+        }
+
+        .oferta-item:hover .ver-producto {
+            background: var(--primary);
+            color: white;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .oferta-item {
+            animation: slideUp 0.4s ease forwards;
+        }
+
+        @media (max-width: 480px) {
+            .ofertas-header {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .oferta-item {
+                width: 135px;
+                padding: 10px;
+                min-height: 160px;
+            }
+            .oferta-item .img-container {
+                width: 65px;
+                height: 65px;
+            }
+            .oferta-item .nombre-oferta {
+                font-size: 0.6rem;
+                height: 28px;
+            }
+            .oferta-item .precio-oferta {
+                font-size: 0.8rem;
+            }
+            .ofertas-badge {
+                font-size: 0.7rem;
+                padding: 4px 14px;
+            }
+            .ofertas-carousel {
+                padding: 8px 10px 12px 10px;
+                gap: 8px;
+            }
+        }
         
         @media (max-width: 480px) {
             .chatbot-container { width: 300px; height: 450px; right: 10px; bottom: 150px; }
@@ -399,6 +613,23 @@
                     <text x="50%" y="125" text-anchor="middle" font-family="Inter" font-weight="300" font-size="42" fill="white" letter-spacing="8">MUNDO</text>
                     <text x="50%" y="175" text-anchor="middle" font-family="Inter" font-weight="800" font-size="48" fill="white" letter-spacing="2">COLCHONETAS</text>
                 </svg>
+            </div>
+        </section>
+
+        <!-- ========================================= -->
+        <!-- SECCIÓN DE OFERTAS DESTACADAS - ESTILO WHATSAPP -->
+        <!-- ========================================= -->
+        <section class="ofertas-destacadas" id="ofertas-destacadas" style="display: none;">
+            <div class="ofertas-header">
+                <div class="ofertas-badge">
+                    <i class="fas fa-bolt"></i> OFERTAS <span class="ofertas-count" id="ofertas-count">0</span>
+                </div>
+                <div style="font-size: 0.7rem; color: var(--slate-500); font-weight: 500; white-space: nowrap;">
+                    <i class="fas fa-arrow-right"></i> Deslizá para ver más
+                </div>
+            </div>
+            <div class="ofertas-carousel" id="ofertas-carousel">
+                <!-- Las ofertas se cargan aquí dinámicamente -->
             </div>
         </section>
 
@@ -536,7 +767,7 @@
 
         const norm = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
 
-        // FUNCIÓN PARA COMPARTIR PRODUCTO - VERSIÓN LIMPIA Y PROFESIONAL
+        // FUNCIÓN PARA COMPARTIR PRODUCTO
         function shareProduct(clave, platform) {
             const p = products.find(i => i.clave === clave);
             if(!p) return;
@@ -544,7 +775,6 @@
             const pFinal = p.oferta ? p.precioOferta : p.precio;
             const productUrl = window.location.origin + window.location.pathname + '?producto=' + encodeURIComponent(clave);
             
-            // Mensaje profesional y limpio
             const message = `🪐 ${p.nombre}\n💰 $${pFinal.toLocaleString()}\n👇 ${productUrl}`;
             
             if(platform === 'whatsapp') {
@@ -582,6 +812,55 @@
                 }, 500);
                 setTimeout(() => clearInterval(checkAndOpen), 5000);
             }
+        }
+
+        // =======================================================
+        // FUNCIÓN PARA RENDERIZAR OFERTAS DESTACADAS
+        // =======================================================
+        function renderOfertasDestacadas() {
+            const container = document.getElementById('ofertas-destacadas');
+            const carousel = document.getElementById('ofertas-carousel');
+            const count = document.getElementById('ofertas-count');
+            
+            // Filtrar productos con oferta (columna J = "SI")
+            const ofertas = products.filter(p => p.oferta && parseInt(p.stock) > 0);
+            
+            if (ofertas.length === 0) {
+                container.style.display = 'none';
+                return;
+            }
+            
+            container.style.display = 'block';
+            count.textContent = ofertas.length;
+            
+            // Ordenar: primero combos, luego por mayor descuento
+            ofertas.sort((a, b) => {
+                const aIsCombo = norm(a.categoria) === 'combos';
+                const bIsCombo = norm(b.categoria) === 'combos';
+                if (aIsCombo && !bIsCombo) return -1;
+                if (!aIsCombo && bIsCombo) return 1;
+                return b.descuento - a.descuento;
+            });
+            
+            carousel.innerHTML = ofertas.map((p, index) => {
+                const pFinal = p.oferta ? p.precioOferta : p.precio;
+                const esCombo = norm(p.categoria) === 'combos';
+                const imgSrc = p.fotos && p.fotos[0] ? p.fotos[0] : '';
+                
+                return `
+                    <div class="oferta-item" onclick="openDetail('${p.clave}')" style="animation-delay: ${index * 0.1}s">
+                        ${p.oferta ? `<div class="badge-offer-small">${p.descuento}% OFF</div>` : ''}
+                        ${esCombo ? `<div class="badge-combo">🎁 COMBO</div>` : ''}
+                        <div class="img-container">
+                            ${imgSrc ? `<img src="${imgSrc}" loading="lazy">` : '<i class="fas fa-image fa-2x" style="color:#ddd"></i>'}
+                        </div>
+                        <div class="nombre-oferta">${p.nombre}</div>
+                        <div class="precio-oferta">$${pFinal.toLocaleString()}</div>
+                        ${p.oferta ? `<div class="precio-viejo">$${p.precio.toLocaleString()}</div>` : ''}
+                        <div class="ver-producto">Ver producto →</div>
+                    </div>
+                `;
+            }).join('');
         }
 
         // FUNCIONES PARA CONTADOR DE VISITAS
@@ -1070,7 +1349,11 @@
             renderProducts();
         }
 
-        function renderAll() { renderCategories(); renderProducts(); }
+        function renderAll() { 
+            renderCategories(); 
+            renderProducts(); 
+            renderOfertasDestacadas();
+        }
 
         function renderCategories() {
             const container = document.getElementById('categories-container');
