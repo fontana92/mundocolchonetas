@@ -671,28 +671,32 @@
             // Obtener la imagen del producto (primera foto o logo por defecto)
             const imageUrl = p.fotos && p.fotos[0] ? p.fotos[0] : 'https://mundocolchonetas.com/logo-social.jpg';
             
-            // Texto corto con la imagen incluida para que WhatsApp la muestre en el estado
-            const shortText = `🪐 ${p.nombre}\n💰 $${pFinal.toLocaleString()}\n📷 ${imageUrl}\n👇 ${productUrl}`;
-            const encodedText = encodeURIComponent(shortText);
-            const encodedUrl = encodeURIComponent(productUrl);
-            const encodedImage = encodeURIComponent(imageUrl);
+            // Texto corto para compartir (SIN la URL de la imagen para que no se vea como texto)
+            const shortText = `🪐 ${p.nombre}\n💰 $${pFinal.toLocaleString()}\n👇 ${productUrl}`;
             
             let shareUrl = '';
             
             switch(platform) {
                 case 'whatsapp':
-                    // Incluimos la imagen en el texto para que WhatsApp la muestre
-                    shareUrl = `https://wa.me/?text=${encodedText}`;
+                    // Para WhatsApp: compartimos la imagen directamente como archivo multimedia usando la URL de la imagen
+                    // Esto funciona mejor si la imagen está en un servidor accesible
+                    // Usamos el formato de WhatsApp que permite compartir imagen
+                    shareUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shortText)}`;
+                    
+                    // Intentamos abrir la imagen en una nueva ventana para que el usuario la descargue y la comparta manualmente
+                    // Pero mejor: usamos el mensaje con la URL de la imagen al final
+                    const messageWithImage = `${shortText}\n\n📷 ${imageUrl}`;
+                    shareUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(messageWithImage)}`;
                     break;
                     
                 case 'facebook':
-                    // Facebook usa Open Graph, pasamos la URL con la imagen
-                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodeURIComponent(`🪐 ${p.nombre} - $${pFinal.toLocaleString()}`)}`;
+                    // Facebook usa Open Graph
+                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(productUrl)}&quote=${encodeURIComponent(`🪐 ${p.nombre} - $${pFinal.toLocaleString()}`)}`;
                     break;
                     
                 case 'instagram':
-                    // Instagram: copia texto + link + imagen para pegar en historia/story
-                    const instaMsg = `${p.nombre}\n$${pFinal.toLocaleString()}\n${imageUrl}\n${productUrl}`;
+                    // Instagram: copia texto + link para pegar en historia
+                    const instaMsg = `${p.nombre}\n$${pFinal.toLocaleString()}\n${productUrl}`;
                     const tempInput = document.createElement('input');
                     tempInput.value = instaMsg;
                     document.body.appendChild(tempInput);
@@ -703,17 +707,40 @@
                     return;
                     
                 case 'twitter':
-                    shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(`🪐 ${p.nombre} - $${pFinal.toLocaleString()}`)}&url=${encodedUrl}`;
+                    shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(`🪐 ${p.nombre} - $${pFinal.toLocaleString()}`)}&url=${encodeURIComponent(productUrl)}`;
                     break;
                     
                 case 'linkedin':
-                    shareUrl = `https://www.linkedin.com/shareArticle?mini=true&url=${encodedUrl}&title=${encodeURIComponent(p.nombre)}&summary=${encodeURIComponent(`${p.categoria} - $${pFinal.toLocaleString()}`)}`;
+                    shareUrl = `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(productUrl)}&title=${encodeURIComponent(p.nombre)}&summary=${encodeURIComponent(`${p.categoria} - $${pFinal.toLocaleString()}`)}`;
                     break;
             }
             
             if(shareUrl) {
                 window.open(shareUrl, '_blank');
             }
+        }
+
+        // FUNCIÓN PARA COMPARTIR EL PRODUCTO CON LA IMAGEN (OPCIÓN CON DESCARGAR)
+        function shareProductWithImage(clave) {
+            const p = products.find(i => i.clave === clave);
+            if(!p) return;
+            
+            const pFinal = p.oferta ? p.precioOferta : p.precio;
+            const productUrl = window.location.origin + window.location.pathname + '?producto=' + encodeURIComponent(clave);
+            const imageUrl = p.fotos && p.fotos[0] ? p.fotos[0] : 'https://mundocolchonetas.com/logo-social.jpg';
+            
+            // Abrir la imagen en una nueva ventana para que el usuario pueda descargarla y compartirla en su estado de WhatsApp
+            window.open(imageUrl, '_blank');
+            showNotify('📸 Descarga la imagen y compártela en tu estado de WhatsApp');
+            
+            // También copiar el texto al portapapeles
+            const text = `🪐 ${p.nombre}\n💰 $${pFinal.toLocaleString()}\n👇 ${productUrl}`;
+            const tempInput = document.createElement('input');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
         }
 
         // =======================================================
@@ -742,12 +769,11 @@
             }
         }
 
-        // FUNCIONES PARA CONTADOR DE VISITAS - CORREGIDAS
+        // FUNCIONES PARA CONTADOR DE VISITAS
         function trackVisitor() {
             const today = new Date().toLocaleDateString('es-AR');
             const now = new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
             
-            // Obtener datos existentes
             let visitorsData = JSON.parse(localStorage.getItem(CONFIG.VISITORS_KEY)) || {
                 total: 0,
                 today: 0,
@@ -756,37 +782,30 @@
                 dailyStats: {}
             };
             
-            // Reiniciar contador diario si es un nuevo día (CORREGIDO)
             if (visitorsData.todayDate !== today) {
                 visitorsData.today = 0;
                 visitorsData.todayDate = today;
             }
             
-            // Incrementar contadores
             visitorsData.total++;
             visitorsData.today++;
             
-            // Registrar visita en historia
             visitorsData.history.push({
                 date: today,
                 time: now,
                 timestamp: Date.now()
             });
             
-            // Mantener solo los últimos 1000 registros
             if (visitorsData.history.length > 1000) {
                 visitorsData.history = visitorsData.history.slice(-1000);
             }
             
-            // Actualizar estadísticas diarias (CORREGIDO)
             if (!visitorsData.dailyStats[today]) {
                 visitorsData.dailyStats[today] = 0;
             }
             visitorsData.dailyStats[today]++;
             
-            // Guardar en localStorage
             localStorage.setItem(CONFIG.VISITORS_KEY, JSON.stringify(visitorsData));
-            
             return visitorsData;
         }
 
@@ -799,13 +818,11 @@
                 dailyStats: {}
             };
             
-            // Calcular estadísticas
             const totalVisits = visitorsData.total;
             const todayVisits = visitorsData.today;
             const uniqueDays = Object.keys(visitorsData.dailyStats).length;
             const avgPerDay = uniqueDays > 0 ? Math.round(totalVisits / uniqueDays) : 0;
             
-            // Obtener últimos 7 días
             const last7Days = {};
             const today = new Date();
             for (let i = 6; i >= 0; i--) {
@@ -815,7 +832,6 @@
                 last7Days[dateStr] = visitorsData.dailyStats[dateStr] || 0;
             }
             
-            // Crear gráfico simple de los últimos 7 días
             let chartHTML = '<div style="margin: 20px 0; height: 150px; display: flex; align-items: flex-end; gap: 10px; border-bottom: 2px solid var(--border); padding-bottom: 20px;">';
             const maxVisits = Math.max(...Object.values(last7Days), 1);
             
@@ -832,7 +848,6 @@
             });
             chartHTML += '</div>';
             
-            // Crear HTML de estadísticas
             const statsHTML = `
                 <div style="background: var(--slate-100); padding: 20px; border-radius: 15px; margin: 20px 0;">
                     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px;">
@@ -902,7 +917,7 @@
         function resetVisitorData() {
             if (confirm("¿Estás seguro de que deseas reiniciar TODOS los datos de visitantes? Esta acción no se puede deshacer.")) {
                 localStorage.removeItem(CONFIG.VISITORS_KEY);
-                trackVisitor(); // Iniciar nuevo registro
+                trackVisitor();
                 showNotify('Contador reiniciado');
                 setTimeout(() => {
                     closeModal('stats-modal');
@@ -911,7 +926,6 @@
             }
         }
 
-        // Mostrar estadísticas básicas en panel admin
         function updateVisitorStatsInPanel() {
             const visitorsData = JSON.parse(localStorage.getItem(CONFIG.VISITORS_KEY)) || {
                 total: 0,
@@ -950,7 +964,7 @@
             document.getElementById('visitor-data').innerHTML = statsHTML;
         }
 
-        // DATOS DEL CHATBOT - ACTUALIZADO PARA VENDER SOLO PRODUCTOS EN STOCK
+        // DATOS DEL CHATBOT
         const CHATBOT_RESPONSES = {
             "hola": "¡Hola! 👋 Soy tu asistente de Mundo Colchonetas. Como tu personal trainer virtual, puedo ayudarte a encontrar los mejores productos para tu entrenamiento. ¿En qué puedo asistirte hoy?",
             "hola!": "¡Hola! 👋 Soy tu asistente de Mundo Colchonetas. Como tu personal trainer virtual, puedo ayudarte a encontrar los mejores productos para tu entrenamiento. ¿En qué puedo asistirte hoy?",
@@ -1020,8 +1034,6 @@
             "calidad": "Trabajamos solo con productos de primera calidad. Como trainer, sé que el equipo adecuado mejora tu rendimiento.",
             "devoluciones": "Aceptamos devoluciones dentro de los 7 días si el producto no fue usado y está en perfecto estado.",
             "tengo una duda": "¡Claro! Como tu entrenador virtual, puedo resolver dudas sobre productos, entrenamiento o compra. ¿Qué necesitas saber?",
-            
-            // NUEVAS RESPUESTAS ESPECÍFICAS PARA COMBOS Y VENTAS
             "combos": function() {
                 const combos = products.filter(p => norm(p.categoria) === 'combos' && parseInt(p.stock) > 0);
                 if (combos.length === 0) return "Actualmente no tenemos combos disponibles en stock. Te recomiendo ver nuestras ofertas individuales.";
@@ -1038,9 +1050,7 @@
                 response += "💡 *Los combos ahorran hasta 30% vs comprar por separado*";
                 return response;
             },
-            
             "quiero un combo": "¡Excelente elección! 💪 Los combos ofrecen el mejor valor. ¿Para qué actividad buscas?\n\n1. 🧘 Combo Yoga\n2. 💪 Combo Fitness\n3. 🏕️ Combo Camping\n4. 👨‍👩‍👧‍👦 Combo Familiar\n\nPregúntame por 'combos' para ver disponibilidad exacta.",
-            
             "mejor combo": function() {
                 const combos = products.filter(p => norm(p.categoria) === 'combos' && parseInt(p.stock) > 0);
                 if (combos.length === 0) return "No tenemos combos en stock ahora.";
@@ -1058,11 +1068,9 @@
                        `📝 ${mejorCombo.descripcion.substring(0, 100)}...\n\n` +
                        `¡Este combo incluye todo lo necesario para empezar!`;
             },
-            
             "recomiendame algo": function() {
                 return this["recomendacion"]();
             },
-            
             "que me conviene comprar": function() {
                 const stockProducts = products.filter(p => parseInt(p.stock) > 0);
                 if (stockProducts.length === 0) return "Todos los productos están agotados temporalmente.";
@@ -1087,7 +1095,6 @@
                 response += "¿Qué te interesa ver primero?";
                 return response;
             },
-            
             "tengo poco presupuesto": function() {
                 const economicos = products.filter(p => parseInt(p.stock) > 0)
                                           .sort((a, b) => (a.oferta ? a.precioOferta : a.precio) - (b.oferta ? b.precioOferta : b.precio))
@@ -1107,9 +1114,7 @@
                 response += "💡 *Consejo: Los combos suelen tener mejor precio por producto*";
                 return response;
             },
-            
             "beneficios": "✨ **BENEFICIOS EXCLUSIVOS** ✨\n\n✅ Garantía de 1 año\n✅ Asesoramiento fitness personalizado (yo mismo)\n✅ Guías de entrenamiento gratuitas\n✅ Productos probados por entrenadores\n✅ Calidad premium a buen precio\n\n¿Qué te interesa saber más?",
-            
             "mejor oferta": function() {
                 const mejoresOfertas = products.filter(p => p.oferta && parseInt(p.stock) > 0)
                                               .sort((a, b) => b.descuento - a.descuento)
@@ -1172,7 +1177,6 @@
             const quickOptionsDiv = document.createElement('div');
             quickOptionsDiv.className = 'quick-options';
             
-            // Verificar qué tenemos en stock
             const tieneCombos = products.some(p => norm(p.categoria) === 'combos' && parseInt(p.stock) > 0);
             const tieneOfertas = products.some(p => p.oferta && parseInt(p.stock) > 0);
             
@@ -1287,12 +1291,10 @@
             }
         }
 
-        // FUNCIONES PARA COMPARTIR - AGREGADAS Y CORREGIDAS
+        // FUNCIONES PARA COMPARTIR
         function toggleShare() {
             const shareContainer = document.getElementById('share-container');
             shareContainer.classList.toggle('active');
-            
-            // Asegurarse de que los links estén actualizados
             updateShareLinks();
         }
 
@@ -1338,7 +1340,6 @@
             tempInput.select();
             document.execCommand('copy');
             document.body.removeChild(tempInput);
-            
             showNotify('¡Link copiado!');
             toggleShare();
         }
@@ -1366,19 +1367,11 @@
             document.getElementById('excel-url').value = savedUrl;
             syncWithExcel(true);
             
-            // INICIALIZAR CONTADOR DE VISITAS (INVISIBLE)
             trackVisitor();
-            
-            // INICIALIZAR LOS LINKS DE COMPARTIR
             updateShareLinks();
-            
-            // ACTUALIZAR ESTADÍSTICAS EN PANEL
             updateVisitorStatsInPanel();
-            
-            // VERIFICAR SI VIENE DE UN PRODUCTO COMPARTIDO Y ABRIRLO
             checkProductInUrl();
             
-            // Mostrar chatbot después de 10 segundos
             setTimeout(() => {
                 if (!localStorage.getItem('chatbot_shown')) {
                     toggleChatbot();
@@ -1421,8 +1414,6 @@
                     localStorage.setItem(CONFIG.KEY, JSON.stringify(products));
                     localStorage.setItem('sheet_url', urlInput);
                     renderAll();
-                    
-                    // Después de cargar productos, verificar si hay producto en URL
                     checkProductInUrl();
                 }
             } catch (e) { 
@@ -1445,7 +1436,6 @@
             let cats = ['todos'];
             if (hasOffers) cats.push('ofertas');
             
-            // Agregar 'combos' como categoría especial si existe
             const hasCombos = products.some(p => norm(p.categoria) === 'combos');
             if (hasCombos) {
                 cats.push('combos');
@@ -1485,16 +1475,13 @@
                 );
             }
             
-            // ORDENAR: Si es la categoría "todos", mostrar COMBOS primero
             if (currentCategory === 'todos') {
                 filtered.sort((a, b) => {
                     const aIsCombo = norm(a.categoria) === 'combos';
                     const bIsCombo = norm(b.categoria) === 'combos';
                     
-                    if (aIsCombo && !bIsCombo) return -1; // a (combo) va primero
-                    if (!aIsCombo && bIsCombo) return 1;  // b (combo) va primero
-                    
-                    // Si ambos son combos o ninguno es combo, mantener orden original
+                    if (aIsCombo && !bIsCombo) return -1;
+                    if (!aIsCombo && bIsCombo) return 1;
                     return 0;
                 });
             }
@@ -1651,7 +1638,6 @@
                 const subtotal = price * i.qty;
                 msg += `• ${i.nombre} (x${i.qty}) - $${subtotal.toLocaleString()}\n`;
                 
-                // Preparar datos para Google Sheets
                 itemsForSheet.push({
                     name: i.nombre,
                     quantity: i.qty,
@@ -1663,10 +1649,7 @@
             msg += `\n${shippingInfo}\n`;
             msg += `💰 TOTAL: ${document.getElementById('cart-total').innerText}`;
             
-            // Registrar venta localmente
             registerSale(customerName, cp);
-            
-            // Enviar a Google Sheets
             sendToGoogleSheets(customerName, cp, itemsForSheet, shippingFee);
             
             window.open(`https://wa.me/5491168705261?text=${encodeURIComponent(msg)}`, '_blank');
@@ -1809,7 +1792,6 @@
                 isAdminLoggedIn = true; localStorage.setItem('adminSession', 'active');
                 document.getElementById('login-modal').classList.remove('active');
                 document.getElementById('admin-panel').classList.add('visible');
-                // Actualizar estadísticas cuando se abre el panel
                 updateVisitorStatsInPanel();
             } else alert("Error");
         }
@@ -1819,10 +1801,6 @@
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
         function checkAdminAccess() { if(isAdminLoggedIn) document.getElementById('admin-panel').classList.toggle('visible'); else document.getElementById('login-modal').classList.add('active'); }
         function showNotify(msg) { const n = document.getElementById('notification'); n.innerText = msg; n.style.transform = "translateX(-50%) translateY(0)"; setTimeout(() => n.style.transform = "translateX(-50%) translateY(150px)", 2000); }
-
-        // =======================================================
-        // NUEVAS FUNCIONES PARA ENVIAR PEDIDOS A GOOGLE SHEETS
-        // =======================================================
 
         function sendToGoogleSheets(customerName, postalCode, items, shipping) {
             const WEBAPP_URL = CONFIG.SHEETS_WEBAPP_URL;
