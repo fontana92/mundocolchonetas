@@ -5,45 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Mundo Colchonetas | Premium Fitness</title>
     
-    <!-- OPTIMIZACIÓN PARA BUSCADORES -->
-    <meta name="description" content="Catálogo oficial de Mundo Colchonetas - Las mejores colchonetas para yoga, pilates, fitness y camping. ✅ Calidad premium ✅ Envíos a todo el país ✅ Mejores precios del mercado">
-    <meta name="keywords" content="colchonetas, yoga, pilates, fitness, camping, deporte, ejercicio, argentina, gimnasio, entrenamiento, equipo fitness">
+    <meta name="description" content="Catálogo oficial de Mundo Colchonetas - Las mejores colchonetas para yoga, pilates, fitness y camping. Calidad premium y envíos a todo el país.">
+    <meta name="keywords" content="colchonetas, yoga, pilates, fitness, camping, deporte, ejercicio, argentina">
     <meta name="author" content="Mundo Colchonetas">
     <meta name="robots" content="index, follow">
     
-    <!-- Open Graph DINÁMICO para redes sociales - SE ACTUALIZA CON JS -->
-    <meta property="og:title" id="og-title" content="Mundo Colchonetas | Catálogo Premium de Colchonetas">
-    <meta property="og:description" id="og-description" content="Descubre nuestra colección de colchonetas profesionales para yoga, pilates, fitness y camping. Envíos a todo el país.">
+    <!-- OPEN GRAPH - La imagen que se ve al compartir en WhatsApp -->
+    <meta property="og:title" content="Mundo Colchonetas | Colchonetas Premium">
+    <meta property="og:description" content="Las mejores colchonetas para yoga, pilates y fitness. Envíos a todo el país.">
     <meta property="og:type" content="website">
-    <meta property="og:url" id="og-url" content="https://mundocolchonetas.com">
-    <meta property="og:image" id="og-image" content="https://mundocolchonetas.com/logo-social.jpg">
+    <meta property="og:url" content="https://mundocolchonetas.com">
+    <meta property="og:image" content="https://i.postimg.cc/t4XYZ123/logo-mundo-colchonetas.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     
-    <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" id="twitter-title" content="Mundo Colchonetas | Catálogo Premium">
-    <meta name="twitter:description" id="twitter-description" content="Las mejores colchonetas para tu entrenamiento. Calidad garantizada y envíos rápidos.">
-    <meta name="twitter:image" id="twitter-image" content="https://mundocolchonetas.com/logo-twitter.jpg">
+    <meta name="twitter:title" content="Mundo Colchonetas | Colchonetas Premium">
+    <meta name="twitter:description" content="Las mejores colchonetas para tu entrenamiento.">
+    <meta name="twitter:image" content="https://i.postimg.cc/t4XYZ123/logo-mundo-colchonetas.jpg">
     
-    <!-- Favicon -->
     <link rel="icon" type="image/png" href="https://mundocolchonetas.com/favicon.png">
-    
-    <!-- Schema.org para Google -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "SportsActivityLocation",
-      "name": "Mundo Colchonetas",
-      "description": "Tienda especializada en colchonetas y equipo para fitness, yoga, pilates y camping",
-      "url": "https://mundocolchonetas.com",
-      "address": {
-        "@type": "PostalAddress",
-        "addressCountry": "AR"
-      },
-      "openingHours": "Mo-Fr 09:00-18:00"
-    }
-    </script>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -555,72 +536,34 @@
 
         const norm = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
 
-        // =======================================================
-        // FUNCIÓN PARA COMPARTIR PRODUCTO - CON PREVIEW DE IMAGEN
-        // =======================================================
+        // FUNCIÓN PARA COMPARTIR PRODUCTO - VERSIÓN LIMPIA Y PROFESIONAL
         function shareProduct(clave, platform) {
-    const p = products.find(i => i.clave === clave);
-    if(!p) return;
-    
-    const pFinal = p.oferta ? p.precioOferta : p.precio;
-    const imageUrl = p.fotos && p.fotos[0] ? p.fotos[0] : 'https://mundocolchonetas.com/logo-social.jpg';
-    const productUrl = window.location.origin + window.location.pathname + '?producto=' + encodeURIComponent(clave);
-    
-    // El truco está acá: la URL de la imagen va PRIMERO para que WhatsApp la detecte
-    const message = `${imageUrl}\n\n🪐 ${p.nombre}\n💰 $${pFinal.toLocaleString()}\n👇 ${productUrl}`;
-    
-    let shareUrl = '';
-    
-    switch(platform) {
-        case 'whatsapp':
-            shareUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
-            break;
-        case 'facebook':
-            shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(productUrl)}&quote=${encodeURIComponent(`🪐 ${p.nombre} - $${pFinal.toLocaleString()}`)}`;
-            break;
-        case 'instagram':
-            const instaMsg = `${p.nombre}\n$${pFinal.toLocaleString()}\n${imageUrl}\n${productUrl}`;
-            const tempInput = document.createElement('input');
-            tempInput.value = instaMsg;
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempInput);
-            showNotify('📋 Texto copiado para Instagram');
-            return;
-    }
-    
-    if(shareUrl) {
-        window.open(shareUrl, '_blank');
-    }
-}
-
-        // =======================================================
-        // FUNCIÓN PARA ACTUALIZAR OPEN GRAPH DINÁMICAMENTE
-        // =======================================================
-        function updateOpenGraphForProduct(clave) {
             const p = products.find(i => i.clave === clave);
             if(!p) return;
             
             const pFinal = p.oferta ? p.precioOferta : p.precio;
-            const imageUrl = p.fotos && p.fotos[0] ? p.fotos[0] : 'https://mundocolchonetas.com/logo-social.jpg';
             const productUrl = window.location.origin + window.location.pathname + '?producto=' + encodeURIComponent(clave);
             
-            // Actualizar meta tags para Open Graph
-            document.getElementById('og-title').setAttribute('content', `${p.nombre} - Mundo Colchonetas`);
-            document.getElementById('og-description').setAttribute('content', `${p.categoria} - $${pFinal.toLocaleString()}. ${p.descripcion.substring(0, 120)}...`);
-            document.getElementById('og-url').setAttribute('content', productUrl);
-            document.getElementById('og-image').setAttribute('content', imageUrl);
+            // Mensaje profesional y limpio
+            const message = `🪐 ${p.nombre}\n💰 $${pFinal.toLocaleString()}\n👇 ${productUrl}`;
             
-            // Actualizar Twitter Cards
-            document.getElementById('twitter-title').setAttribute('content', `${p.nombre} - Mundo Colchonetas`);
-            document.getElementById('twitter-description').setAttribute('content', `${p.categoria} - $${pFinal.toLocaleString()}`);
-            document.getElementById('twitter-image').setAttribute('content', imageUrl);
+            if(platform === 'whatsapp') {
+                window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+            } else if(platform === 'facebook') {
+                window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(productUrl)}&quote=${encodeURIComponent(`🪐 ${p.nombre} - $${pFinal.toLocaleString()}`)}`, '_blank');
+            } else if(platform === 'instagram') {
+                const instaMsg = `${p.nombre}\n$${pFinal.toLocaleString()}\n${productUrl}`;
+                const tempInput = document.createElement('input');
+                tempInput.value = instaMsg;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+                showNotify('📋 Copiado para Instagram');
+            }
         }
 
-        // =======================================================
         // FUNCIÓN PARA DETECTAR PRODUCTO EN URL Y ABRIRLO
-        // =======================================================
         function checkProductInUrl() {
             const urlParams = new URLSearchParams(window.location.search);
             const productClave = urlParams.get('producto');
@@ -631,8 +574,6 @@
                         clearInterval(checkAndOpen);
                         const product = products.find(p => p.clave === productClave);
                         if (product) {
-                            // Actualizar Open Graph para este producto
-                            updateOpenGraphForProduct(product.clave);
                             setTimeout(() => {
                                 openDetail(product.clave);
                             }, 500);
@@ -842,7 +783,7 @@
         const CHATBOT_RESPONSES = {
             "hola": "¡Hola! 👋 Soy tu asistente de Mundo Colchonetas. ¿En qué puedo ayudarte?",
             "hola!": "¡Hola! 👋 Soy tu asistente de Mundo Colchonetas. ¿En qué puedo ayudarte?",
-            "buenas": "¡Buenas! 😊 ¿Buscas algo en especial en nuestro catálogo?",
+            "buenas": "¡Buenas! 😊 ¿Buscas algo en especial?",
             "que productos tienen": function() {
                 const categorias = [...new Set(products.map(p => p.categoria))];
                 let response = "📋 **PRODUCTOS DISPONIBLES** 📋\n\n";
@@ -854,26 +795,26 @@
                 });
                 return response;
             },
-            "hacen envios": "¡Sí! Hacemos envíos a todo el país. Ingresa tu código postal en el carrito para calcular el costo exacto.",
-            "envios": "Sí hacemos envíos 🚚. Ingresa tu código postal en el carrito para calcular el costo exacto.",
-            "como compro": "Te guío paso a paso:\n1. Agrega los productos al carrito\n2. Completa tus datos (nombre y CP)\n3. Envía el pedido por WhatsApp\n4. Te contactamos para coordinar pago y envío",
-            "metodos de pago": "Aceptamos:\n💳 Mercado Pago (tarjetas, efectivo)\n💰 Efectivo (al retirar)\n🏦 Transferencia bancaria\n📱 Depósito",
+            "hacen envios": "¡Sí! Hacemos envíos a todo el país. Ingresa tu código postal en el carrito.",
+            "envios": "Sí hacemos envíos 🚚. Ingresa tu código postal en el carrito.",
+            "como compro": "Te guío paso a paso:\n1. Agrega los productos al carrito\n2. Completa tus datos\n3. Envía el pedido por WhatsApp\n4. Te contactamos",
+            "metodos de pago": "Aceptamos:\n💳 Mercado Pago\n💰 Efectivo\n🏦 Transferencia\n📱 Depósito",
             "ofertas": function() {
                 const ofertas = products.filter(p => p.oferta && parseInt(p.stock) > 0);
-                if (ofertas.length === 0) return "No hay ofertas activas en este momento.";
+                if (ofertas.length === 0) return "No hay ofertas activas.";
                 let response = "🎯 **OFERTAS EN STOCK** 🎯\n\n";
                 ofertas.slice(0, 5).forEach((prod, index) => {
                     response += `${index + 1}. ${prod.nombre}\n   💰 $${prod.precioOferta.toLocaleString()} (${prod.descuento}% OFF)\n`;
                 });
                 return response;
             },
-            "gracias": "¡De nada! 😊 Cualquier duda, aquí estoy.",
-            "adios": "¡Hasta luego! 👋 ¡Vuelve pronto!",
-            "contacto": "Contáctanos por:\n📱 WhatsApp: 11-6870-5261\n📍 Instagram: @mundo_colchonetas",
+            "gracias": "¡De nada! 😊",
+            "adios": "¡Hasta luego! 👋",
+            "contacto": "📱 WhatsApp: 11-6870-5261\n📍 Instagram: @mundo_colchonetas",
             "recomendacion": function() {
                 const recomendados = products.filter(p => parseInt(p.stock) > 0).sort((a, b) => b.oferta - a.oferta).slice(0, 3);
-                if (recomendados.length === 0) return "Todos los productos están agotados temporalmente.";
-                let response = "💪 **TE RECOMIENDO ESTOS PRODUCTOS:**\n\n";
+                if (recomendados.length === 0) return "Todos los productos están agotados.";
+                let response = "💪 **TE RECOMIENDO:**\n\n";
                 recomendados.forEach((prod, index) => {
                     const price = prod.oferta ? prod.precioOferta : prod.precio;
                     response += `${index + 1}. **${prod.nombre}**\n   💰 $${price.toLocaleString()}\n`;
@@ -882,14 +823,14 @@
             }
         };
 
-        const CHATBOT_DEFAULT_RESPONSE = "Entiendo que preguntas sobre: '{query}'. Puedo ayudarte con:\n\n• 📋 Productos disponibles\n• 💰 Precios y ofertas\n• 🚚 Envíos\n• 💳 Métodos de pago\n\n¿En qué tema específico puedo asistirte?";
+        const CHATBOT_DEFAULT_RESPONSE = "Entiendo que preguntas sobre: '{query}'. Puedo ayudarte con:\n\n• 📋 Productos\n• 💰 Ofertas\n• 🚚 Envíos\n• 💳 Pagos\n\n¿En qué tema específico?";
 
         function toggleChatbot() {
             const chatbot = document.getElementById('chatbot-container');
             chatbot.classList.toggle('active');
             if (chatbot.classList.contains('active') && document.getElementById('chatbot-messages').children.length === 0) {
                 setTimeout(() => {
-                    addBotMessage("¡Hola! 👋 Soy tu asistente de Mundo Colchonetas. ¿En qué puedo ayudarte?");
+                    addBotMessage("¡Hola! 👋 Soy tu asistente de Mundo Colchonetas.");
                     setTimeout(() => showQuickOptions(), 500);
                 }, 300);
             }
@@ -1004,7 +945,7 @@
         function updateShareLinks() {
             const currentUrl = window.location.href;
             const encodedUrl = encodeURIComponent(currentUrl);
-            const messageText = encodeURIComponent("¡Mira el catálogo de Mundo Colchonetas! 🎯 Colchonetas profesionales. 👉 ");
+            const messageText = encodeURIComponent("¡Mira el catálogo de Mundo Colchonetas! 🎯 ");
             
             const shareButtonsHTML = `
                 <a href="https://wa.me/?text=${messageText}${encodedUrl}" target="_blank" class="share-button">
@@ -1221,9 +1162,6 @@
             const pFinal = p.oferta ? p.precioOferta : p.precio;
             const fotos = p.fotos.filter(f => f !== "");
             
-            // Actualizar Open Graph para este producto (para compartir)
-            updateOpenGraphForProduct(clave);
-            
             document.getElementById('detail-content').innerHTML = `
                 <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:30px;">
                     <div class="detail-gallery-container">
@@ -1250,8 +1188,8 @@
                         </div>
                         <div style="display:flex; gap:10px; margin-bottom:20px;">
                             <button class="cat-btn active" style="flex:1; padding:15px;" onclick="addToCart('${p.clave}')">Añadir al Carrito</button>
-                            <button class="share-product-btn share-wa" style="width:50px; height:50px; font-size:1.2rem;" onclick="shareProduct('${p.clave}', 'whatsapp')" title="Compartir en WhatsApp"><i class="fab fa-whatsapp"></i></button>
-                            <button class="share-product-btn share-fb" style="width:50px; height:50px; font-size:1.2rem;" onclick="shareProduct('${p.clave}', 'facebook')" title="Compartir en Facebook"><i class="fab fa-facebook-f"></i></button>
+                            <button class="share-product-btn share-wa" style="width:50px; height:50px; font-size:1.2rem;" onclick="shareProduct('${p.clave}', 'whatsapp')" title="Compartir"><i class="fab fa-whatsapp"></i></button>
+                            <button class="share-product-btn share-fb" style="width:50px; height:50px; font-size:1.2rem;" onclick="shareProduct('${p.clave}', 'facebook')" title="Compartir"><i class="fab fa-facebook-f"></i></button>
                         </div>
                     </div>
                 </div>`;
@@ -1311,14 +1249,14 @@
             
             const customerName = document.getElementById('customer-name').value.trim();
             if (!customerName) {
-                alert("Por favor ingresa tu nombre para continuar con el pedido.");
+                alert("Por favor ingresa tu nombre.");
                 document.getElementById('customer-name').focus();
                 return;
             }
             
             const cp = document.getElementById('shipping-cp').value.trim();
             if (!cp) {
-                alert("Por favor ingresa tu código postal para calcular el envío.");
+                alert("Por favor ingresa tu código postal.");
                 document.getElementById('shipping-cp').focus();
                 return;
             }
@@ -1395,7 +1333,7 @@
             const salesData = document.getElementById('sales-data');
             
             if (salesHistory.length === 0) {
-                salesData.innerHTML = `<p style="text-align: center; padding: 20px; color: var(--slate-500);">No hay ventas registradas aún.</p>`;
+                salesData.innerHTML = `<p style="text-align: center; padding: 20px; color: var(--slate-500);">No hay ventas registradas.</p>`;
                 return;
             }
             
@@ -1483,9 +1421,9 @@
         }
 
         function clearSalesData() {
-            if (confirm("¿Estás seguro de que deseas borrar todo el historial de ventas? Esta acción no se puede deshacer.")) {
+            if (confirm("¿Estás seguro de que deseas borrar todo el historial de ventas?")) {
                 localStorage.removeItem(CONFIG.SALES_KEY);
-                document.getElementById('sales-data').innerHTML = `<p style="text-align: center; padding: 20px; color: var(--slate-500);">Historial de ventas borrado.</p>`;
+                document.getElementById('sales-data').innerHTML = `<p style="text-align: center; padding: 20px; color: var(--slate-500);">Historial borrado.</p>`;
             }
         }
 
@@ -1524,8 +1462,6 @@
                 total: total
             };
             
-            console.log("📤 Enviando datos a Sheets:", orderData);
-            
             fetch(WEBAPP_URL, {
                 method: 'POST',
                 mode: 'no-cors',
@@ -1535,55 +1471,10 @@
                 body: JSON.stringify(orderData)
             })
             .then(response => {
-                console.log("✅ Pedido enviado a Google Sheets - Respuesta recibida");
+                console.log("✅ Pedido enviado a Google Sheets");
             })
             .catch(error => {
                 console.error("❌ Error al enviar a Google Sheets:", error);
-            });
-        }
-
-        function testSheetsConnection() {
-            const WEBAPP_URL = CONFIG.SHEETS_WEBAPP_URL;
-            
-            console.log("🧪 Probando conexión con Google Sheets...");
-            
-            fetch(WEBAPP_URL, {
-                method: 'GET',
-                mode: 'no-cors'
-            })
-            .then(() => {
-                console.log("✅ Conexión GET exitosa");
-                
-                const testData = {
-                    timestamp: new Date().toLocaleString('es-AR'),
-                    customerName: "CLIENTE DE PRUEBA",
-                    postalCode: "0000",
-                    items: [
-                        {
-                            name: "Producto de prueba",
-                            quantity: 1,
-                            unitPrice: 999,
-                            subtotal: 999
-                        }
-                    ],
-                    shipping: 0,
-                    total: 999
-                };
-                
-                return fetch(WEBAPP_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(testData)
-                });
-            })
-            .then(() => {
-                alert("✅ CONEXIÓN EXITOSA\n\nRevisa tu Google Sheet:\n- Deberías ver una fila de prueba\n- Y otra fila con 'CLIENTE DE PRUEBA'");
-            })
-            .catch(error => {
-                alert("❌ ERROR DE CONEXIÓN\n\nError: " + error);
             });
         }
 
