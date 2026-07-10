@@ -665,32 +665,26 @@
             if(!p) return;
             
             const pFinal = p.oferta ? p.precioOferta : p.precio;
-            const productUrl = window.location.href;
-            
-            // Usar la primera foto del producto o un logo por defecto
-            const productImage = p.fotos && p.fotos[0] ? p.fotos[0] : 'https://mundocolchonetas.com/logo-social.jpg';
-            const encodedImage = encodeURIComponent(productImage);
-            const encodedUrl = encodeURIComponent(productUrl);
+            // URL con parámetro del producto para abrir directamente
+            const productUrl = window.location.origin + window.location.pathname + '?producto=' + encodeURIComponent(clave);
             
             // Texto corto y limpio para compartir
             const shortText = `🪐 ${p.nombre}\n💰 $${pFinal.toLocaleString()}`;
             const encodedText = encodeURIComponent(shortText);
+            const encodedUrl = encodeURIComponent(productUrl);
             
             let shareUrl = '';
             
             switch(platform) {
                 case 'whatsapp':
-                    // WhatsApp usa texto + link, la imagen se muestra como preview
                     shareUrl = `https://wa.me/?text=${encodedText}%0A👇%20${encodedUrl}`;
                     break;
                     
                 case 'facebook':
-                    // Facebook comparte con imagen, título y descripción automática
                     shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedText}`;
                     break;
                     
                 case 'instagram':
-                    // Instagram: copia texto + link + imagen para pegar en historia/story
                     const instaMsg = `${p.nombre}\n$${pFinal.toLocaleString()}\n${productUrl}`;
                     const tempInput = document.createElement('input');
                     tempInput.value = instaMsg;
@@ -698,29 +692,7 @@
                     tempInput.select();
                     document.execCommand('copy');
                     document.body.removeChild(tempInput);
-                    
-                    // También intentar copiar la imagen si es posible
-                    if (p.fotos && p.fotos[0]) {
-                        fetch(p.fotos[0])
-                            .then(res => res.blob())
-                            .then(blob => {
-                                try {
-                                    navigator.clipboard.write([
-                                        new ClipboardItem({
-                                            [blob.type]: blob
-                                        })
-                                    ]);
-                                    showNotify('📸 Imagen y texto copiados para Instagram');
-                                } catch(e) {
-                                    showNotify('📋 Texto copiado para Instagram');
-                                }
-                            })
-                            .catch(() => {
-                                showNotify('📋 Texto copiado para Instagram');
-                            });
-                    } else {
-                        showNotify('📋 Texto copiado para Instagram');
-                    }
+                    showNotify('📋 Texto copiado para Instagram');
                     return;
                     
                 case 'twitter':
@@ -734,6 +706,32 @@
             
             if(shareUrl) {
                 window.open(shareUrl, '_blank');
+            }
+        }
+
+        // =======================================================
+        // FUNCIÓN PARA DETECTAR PRODUCTO EN URL Y ABRIRLO
+        // =======================================================
+        function checkProductInUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productClave = urlParams.get('producto');
+            
+            if (productClave) {
+                // Esperar a que los productos estén cargados
+                const checkAndOpen = setInterval(() => {
+                    if (products.length > 0) {
+                        clearInterval(checkAndOpen);
+                        const product = products.find(p => p.clave === productClave);
+                        if (product) {
+                            setTimeout(() => {
+                                openDetail(product.clave);
+                            }, 500);
+                        }
+                    }
+                }, 500);
+                
+                // Limpiar después de 5 segundos para no quedarnos colgados
+                setTimeout(() => clearInterval(checkAndOpen), 5000);
             }
         }
 
@@ -1370,6 +1368,9 @@
             // ACTUALIZAR ESTADÍSTICAS EN PANEL
             updateVisitorStatsInPanel();
             
+            // VERIFICAR SI VIENE DE UN PRODUCTO COMPARTIDO Y ABRIRLO
+            checkProductInUrl();
+            
             // Mostrar chatbot después de 10 segundos
             setTimeout(() => {
                 if (!localStorage.getItem('chatbot_shown')) {
@@ -1413,6 +1414,9 @@
                     localStorage.setItem(CONFIG.KEY, JSON.stringify(products));
                     localStorage.setItem('sheet_url', urlInput);
                     renderAll();
+                    
+                    // Después de cargar productos, verificar si hay producto en URL
+                    checkProductInUrl();
                 }
             } catch (e) { 
                 console.error("Sync Error:", e);
