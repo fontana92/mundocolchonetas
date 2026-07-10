@@ -559,53 +559,41 @@
         // FUNCIÓN PARA COMPARTIR PRODUCTO - CON PREVIEW DE IMAGEN
         // =======================================================
         function shareProduct(clave, platform) {
-            const p = products.find(i => i.clave === clave);
-            if(!p) return;
-            
-            const pFinal = p.oferta ? p.precioOferta : p.precio;
-            const imageUrl = p.fotos && p.fotos[0] ? p.fotos[0] : 'https://mundocolchonetas.com/logo-social.jpg';
-            const productUrl = window.location.origin + window.location.pathname + '?producto=' + encodeURIComponent(clave);
-            
-            // IMPORTANTE: Para que WhatsApp muestre la imagen, la URL de la imagen debe estar al principio o en el texto
-            // WhatsApp genera preview cuando detecta una URL de imagen válida
-            const messageWithImage = `🪐 ${p.nombre}\n💰 $${pFinal.toLocaleString()}\n📷 ${imageUrl}\n👇 ${productUrl}`;
-            
-            let shareUrl = '';
-            
-            switch(platform) {
-                case 'whatsapp':
-                    // En WhatsApp, la imagen se muestra si la URL es válida y accesible
-                    shareUrl = `https://wa.me/?text=${encodeURIComponent(messageWithImage)}`;
-                    break;
-                    
-                case 'facebook':
-                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(productUrl)}&quote=${encodeURIComponent(`🪐 ${p.nombre} - $${pFinal.toLocaleString()}`)}`;
-                    break;
-                    
-                case 'instagram':
-                    const instaMsg = `${p.nombre}\n$${pFinal.toLocaleString()}\n${imageUrl}\n${productUrl}`;
-                    const tempInput = document.createElement('input');
-                    tempInput.value = instaMsg;
-                    document.body.appendChild(tempInput);
-                    tempInput.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(tempInput);
-                    showNotify('📋 Texto copiado para Instagram');
-                    return;
-                    
-                case 'twitter':
-                    shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(`🪐 ${p.nombre} - $${pFinal.toLocaleString()}`)}&url=${encodeURIComponent(productUrl)}`;
-                    break;
-                    
-                case 'linkedin':
-                    shareUrl = `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(productUrl)}&title=${encodeURIComponent(p.nombre)}&summary=${encodeURIComponent(`${p.categoria} - $${pFinal.toLocaleString()}`)}`;
-                    break;
-            }
-            
-            if(shareUrl) {
-                window.open(shareUrl, '_blank');
-            }
-        }
+    const p = products.find(i => i.clave === clave);
+    if(!p) return;
+    
+    const pFinal = p.oferta ? p.precioOferta : p.precio;
+    const imageUrl = p.fotos && p.fotos[0] ? p.fotos[0] : 'https://mundocolchonetas.com/logo-social.jpg';
+    const productUrl = window.location.origin + window.location.pathname + '?producto=' + encodeURIComponent(clave);
+    
+    // El truco está acá: la URL de la imagen va PRIMERO para que WhatsApp la detecte
+    const message = `${imageUrl}\n\n🪐 ${p.nombre}\n💰 $${pFinal.toLocaleString()}\n👇 ${productUrl}`;
+    
+    let shareUrl = '';
+    
+    switch(platform) {
+        case 'whatsapp':
+            shareUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+            break;
+        case 'facebook':
+            shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(productUrl)}&quote=${encodeURIComponent(`🪐 ${p.nombre} - $${pFinal.toLocaleString()}`)}`;
+            break;
+        case 'instagram':
+            const instaMsg = `${p.nombre}\n$${pFinal.toLocaleString()}\n${imageUrl}\n${productUrl}`;
+            const tempInput = document.createElement('input');
+            tempInput.value = instaMsg;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            showNotify('📋 Texto copiado para Instagram');
+            return;
+    }
+    
+    if(shareUrl) {
+        window.open(shareUrl, '_blank');
+    }
+}
 
         // =======================================================
         // FUNCIÓN PARA ACTUALIZAR OPEN GRAPH DINÁMICAMENTE
