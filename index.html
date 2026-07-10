@@ -5,24 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Mundo Colchonetas | Premium Fitness</title>
     
-    <!-- OPTIMIZACIÓN PARA BUSCADORES - AGREGADO -->
+    <!-- OPTIMIZACIÓN PARA BUSCADORES -->
     <meta name="description" content="Catálogo oficial de Mundo Colchonetas - Las mejores colchonetas para yoga, pilates, fitness y camping. ✅ Calidad premium ✅ Envíos a todo el país ✅ Mejores precios del mercado">
     <meta name="keywords" content="colchonetas, yoga, pilates, fitness, camping, deporte, ejercicio, argentina, gimnasio, entrenamiento, equipo fitness">
     <meta name="author" content="Mundo Colchonetas">
     <meta name="robots" content="index, follow">
     
-    <!-- Open Graph para redes sociales -->
-    <meta property="og:title" content="Mundo Colchonetas | Catálogo Premium de Colchonetas">
-    <meta property="og:description" content="Descubre nuestra colección de colchonetas profesionales para yoga, pilates, fitness y camping. Envíos a todo el país.">
+    <!-- Open Graph DINÁMICO para redes sociales - SE ACTUALIZA CON JS -->
+    <meta property="og:title" id="og-title" content="Mundo Colchonetas | Catálogo Premium de Colchonetas">
+    <meta property="og:description" id="og-description" content="Descubre nuestra colección de colchonetas profesionales para yoga, pilates, fitness y camping. Envíos a todo el país.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://mundocolchonetas.com">
-    <meta property="og:image" content="https://mundocolchonetas.com/logo-social.jpg">
+    <meta property="og:url" id="og-url" content="https://mundocolchonetas.com">
+    <meta property="og:image" id="og-image" content="https://mundocolchonetas.com/logo-social.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     
     <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Mundo Colchonetas | Catálogo Premium">
-    <meta name="twitter:description" content="Las mejores colchonetas para tu entrenamiento. Calidad garantizada y envíos rápidos.">
-    <meta name="twitter:image" content="https://mundocolchonetas.com/logo-twitter.jpg">
+    <meta name="twitter:title" id="twitter-title" content="Mundo Colchonetas | Catálogo Premium">
+    <meta name="twitter:description" id="twitter-description" content="Las mejores colchonetas para tu entrenamiento. Calidad garantizada y envíos rápidos.">
+    <meta name="twitter:image" id="twitter-image" content="https://mundocolchonetas.com/logo-twitter.jpg">
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="https://mundocolchonetas.com/favicon.png">
@@ -87,13 +89,14 @@
             height: 250px;
             display: flex; align-items: center; justify-content: center;
             position: relative; overflow: hidden; border: 1px solid #333;
-        } @media (min-width: 768px) {
-    .bento-grid {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 20px;
-    }
-}
-        @media (min-width: 768px) { .hero-banner { height: 380px; } }
+        }
+        @media (min-width: 768px) {
+            .bento-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 20px;
+            }
+            .hero-banner { height: 380px; }
+        }
 
         .stars {
             position: absolute; width: 200%; height: 200%;
@@ -124,12 +127,12 @@
         .cat-btn.offer-btn.active { background: #ff4757; color: white; }
 
         .bento-grid { 
-    display: grid; 
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); 
-    gap: 15px; 
-    margin-bottom: 60px; 
-    justify-content: center;
-}
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); 
+            gap: 15px; 
+            margin-bottom: 60px; 
+            justify-content: center;
+        }
         .product-card { background: var(--white); border-radius: var(--radius-lg); border: 1px solid var(--border); padding: 15px; transition: var(--transition); display: flex; flex-direction: column; cursor: pointer; position: relative; }
         .product-card:hover { transform: translateY(-8px); box-shadow: var(--shadow); border-color: var(--primary); }
         
@@ -172,7 +175,6 @@
         #notification { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(150px); background: var(--dark); color: white; padding: 12px 30px; border-radius: 99px; z-index: 3000; transition: var(--transition); font-weight: 500; }
         .wa-float { position: fixed; bottom: 25px; right: 25px; width: 60px; height: 60px; background: #25D366; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; z-index: 900; box-shadow: 0 10px 30px rgba(37,211,102,0.4); text-decoration: none; }
         
-        /* ESTILOS DEL CHATBOT - AGREGADOS */
         .chatbot-toggle {
             position: fixed;
             bottom: 100px;
@@ -192,11 +194,7 @@
             border: none;
             transition: var(--transition);
         }
-        
-        .chatbot-toggle:hover {
-            transform: scale(1.1);
-            box-shadow: 0 15px 40px rgba(142, 68, 173, 0.6);
-        }
+        .chatbot-toggle:hover { transform: scale(1.1); box-shadow: 0 15px 40px rgba(142, 68, 173, 0.6); }
         
         .chatbot-container {
             position: fixed;
@@ -213,10 +211,7 @@
             overflow: hidden;
             border: 3px solid var(--primary);
         }
-        
-        .chatbot-container.active {
-            display: flex;
-        }
+        .chatbot-container.active { display: flex; }
         
         .chatbot-header {
             background: var(--primary);
@@ -226,20 +221,8 @@
             justify-content: space-between;
             align-items: center;
         }
-        
-        .chatbot-header h3 {
-            font-weight: 700;
-            font-size: 1rem;
-            margin: 0;
-        }
-        
-        .chatbot-close {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
+        .chatbot-header h3 { font-weight: 700; font-size: 1rem; margin: 0; }
+        .chatbot-close { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
         
         .chatbot-messages {
             flex: 1;
@@ -249,35 +232,11 @@
             flex-direction: column;
             gap: 15px;
         }
+        .message { max-width: 80%; padding: 12px 15px; border-radius: 18px; font-size: 0.9rem; line-height: 1.4; }
+        .bot-message { background: var(--slate-100); align-self: flex-start; border-bottom-left-radius: 5px; }
+        .user-message { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 5px; }
         
-        .message {
-            max-width: 80%;
-            padding: 12px 15px;
-            border-radius: 18px;
-            font-size: 0.9rem;
-            line-height: 1.4;
-        }
-        
-        .bot-message {
-            background: var(--slate-100);
-            align-self: flex-start;
-            border-bottom-left-radius: 5px;
-        }
-        
-        .user-message {
-            background: var(--primary);
-            color: white;
-            align-self: flex-end;
-            border-bottom-right-radius: 5px;
-        }
-        
-        .quick-options {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 10px;
-        }
-        
+        .quick-options { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
         .quick-option {
             background: var(--slate-100);
             border: 1px solid var(--border);
@@ -287,12 +246,7 @@
             cursor: pointer;
             transition: var(--transition);
         }
-        
-        .quick-option:hover {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
+        .quick-option:hover { background: var(--primary); color: white; border-color: var(--primary); }
         
         .chatbot-input {
             display: flex;
@@ -300,7 +254,6 @@
             border-top: 1px solid var(--border);
             gap: 10px;
         }
-        
         .chatbot-input input {
             flex: 1;
             padding: 12px 15px;
@@ -309,11 +262,7 @@
             font-size: 0.9rem;
             outline: none;
         }
-        
-        .chatbot-input input:focus {
-            border-color: var(--primary);
-        }
-        
+        .chatbot-input input:focus { border-color: var(--primary); }
         .chatbot-input button {
             background: var(--primary);
             color: white;
@@ -327,7 +276,6 @@
             justify-content: center;
         }
         
-        /* ESTILOS PARA BOTÓN COMPARTIR - AGREGADO */
         .share-float {
             position: fixed;
             bottom: 25px;
@@ -347,11 +295,7 @@
             border: none;
             transition: var(--transition);
         }
-        
-        .share-float:hover {
-            transform: scale(1.1);
-            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
-        }
+        .share-float:hover { transform: scale(1.1); box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6); }
         
         .share-container {
             position: fixed;
@@ -367,10 +311,7 @@
             border: 3px solid var(--primary);
             width: 300px;
         }
-        
-        .share-container.active {
-            display: flex;
-        }
+        .share-container.active { display: flex; }
         
         .share-header {
             background: var(--primary);
@@ -386,7 +327,6 @@
             grid-template-columns: repeat(3, 1fr);
             gap: 15px;
         }
-        
         .share-button {
             display: flex;
             flex-direction: column;
@@ -401,23 +341,10 @@
             text-decoration: none;
             color: var(--dark);
         }
-        
-        .share-button:hover {
-            background: var(--primary);
-            color: white;
-            transform: translateY(-3px);
-        }
-        
-        .share-button i {
-            font-size: 1.5rem;
-        }
-        
-        .share-button span {
-            font-size: 0.7rem;
-            font-weight: 600;
-        }
+        .share-button:hover { background: var(--primary); color: white; transform: translateY(-3px); }
+        .share-button i { font-size: 1.5rem; }
+        .share-button span { font-size: 0.7rem; font-weight: 600; }
 
-        /* Estilos para botones de compartir producto */
         .share-product-btn {
             border: none;
             width: 32px;
@@ -452,28 +379,10 @@
         .share-ig { background: linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); }
         
         @media (max-width: 480px) {
-            .chatbot-container {
-                width: 300px;
-                height: 450px;
-                right: 10px;
-                bottom: 150px;
-            }
-            
-            .chatbot-toggle {
-                right: 10px;
-                bottom: 90px;
-            }
-            
-            .share-float {
-                left: 10px;
-                bottom: 25px;
-            }
-            
-            .share-container {
-                left: 10px;
-                bottom: 100px;
-                width: 280px;
-            }
+            .chatbot-container { width: 300px; height: 450px; right: 10px; bottom: 150px; }
+            .chatbot-toggle { right: 10px; bottom: 90px; }
+            .share-float { left: 10px; bottom: 25px; }
+            .share-container { left: 10px; bottom: 100px; width: 280px; }
         }
     </style>
 </head>
@@ -535,12 +444,9 @@
                 <button class="cat-btn active" style="margin-top:15px; width:100%;" onclick="syncWithExcel()">Actualizar Datos Ahora</button>
             </div>
             
-            <!-- SECCIÓN DE ESTADÍSTICAS DE VISITAS - AGREGADO -->
             <div id="visitor-stats" style="margin-top: 30px; padding-top: 20px; border-top: 2px solid var(--border);">
                 <h4>📊 Estadísticas de Visitantes</h4>
-                <div id="visitor-data" style="margin-top: 15px;">
-                    <!-- Las estadísticas se cargarán aquí -->
-                </div>
+                <div id="visitor-data" style="margin-top: 15px;"></div>
                 <button class="cat-btn" style="margin: 10px 0;" onclick="showVisitorStats()">Ver Estadísticas Detalladas</button>
             </div>
             
@@ -584,7 +490,6 @@
     <div class="modal" id="detail-modal"><div class="modal-content"><span onclick="closeModal('detail-modal')" style="position:absolute; top:15px; right:20px; font-size:2rem; cursor:pointer; z-index:10;">&times;</span><div id="detail-content"></div></div></div>
     <div class="modal" id="login-modal"><div class="modal-content" style="max-width:400px; text-align:center;"><h3>Login Admin</h3><input type="text" id="login-u" placeholder="Usuario" class="form-input"><input type="password" id="login-p" placeholder="Contraseña" class="form-input"><button class="cat-btn active" style="width:100%; margin-top:20px;" onclick="login()">Entrar</button></div></div>
 
-    <!-- MODAL DE ESTADÍSTICAS DE VISITAS - AGREGADO -->
     <div class="modal" id="stats-modal">
         <div class="modal-content" style="max-width: 800px;">
             <span onclick="closeModal('stats-modal')" style="position:absolute; top:15px; right:20px; font-size:2rem; cursor:pointer; z-index:10;">&times;</span>
@@ -593,7 +498,7 @@
         </div>
     </div>
 
-    <!-- CHATBOT AGREGADO -->
+    <!-- CHATBOT -->
     <button class="chatbot-toggle" onclick="toggleChatbot()">
         <i class="fas fa-robot"></i>
     </button>
@@ -603,9 +508,7 @@
             <h3>Asistente Mundo Colchonetas</h3>
             <button class="chatbot-close" onclick="toggleChatbot()">×</button>
         </div>
-        <div class="chatbot-messages" id="chatbot-messages">
-            <!-- Los mensajes se agregarán aquí dinámicamente -->
-        </div>
+        <div class="chatbot-messages" id="chatbot-messages"></div>
         <div class="chatbot-input">
             <input type="text" id="chatbot-input" placeholder="Escribe tu pregunta..." onkeypress="handleChatbotKeypress(event)">
             <button onclick="sendChatbotMessage()">
@@ -614,18 +517,14 @@
         </div>
     </div>
 
-    <!-- BOTÓN DE COMPARTIR - AGREGADO Y CORREGIDO -->
+    <!-- BOTÓN DE COMPARTIR -->
     <button class="share-float" onclick="toggleShare()">
         <i class="fas fa-share-alt"></i>
     </button>
     
     <div class="share-container" id="share-container">
-        <div class="share-header">
-            ¡Comparte el catálogo!
-        </div>
-        <div class="share-buttons" id="share-buttons">
-            <!-- Los links se generarán dinámicamente -->
-        </div>
+        <div class="share-header">¡Comparte el catálogo!</div>
+        <div class="share-buttons" id="share-buttons"></div>
     </div>
 
     <div id="notification">¡Añadido!</div>
@@ -639,7 +538,6 @@
             LEADS_KEY: "mundo_colchonetas_leads",
             VISITORS_KEY: "mundo_colchonetas_visitors",
             MASTER_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQX_MteY9z1Of-MIimoruabnLSCY2p1mMDl0RvYeDWivYTfXljryTikNsCGM3yFdF-PcoWo2Zyb5EiS/pub?gid=0&single=true&output=csv",
-            // ⚠️ CAMBIA ESTA URL POR LA DE TU WEB APP DE GOOGLE APPS SCRIPT
             SHEETS_WEBAPP_URL: "https://script.google.com/macros/s/AKfycbwhqmZQdheEmlcQfpNRbIGMHXSXbYXhPc5ySN56Q6QutgdMG3K6Kqm_8dD9PRw2E-InuQ/exec"
         };
 
@@ -658,40 +556,33 @@
         const norm = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
 
         // =======================================================
-        // FUNCIÓN PARA COMPARTIR PRODUCTO INDIVIDUAL - CON FOTO
+        // FUNCIÓN PARA COMPARTIR PRODUCTO - CON PREVIEW DE IMAGEN
         // =======================================================
         function shareProduct(clave, platform) {
             const p = products.find(i => i.clave === clave);
             if(!p) return;
             
             const pFinal = p.oferta ? p.precioOferta : p.precio;
-            // URL con parámetro del producto para abrir directamente
+            const imageUrl = p.fotos && p.fotos[0] ? p.fotos[0] : 'https://mundocolchonetas.com/logo-social.jpg';
             const productUrl = window.location.origin + window.location.pathname + '?producto=' + encodeURIComponent(clave);
             
-            // Obtener la imagen del producto (primera foto o logo por defecto)
-            const imageUrl = p.fotos && p.fotos[0] ? p.fotos[0] : 'https://mundocolchonetas.com/logo-social.jpg';
-            
-            // Texto corto con la imagen incluida para que WhatsApp la muestre en el estado
-            const shortText = `🪐 ${p.nombre}\n💰 $${pFinal.toLocaleString()}\n📷 ${imageUrl}\n👇 ${productUrl}`;
-            const encodedText = encodeURIComponent(shortText);
-            const encodedUrl = encodeURIComponent(productUrl);
-            const encodedImage = encodeURIComponent(imageUrl);
+            // IMPORTANTE: Para que WhatsApp muestre la imagen, la URL de la imagen debe estar al principio o en el texto
+            // WhatsApp genera preview cuando detecta una URL de imagen válida
+            const messageWithImage = `🪐 ${p.nombre}\n💰 $${pFinal.toLocaleString()}\n📷 ${imageUrl}\n👇 ${productUrl}`;
             
             let shareUrl = '';
             
             switch(platform) {
                 case 'whatsapp':
-                    // Incluimos la imagen en el texto para que WhatsApp la muestre
-                    shareUrl = `https://wa.me/?text=${encodedText}`;
+                    // En WhatsApp, la imagen se muestra si la URL es válida y accesible
+                    shareUrl = `https://wa.me/?text=${encodeURIComponent(messageWithImage)}`;
                     break;
                     
                 case 'facebook':
-                    // Facebook usa Open Graph, pasamos la URL con la imagen
-                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodeURIComponent(`🪐 ${p.nombre} - $${pFinal.toLocaleString()}`)}`;
+                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(productUrl)}&quote=${encodeURIComponent(`🪐 ${p.nombre} - $${pFinal.toLocaleString()}`)}`;
                     break;
                     
                 case 'instagram':
-                    // Instagram: copia texto + link + imagen para pegar en historia/story
                     const instaMsg = `${p.nombre}\n$${pFinal.toLocaleString()}\n${imageUrl}\n${productUrl}`;
                     const tempInput = document.createElement('input');
                     tempInput.value = instaMsg;
@@ -703,17 +594,40 @@
                     return;
                     
                 case 'twitter':
-                    shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(`🪐 ${p.nombre} - $${pFinal.toLocaleString()}`)}&url=${encodedUrl}`;
+                    shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(`🪐 ${p.nombre} - $${pFinal.toLocaleString()}`)}&url=${encodeURIComponent(productUrl)}`;
                     break;
                     
                 case 'linkedin':
-                    shareUrl = `https://www.linkedin.com/shareArticle?mini=true&url=${encodedUrl}&title=${encodeURIComponent(p.nombre)}&summary=${encodeURIComponent(`${p.categoria} - $${pFinal.toLocaleString()}`)}`;
+                    shareUrl = `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(productUrl)}&title=${encodeURIComponent(p.nombre)}&summary=${encodeURIComponent(`${p.categoria} - $${pFinal.toLocaleString()}`)}`;
                     break;
             }
             
             if(shareUrl) {
                 window.open(shareUrl, '_blank');
             }
+        }
+
+        // =======================================================
+        // FUNCIÓN PARA ACTUALIZAR OPEN GRAPH DINÁMICAMENTE
+        // =======================================================
+        function updateOpenGraphForProduct(clave) {
+            const p = products.find(i => i.clave === clave);
+            if(!p) return;
+            
+            const pFinal = p.oferta ? p.precioOferta : p.precio;
+            const imageUrl = p.fotos && p.fotos[0] ? p.fotos[0] : 'https://mundocolchonetas.com/logo-social.jpg';
+            const productUrl = window.location.origin + window.location.pathname + '?producto=' + encodeURIComponent(clave);
+            
+            // Actualizar meta tags para Open Graph
+            document.getElementById('og-title').setAttribute('content', `${p.nombre} - Mundo Colchonetas`);
+            document.getElementById('og-description').setAttribute('content', `${p.categoria} - $${pFinal.toLocaleString()}. ${p.descripcion.substring(0, 120)}...`);
+            document.getElementById('og-url').setAttribute('content', productUrl);
+            document.getElementById('og-image').setAttribute('content', imageUrl);
+            
+            // Actualizar Twitter Cards
+            document.getElementById('twitter-title').setAttribute('content', `${p.nombre} - Mundo Colchonetas`);
+            document.getElementById('twitter-description').setAttribute('content', `${p.categoria} - $${pFinal.toLocaleString()}`);
+            document.getElementById('twitter-image').setAttribute('content', imageUrl);
         }
 
         // =======================================================
@@ -724,30 +638,28 @@
             const productClave = urlParams.get('producto');
             
             if (productClave) {
-                // Esperar a que los productos estén cargados
                 const checkAndOpen = setInterval(() => {
                     if (products.length > 0) {
                         clearInterval(checkAndOpen);
                         const product = products.find(p => p.clave === productClave);
                         if (product) {
+                            // Actualizar Open Graph para este producto
+                            updateOpenGraphForProduct(product.clave);
                             setTimeout(() => {
                                 openDetail(product.clave);
                             }, 500);
                         }
                     }
                 }, 500);
-                
-                // Limpiar después de 5 segundos para no quedarnos colgados
                 setTimeout(() => clearInterval(checkAndOpen), 5000);
             }
         }
 
-        // FUNCIONES PARA CONTADOR DE VISITAS - CORREGIDAS
+        // FUNCIONES PARA CONTADOR DE VISITAS
         function trackVisitor() {
             const today = new Date().toLocaleDateString('es-AR');
             const now = new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
             
-            // Obtener datos existentes
             let visitorsData = JSON.parse(localStorage.getItem(CONFIG.VISITORS_KEY)) || {
                 total: 0,
                 today: 0,
@@ -756,37 +668,30 @@
                 dailyStats: {}
             };
             
-            // Reiniciar contador diario si es un nuevo día (CORREGIDO)
             if (visitorsData.todayDate !== today) {
                 visitorsData.today = 0;
                 visitorsData.todayDate = today;
             }
             
-            // Incrementar contadores
             visitorsData.total++;
             visitorsData.today++;
             
-            // Registrar visita en historia
             visitorsData.history.push({
                 date: today,
                 time: now,
                 timestamp: Date.now()
             });
             
-            // Mantener solo los últimos 1000 registros
             if (visitorsData.history.length > 1000) {
                 visitorsData.history = visitorsData.history.slice(-1000);
             }
             
-            // Actualizar estadísticas diarias (CORREGIDO)
             if (!visitorsData.dailyStats[today]) {
                 visitorsData.dailyStats[today] = 0;
             }
             visitorsData.dailyStats[today]++;
             
-            // Guardar en localStorage
             localStorage.setItem(CONFIG.VISITORS_KEY, JSON.stringify(visitorsData));
-            
             return visitorsData;
         }
 
@@ -799,13 +704,11 @@
                 dailyStats: {}
             };
             
-            // Calcular estadísticas
             const totalVisits = visitorsData.total;
             const todayVisits = visitorsData.today;
             const uniqueDays = Object.keys(visitorsData.dailyStats).length;
             const avgPerDay = uniqueDays > 0 ? Math.round(totalVisits / uniqueDays) : 0;
             
-            // Obtener últimos 7 días
             const last7Days = {};
             const today = new Date();
             for (let i = 6; i >= 0; i--) {
@@ -815,7 +718,6 @@
                 last7Days[dateStr] = visitorsData.dailyStats[dateStr] || 0;
             }
             
-            // Crear gráfico simple de los últimos 7 días
             let chartHTML = '<div style="margin: 20px 0; height: 150px; display: flex; align-items: flex-end; gap: 10px; border-bottom: 2px solid var(--border); padding-bottom: 20px;">';
             const maxVisits = Math.max(...Object.values(last7Days), 1);
             
@@ -832,7 +734,6 @@
             });
             chartHTML += '</div>';
             
-            // Crear HTML de estadísticas
             const statsHTML = `
                 <div style="background: var(--slate-100); padding: 20px; border-radius: 15px; margin: 20px 0;">
                     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px;">
@@ -902,7 +803,7 @@
         function resetVisitorData() {
             if (confirm("¿Estás seguro de que deseas reiniciar TODOS los datos de visitantes? Esta acción no se puede deshacer.")) {
                 localStorage.removeItem(CONFIG.VISITORS_KEY);
-                trackVisitor(); // Iniciar nuevo registro
+                trackVisitor();
                 showNotify('Contador reiniciado');
                 setTimeout(() => {
                     closeModal('stats-modal');
@@ -911,7 +812,6 @@
             }
         }
 
-        // Mostrar estadísticas básicas en panel admin
         function updateVisitorStatsInPanel() {
             const visitorsData = JSON.parse(localStorage.getItem(CONFIG.VISITORS_KEY)) || {
                 total: 0,
@@ -950,201 +850,59 @@
             document.getElementById('visitor-data').innerHTML = statsHTML;
         }
 
-        // DATOS DEL CHATBOT - ACTUALIZADO PARA VENDER SOLO PRODUCTOS EN STOCK
+        // CHATBOT
         const CHATBOT_RESPONSES = {
-            "hola": "¡Hola! 👋 Soy tu asistente de Mundo Colchonetas. Como tu personal trainer virtual, puedo ayudarte a encontrar los mejores productos para tu entrenamiento. ¿En qué puedo asistirte hoy?",
-            "hola!": "¡Hola! 👋 Soy tu asistente de Mundo Colchonetas. Como tu personal trainer virtual, puedo ayudarte a encontrar los mejores productos para tu entrenamiento. ¿En qué puedo asistirte hoy?",
-            "buenas": "¡Buenas! 😊 ¿Buscas algo en especial en nuestro catálogo de colchonetas? Como experto en fitness, puedo recomendarte según tu nivel y objetivos.",
+            "hola": "¡Hola! 👋 Soy tu asistente de Mundo Colchonetas. ¿En qué puedo ayudarte?",
+            "hola!": "¡Hola! 👋 Soy tu asistente de Mundo Colchonetas. ¿En qué puedo ayudarte?",
+            "buenas": "¡Buenas! 😊 ¿Buscas algo en especial en nuestro catálogo?",
             "que productos tienen": function() {
                 const categorias = [...new Set(products.map(p => p.categoria))];
-                let response = "📋 **PRODUCTOS DISPONIBLES EN STOCK** 📋\n\n";
-                
+                let response = "📋 **PRODUCTOS DISPONIBLES** 📋\n\n";
                 categorias.forEach(cat => {
                     const productosCat = products.filter(p => p.categoria === cat && parseInt(p.stock) > 0);
                     if (productosCat.length > 0) {
-                        response += `**${cat.toUpperCase()}** (${productosCat.length} productos disponibles)\n`;
+                        response += `**${cat.toUpperCase()}** (${productosCat.length} productos)\n`;
                     }
                 });
-                
-                response += "\n💡 *Consejo de trainer: Los combos tienen mejor relación calidad-precio*";
                 return response;
             },
-            "cuales son los precios": "Los precios varían según el tipo y calidad. Como tu entrenador personal, te recomiendo invertir en calidad si entrenas regularmente. ¿Para qué actividad específica buscas?",
-            "hacen envios": "¡Sí! Hacemos envíos a todo el país. Para zonas locales (Pilar, Derqui, Del Viso, etc.) tenemos envío con costo. Ingresa tu código postal en el carrito para calcular el costo exacto.",
-            "envios": "Sí hacemos envíos 🚚. Para calcular el costo exacto, ingresa tu código postal en la sección del carrito de compras.",
-            "como compro": "Como buen entrenador, te guío paso a paso:\n1. Agrega los productos al carrito\n2. Completa tus datos (nombre y CP)\n3. Envía el pedido por WhatsApp\n4. Te contactamos para coordinar pago y envío",
-            "metodos de pago": "Aceptamos:\n💳 Mercado Pago (tarjetas, efectivo)\n💰 Efectivo (al retirar)\n🏦 Transferencia bancaria\n📱 Depósito\n\n*Tip: Los combos se pueden pagar en cuotas*",
+            "hacen envios": "¡Sí! Hacemos envíos a todo el país. Ingresa tu código postal en el carrito para calcular el costo exacto.",
+            "envios": "Sí hacemos envíos 🚚. Ingresa tu código postal en el carrito para calcular el costo exacto.",
+            "como compro": "Te guío paso a paso:\n1. Agrega los productos al carrito\n2. Completa tus datos (nombre y CP)\n3. Envía el pedido por WhatsApp\n4. Te contactamos para coordinar pago y envío",
+            "metodos de pago": "Aceptamos:\n💳 Mercado Pago (tarjetas, efectivo)\n💰 Efectivo (al retirar)\n🏦 Transferencia bancaria\n📱 Depósito",
             "ofertas": function() {
                 const ofertas = products.filter(p => p.oferta && parseInt(p.stock) > 0);
-                if (ofertas.length === 0) return "No hay ofertas activas en este momento. Pero todos nuestros productos son de calidad premium.";
-                
-                let response = "🎯 **OFERTAS EN STOCK - ¡OPORTUNIDAD ÚNICA!** 🎯\n\n";
+                if (ofertas.length === 0) return "No hay ofertas activas en este momento.";
+                let response = "🎯 **OFERTAS EN STOCK** 🎯\n\n";
                 ofertas.slice(0, 5).forEach((prod, index) => {
-                    response += `${index + 1}. ${prod.nombre}\n`;
-                    response += `   💰 $${prod.precioOferta.toLocaleString()} (${prod.descuento}% OFF)\n`;
-                    response += `   📦 Stock: ${prod.stock} unidades\n`;
-                    response += `   🏷️ ${prod.categoria}\n\n`;
+                    response += `${index + 1}. ${prod.nombre}\n   💰 $${prod.precioOferta.toLocaleString()} (${prod.descuento}% OFF)\n`;
                 });
-                response += "¡Estas ofertas no durarán mucho! ¿Te interesa alguna?";
                 return response;
             },
-            "descuentos": "Revisa nuestra sección de '🔥 OFERTAS' en el catálogo. También tenemos promociones por cantidad o combos especiales.",
-            "garantia": "Todos nuestros productos tienen garantía de fabricante. Si entrenas duro y tienes algún problema, contáctanos y te ayudamos.",
-            "medidas": "Como trainer, recomiendo:\n• **Yoga**: 183x61cm, 6-8mm grosor\n• **Pilates**: 180x60cm, antideslizante\n• **Fitness**: Varias medidas según espacio\n• **Camping**: Impermeables, varios tamaños",
-            "materiales": "Trabajamos con materiales de calidad:\n• PVC de alta densidad (durable)\n• Espuma EVA (confort)\n• Tela antideslizante (seguridad)\n• Materiales ecológicos",
-            "gracias": "¡De nada! 😊 Cualquier duda sobre entrenamiento o productos, aquí estoy.",
-            "adios": "¡Hasta luego! 👋 Recuerda: La consistencia en el entrenamiento es clave. ¡Vuelve pronto!",
-            "contacto": "Puedes contactarnos por:\n📱 WhatsApp: 11-6870-5261\n📍 Instagram: @mundo_colchonetas\n\n*Para asesoramiento fitness personalizado, aquí estoy yo*",
-            "horarios": "Catálogo online 24/7. Para contacto directo: Lunes a Viernes de 9 a 18hs.",
-            "stock": "Todo lo que ves en el catálogo está disponible. Si algo se agota, se actualiza automáticamente.",
+            "gracias": "¡De nada! 😊 Cualquier duda, aquí estoy.",
+            "adios": "¡Hasta luego! 👋 ¡Vuelve pronto!",
+            "contacto": "Contáctanos por:\n📱 WhatsApp: 11-6870-5261\n📍 Instagram: @mundo_colchonetas",
             "recomendacion": function() {
-                const recomendados = products.filter(p => parseInt(p.stock) > 0)
-                                          .sort((a, b) => b.oferta - a.oferta)
-                                          .slice(0, 3);
-                
-                if (recomendados.length === 0) return "Todos nuestros productos están agotados temporalmente. Vuelve pronto.";
-                
-                let response = "💪 **COMO TU PERSONAL TRAINER, TE RECOMIENDO ESTOS PRODUCTOS:**\n\n";
+                const recomendados = products.filter(p => parseInt(p.stock) > 0).sort((a, b) => b.oferta - a.oferta).slice(0, 3);
+                if (recomendados.length === 0) return "Todos los productos están agotados temporalmente.";
+                let response = "💪 **TE RECOMIENDO ESTOS PRODUCTOS:**\n\n";
                 recomendados.forEach((prod, index) => {
                     const price = prod.oferta ? prod.precioOferta : prod.precio;
-                    response += `${index + 1}. **${prod.nombre}**\n`;
-                    response += `   💰 $${price.toLocaleString()}`;
-                    if (prod.oferta) response += ` (${prod.descuento}% OFF)`;
-                    response += `\n   📦 ${prod.stock} disponibles\n`;
-                    response += `   🏷️ ${prod.categoria}\n\n`;
+                    response += `${index + 1}. **${prod.nombre}**\n   💰 $${price.toLocaleString()}\n`;
                 });
-                
-                response += "¿Te interesa alguno? Puedo darte más detalles.";
                 return response;
-            },
-            "calidad": "Trabajamos solo con productos de primera calidad. Como trainer, sé que el equipo adecuado mejora tu rendimiento.",
-            "devoluciones": "Aceptamos devoluciones dentro de los 7 días si el producto no fue usado y está en perfecto estado.",
-            "tengo una duda": "¡Claro! Como tu entrenador virtual, puedo resolver dudas sobre productos, entrenamiento o compra. ¿Qué necesitas saber?",
-            
-            // NUEVAS RESPUESTAS ESPECÍFICAS PARA COMBOS Y VENTAS
-            "combos": function() {
-                const combos = products.filter(p => norm(p.categoria) === 'combos' && parseInt(p.stock) > 0);
-                if (combos.length === 0) return "Actualmente no tenemos combos disponibles en stock. Te recomiendo ver nuestras ofertas individuales.";
-                
-                let response = "🔥 **¡COMBOS DISPONIBLES EN STOCK - MEJOR PRECIO!** 🔥\n\n";
-                combos.forEach((combo, index) => {
-                    const price = combo.oferta ? combo.precioOferta : combo.precio;
-                    response += `${index + 1}. **${combo.nombre}**\n`;
-                    response += `   💰 $${price.toLocaleString()}`;
-                    if (combo.oferta) response += ` (${combo.descuento}% OFF)`;
-                    response += `\n   📦 Stock: ${combo.stock} unidades\n`;
-                    response += `   📝 ${combo.descripcion.substring(0, 80)}...\n\n`;
-                });
-                response += "💡 *Los combos ahorran hasta 30% vs comprar por separado*";
-                return response;
-            },
-            
-            "quiero un combo": "¡Excelente elección! 💪 Los combos ofrecen el mejor valor. ¿Para qué actividad buscas?\n\n1. 🧘 Combo Yoga\n2. 💪 Combo Fitness\n3. 🏕️ Combo Camping\n4. 👨‍👩‍👧‍👦 Combo Familiar\n\nPregúntame por 'combos' para ver disponibilidad exacta.",
-            
-            "mejor combo": function() {
-                const combos = products.filter(p => norm(p.categoria) === 'combos' && parseInt(p.stock) > 0);
-                if (combos.length === 0) return "No tenemos combos en stock ahora.";
-                
-                const mejorCombo = combos.reduce((prev, current) => 
-                    (prev.oferta ? prev.precioOferta : prev.precio) < (current.oferta ? current.precioOferta : current.precio) ? prev : current
-                );
-                
-                const price = mejorCombo.oferta ? mejorCombo.precioOferta : mejorCombo.precio;
-                return `🎯 **EL COMBO MÁS VENDIDO** 🎯\n\n` +
-                       `**${mejorCombo.nombre}**\n` +
-                       `💰 $${price.toLocaleString()}` +
-                       (mejorCombo.oferta ? ` (${mejorCombo.descuento}% OFF)` : '') +
-                       `\n📦 ${mejorCombo.stock} disponibles\n` +
-                       `📝 ${mejorCombo.descripcion.substring(0, 100)}...\n\n` +
-                       `¡Este combo incluye todo lo necesario para empezar!`;
-            },
-            
-            "recomiendame algo": function() {
-                return this["recomendacion"]();
-            },
-            
-            "que me conviene comprar": function() {
-                const stockProducts = products.filter(p => parseInt(p.stock) > 0);
-                if (stockProducts.length === 0) return "Todos los productos están agotados temporalmente.";
-                
-                const combos = stockProducts.filter(p => norm(p.categoria) === 'combos');
-                const ofertas = stockProducts.filter(p => p.oferta);
-                
-                let response = "💡 **COMO TU TRAINER, TE ASESORO:**\n\n";
-                
-                if (combos.length > 0) {
-                    response += "🎁 **MEJOR OPCIÓN**: Un COMBO (más productos, menor precio)\n";
-                }
-                
-                if (ofertas.length > 0) {
-                    response += "🔥 **MEJOR OFERTA**: Productos con descuento\n";
-                }
-                
-                response += "\nMi consejo profesional:\n";
-                response += "• Si entrenas 3+ veces/semana → Invierte en calidad\n";
-                response += "• Si eres principiante → Combo básico\n";
-                response += "• Si buscas ahorrar → Ofertas o combos\n\n";
-                response += "¿Qué te interesa ver primero?";
-                return response;
-            },
-            
-            "tengo poco presupuesto": function() {
-                const economicos = products.filter(p => parseInt(p.stock) > 0)
-                                          .sort((a, b) => (a.oferta ? a.precioOferta : a.precio) - (b.oferta ? b.precioOferta : b.precio))
-                                          .slice(0, 3);
-                
-                if (economicos.length === 0) return "No hay productos disponibles en este momento.";
-                
-                let response = "💸 **OPCIONES ECONÓMICAS DISPONIBLES** 💸\n\n";
-                economicos.forEach((prod, index) => {
-                    const price = prod.oferta ? prod.precioOferta : prod.precio;
-                    response += `${index + 1}. **${prod.nombre}**\n`;
-                    response += `   💰 $${price.toLocaleString()}`;
-                    if (prod.oferta) response += ` (${prod.descuento}% OFF)`;
-                    response += `\n   📦 ${prod.stock} disponibles\n\n`;
-                });
-                
-                response += "💡 *Consejo: Los combos suelen tener mejor precio por producto*";
-                return response;
-            },
-            
-            "beneficios": "✨ **BENEFICIOS EXCLUSIVOS** ✨\n\n✅ Garantía de 1 año\n✅ Asesoramiento fitness personalizado (yo mismo)\n✅ Guías de entrenamiento gratuitas\n✅ Productos probados por entrenadores\n✅ Calidad premium a buen precio\n\n¿Qué te interesa saber más?",
-            
-            "mejor oferta": function() {
-                const mejoresOfertas = products.filter(p => p.oferta && parseInt(p.stock) > 0)
-                                              .sort((a, b) => b.descuento - a.descuento)
-                                              .slice(0, 1);
-                
-                if (mejoresOfertas.length === 0) {
-                    return "No hay ofertas especiales ahora, pero todos nuestros productos tienen excelente relación calidad-precio.";
-                }
-                
-                const prod = mejoresOfertas[0];
-                return `🔥 **LA MEJOR OFERTA EN STOCK** 🔥\n\n` +
-                       `**${prod.nombre}**\n` +
-                       `💰 Precio regular: $${prod.precio.toLocaleString()}\n` +
-                       `🔥 Precio OFERTA: $${prod.precioOferta.toLocaleString()}\n` +
-                       `🎯 Descuento: ${prod.descuento}% OFF\n` +
-                       `📦 Stock: ${prod.stock} unidades\n` +
-                       `🏷️ Categoría: ${prod.categoria}\n\n` +
-                       `¡Es la oferta con mayor descuento que tenemos!`;
             }
         };
 
-        const CHATBOT_DEFAULT_RESPONSE = "Entiendo que preguntas sobre: '{query}'. Como tu personal trainer virtual de Mundo Colchonetas, puedo ayudarte con:\n\n• 📋 Productos disponibles en stock\n• 💰 Precios, ofertas y combos\n• 🚚 Envíos y costos\n• 💳 Métodos de pago\n• 🏋️‍♂️ Asesoramiento fitness\n\n¿En qué tema específico puedo asistirte?";
+        const CHATBOT_DEFAULT_RESPONSE = "Entiendo que preguntas sobre: '{query}'. Puedo ayudarte con:\n\n• 📋 Productos disponibles\n• 💰 Precios y ofertas\n• 🚚 Envíos\n• 💳 Métodos de pago\n\n¿En qué tema específico puedo asistirte?";
 
-        // FUNCIONES DEL CHATBOT
         function toggleChatbot() {
             const chatbot = document.getElementById('chatbot-container');
             chatbot.classList.toggle('active');
-            
             if (chatbot.classList.contains('active') && document.getElementById('chatbot-messages').children.length === 0) {
                 setTimeout(() => {
-                    addBotMessage("¡Hola! 👋 Soy tu **personal trainer virtual** de Mundo Colchonetas. Como experto en fitness, puedo ayudarte a elegir los mejores productos para tu entrenamiento.");
-                    
-                    setTimeout(() => {
-                        showQuickOptions();
-                    }, 500);
+                    addBotMessage("¡Hola! 👋 Soy tu asistente de Mundo Colchonetas. ¿En qué puedo ayudarte?");
+                    setTimeout(() => showQuickOptions(), 500);
                 }, 300);
             }
         }
@@ -1172,24 +930,7 @@
             const quickOptionsDiv = document.createElement('div');
             quickOptionsDiv.className = 'quick-options';
             
-            // Verificar qué tenemos en stock
-            const tieneCombos = products.some(p => norm(p.categoria) === 'combos' && parseInt(p.stock) > 0);
-            const tieneOfertas = products.some(p => p.oferta && parseInt(p.stock) > 0);
-            
-            let options = [];
-            
-            if (tieneCombos) {
-                options.push("🔥 Ver combos");
-            }
-            
-            if (tieneOfertas) {
-                options.push("💰 Mejor oferta");
-            }
-            
-            options.push("📋 Productos disponibles");
-            options.push("🚚 Consultar envíos");
-            options.push("💳 Métodos de pago");
-            options.push("🏋️‍♂️ Recomendación trainer");
+            const options = ["📋 Productos", "💰 Ofertas", "🚚 Envíos", "💳 Pagos", "🏋️‍♂️ Recomendación"];
             
             options.forEach(option => {
                 const optionBtn = document.createElement('button');
@@ -1205,57 +946,41 @@
 
         function handleQuickOption(option) {
             addUserMessage(option);
-            
             setTimeout(() => {
                 switch(option) {
-                    case "🔥 Ver combos":
-                        const combosResp = CHATBOT_RESPONSES["combos"];
-                        addBotMessage(typeof combosResp === 'function' ? combosResp() : combosResp);
-                        break;
-                        
-                    case "💰 Mejor oferta":
-                        const ofertaResp = CHATBOT_RESPONSES["mejor oferta"];
-                        addBotMessage(typeof ofertaResp === 'function' ? ofertaResp() : ofertaResp);
-                        break;
-                        
-                    case "📋 Productos disponibles":
+                    case "📋 Productos":
                         const productosResp = CHATBOT_RESPONSES["que productos tienen"];
                         addBotMessage(typeof productosResp === 'function' ? productosResp() : productosResp);
                         break;
-                        
-                    case "🚚 Consultar envíos":
+                    case "💰 Ofertas":
+                        const ofertasResp = CHATBOT_RESPONSES["ofertas"];
+                        addBotMessage(typeof ofertasResp === 'function' ? ofertasResp() : ofertasResp);
+                        break;
+                    case "🚚 Envíos":
                         addBotMessage(CHATBOT_RESPONSES["envios"]);
                         break;
-                        
-                    case "💳 Métodos de pago":
+                    case "💳 Pagos":
                         addBotMessage(CHATBOT_RESPONSES["metodos de pago"]);
                         break;
-                        
-                    case "🏋️‍♂️ Recomendación trainer":
+                    case "🏋️‍♂️ Recomendación":
                         const recomendacionResp = CHATBOT_RESPONSES["recomendacion"];
                         addBotMessage(typeof recomendacionResp === 'function' ? recomendacionResp() : recomendacionResp);
                         break;
                 }
-                
-                setTimeout(() => {
-                    showQuickOptions();
-                }, 1000);
+                setTimeout(() => showQuickOptions(), 1000);
             }, 500);
         }
 
         function sendChatbotMessage() {
             const input = document.getElementById('chatbot-input');
             const message = input.value.trim();
-            
             if (!message) return;
-            
             addUserMessage(message);
             input.value = '';
             
             setTimeout(() => {
                 const normalizedMessage = norm(message);
                 let response = CHATBOT_RESPONSES[normalizedMessage];
-                
                 if (!response) {
                     for (const key in CHATBOT_RESPONSES) {
                         if (normalizedMessage.includes(key) && key.length > 3) {
@@ -1263,21 +988,15 @@
                             break;
                         }
                     }
-                    
                     if (!response) {
                         response = CHATBOT_DEFAULT_RESPONSE.replace('{query}', message);
                     }
                 }
-                
                 if (typeof response === 'function') {
                     response = response();
                 }
-                
                 addBotMessage(response);
-                
-                setTimeout(() => {
-                    showQuickOptions();
-                }, 500);
+                setTimeout(() => showQuickOptions(), 500);
             }, 800);
         }
 
@@ -1287,38 +1006,36 @@
             }
         }
 
-        // FUNCIONES PARA COMPARTIR - AGREGADAS Y CORREGIDAS
+        // FUNCIONES PARA COMPARTIR
         function toggleShare() {
             const shareContainer = document.getElementById('share-container');
             shareContainer.classList.toggle('active');
-            
-            // Asegurarse de que los links estén actualizados
             updateShareLinks();
         }
 
         function updateShareLinks() {
             const currentUrl = window.location.href;
             const encodedUrl = encodeURIComponent(currentUrl);
-            const messageText = encodeURIComponent("¡Mira el catálogo de Mundo Colchonetas! 🎯 Colchonetas profesionales para yoga, pilates, fitness y camping. Envíos a todo el país. 👉 ");
+            const messageText = encodeURIComponent("¡Mira el catálogo de Mundo Colchonetas! 🎯 Colchonetas profesionales. 👉 ");
             
             const shareButtonsHTML = `
                 <a href="https://wa.me/?text=${messageText}${encodedUrl}" target="_blank" class="share-button">
                     <i class="fab fa-whatsapp" style="color: #25D366;"></i>
                     <span>WhatsApp</span>
                 </a>
-                <a href="https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=Catálogo%20Mundo%20Colchonetas%20-%20Las%20mejores%20colchonetas%20para%20tu%20entrenamiento" target="_blank" class="share-button">
+                <a href="https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=Catálogo%20Mundo%20Colchonetas" target="_blank" class="share-button">
                     <i class="fab fa-facebook-f" style="color: #1877F2;"></i>
                     <span>Facebook</span>
                 </a>
-                <a href="https://twitter.com/intent/tweet?url=${encodedUrl}&text=🎯%20Catálogo%20Mundo%20Colchonetas%20-%20Colchonetas%20premium%20para%20yoga,%20pilates%20y%20fitness.%20¡Envíos%20rápidos!" target="_blank" class="share-button">
+                <a href="https://twitter.com/intent/tweet?url=${encodedUrl}&text=🎯%20Catálogo%20Mundo%20Colchonetas" target="_blank" class="share-button">
                     <i class="fab fa-twitter" style="color: #1DA1F2;"></i>
                     <span>Twitter</span>
                 </a>
-                <a href="https://www.linkedin.com/shareArticle?mini=true&url=${encodedUrl}&title=Catálogo%20Mundo%20Colchonetas&summary=Colchonetas%20profesionales%20para%20deporte%20y%20fitness" target="_blank" class="share-button">
+                <a href="https://www.linkedin.com/shareArticle?mini=true&url=${encodedUrl}&title=Catálogo%20Mundo%20Colchonetas" target="_blank" class="share-button">
                     <i class="fab fa-linkedin-in" style="color: #0A66C2;"></i>
                     <span>LinkedIn</span>
                 </a>
-                <a href="mailto:?subject=Te%20comparto%20el%20catálogo%20de%20Mundo%20Colchonetas&body=Hola,%20te%20comparto%20este%20catálogo%20de%20colchonetas%20profesionales:%20${encodedUrl}" class="share-button">
+                <a href="mailto:?subject=Te%20comparto%20el%20catálogo%20de%20Mundo%20Colchonetas&body=Hola,%20te%20comparto%20este%20catálogo:%20${encodedUrl}" class="share-button">
                     <i class="fas fa-envelope" style="color: #EA4335;"></i>
                     <span>Email</span>
                 </a>
@@ -1327,7 +1044,6 @@
                     <span>Copiar link</span>
                 </button>
             `;
-            
             document.getElementById('share-buttons').innerHTML = shareButtonsHTML;
         }
 
@@ -1338,7 +1054,6 @@
             tempInput.select();
             document.execCommand('copy');
             document.body.removeChild(tempInput);
-            
             showNotify('¡Link copiado!');
             toggleShare();
         }
@@ -1366,19 +1081,11 @@
             document.getElementById('excel-url').value = savedUrl;
             syncWithExcel(true);
             
-            // INICIALIZAR CONTADOR DE VISITAS (INVISIBLE)
             trackVisitor();
-            
-            // INICIALIZAR LOS LINKS DE COMPARTIR
             updateShareLinks();
-            
-            // ACTUALIZAR ESTADÍSTICAS EN PANEL
             updateVisitorStatsInPanel();
-            
-            // VERIFICAR SI VIENE DE UN PRODUCTO COMPARTIDO Y ABRIRLO
             checkProductInUrl();
             
-            // Mostrar chatbot después de 10 segundos
             setTimeout(() => {
                 if (!localStorage.getItem('chatbot_shown')) {
                     toggleChatbot();
@@ -1421,8 +1128,6 @@
                     localStorage.setItem(CONFIG.KEY, JSON.stringify(products));
                     localStorage.setItem('sheet_url', urlInput);
                     renderAll();
-                    
-                    // Después de cargar productos, verificar si hay producto en URL
                     checkProductInUrl();
                 }
             } catch (e) { 
@@ -1444,13 +1149,8 @@
             const hasOffers = products.some(p => p.oferta);
             let cats = ['todos'];
             if (hasOffers) cats.push('ofertas');
-            
-            // Agregar 'combos' como categoría especial si existe
             const hasCombos = products.some(p => norm(p.categoria) === 'combos');
-            if (hasCombos) {
-                cats.push('combos');
-            }
-            
+            if (hasCombos) cats.push('combos');
             const otherCats = [...new Set(products.map(p => p.categoria.toLowerCase()))];
             cats = [...cats, ...otherCats.filter(cat => cat !== 'combos')];
             
@@ -1485,16 +1185,12 @@
                 );
             }
             
-            // ORDENAR: Si es la categoría "todos", mostrar COMBOS primero
             if (currentCategory === 'todos') {
                 filtered.sort((a, b) => {
                     const aIsCombo = norm(a.categoria) === 'combos';
                     const bIsCombo = norm(b.categoria) === 'combos';
-                    
-                    if (aIsCombo && !bIsCombo) return -1; // a (combo) va primero
-                    if (!aIsCombo && bIsCombo) return 1;  // b (combo) va primero
-                    
-                    // Si ambos son combos o ninguno es combo, mantener orden original
+                    if (aIsCombo && !bIsCombo) return -1;
+                    if (!aIsCombo && bIsCombo) return 1;
                     return 0;
                 });
             }
@@ -1537,6 +1233,9 @@
             const pFinal = p.oferta ? p.precioOferta : p.precio;
             const fotos = p.fotos.filter(f => f !== "");
             
+            // Actualizar Open Graph para este producto (para compartir)
+            updateOpenGraphForProduct(clave);
+            
             document.getElementById('detail-content').innerHTML = `
                 <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:30px;">
                     <div class="detail-gallery-container">
@@ -1561,7 +1260,11 @@
                             ${p.oferta ? `<span class="old-price" style="font-size:1.2rem;">$${p.precio.toLocaleString()}</span>` : ''}
                             <div class="current-price" style="font-size:2.8rem;">$${pFinal.toLocaleString()}</div>
                         </div>
-                        <button class="cat-btn active" style="width:100%; padding:20px; font-size:1.1rem;" onclick="addToCart('${p.clave}')">Añadir al Carrito</button>
+                        <div style="display:flex; gap:10px; margin-bottom:20px;">
+                            <button class="cat-btn active" style="flex:1; padding:15px;" onclick="addToCart('${p.clave}')">Añadir al Carrito</button>
+                            <button class="share-product-btn share-wa" style="width:50px; height:50px; font-size:1.2rem;" onclick="shareProduct('${p.clave}', 'whatsapp')" title="Compartir en WhatsApp"><i class="fab fa-whatsapp"></i></button>
+                            <button class="share-product-btn share-fb" style="width:50px; height:50px; font-size:1.2rem;" onclick="shareProduct('${p.clave}', 'facebook')" title="Compartir en Facebook"><i class="fab fa-facebook-f"></i></button>
+                        </div>
                     </div>
                 </div>`;
             document.getElementById('detail-modal').classList.add('active');
@@ -1650,8 +1353,6 @@
                 const price = i.oferta ? i.precioOferta : i.precio;
                 const subtotal = price * i.qty;
                 msg += `• ${i.nombre} (x${i.qty}) - $${subtotal.toLocaleString()}\n`;
-                
-                // Preparar datos para Google Sheets
                 itemsForSheet.push({
                     name: i.nombre,
                     quantity: i.qty,
@@ -1663,10 +1364,7 @@
             msg += `\n${shippingInfo}\n`;
             msg += `💰 TOTAL: ${document.getElementById('cart-total').innerText}`;
             
-            // Registrar venta localmente
             registerSale(customerName, cp);
-            
-            // Enviar a Google Sheets
             sendToGoogleSheets(customerName, cp, itemsForSheet, shippingFee);
             
             window.open(`https://wa.me/5491168705261?text=${encodeURIComponent(msg)}`, '_blank');
@@ -1809,7 +1507,6 @@
                 isAdminLoggedIn = true; localStorage.setItem('adminSession', 'active');
                 document.getElementById('login-modal').classList.remove('active');
                 document.getElementById('admin-panel').classList.add('visible');
-                // Actualizar estadísticas cuando se abre el panel
                 updateVisitorStatsInPanel();
             } else alert("Error");
         }
@@ -1820,13 +1517,8 @@
         function checkAdminAccess() { if(isAdminLoggedIn) document.getElementById('admin-panel').classList.toggle('visible'); else document.getElementById('login-modal').classList.add('active'); }
         function showNotify(msg) { const n = document.getElementById('notification'); n.innerText = msg; n.style.transform = "translateX(-50%) translateY(0)"; setTimeout(() => n.style.transform = "translateX(-50%) translateY(150px)", 2000); }
 
-        // =======================================================
-        // NUEVAS FUNCIONES PARA ENVIAR PEDIDOS A GOOGLE SHEETS
-        // =======================================================
-
         function sendToGoogleSheets(customerName, postalCode, items, shipping) {
             const WEBAPP_URL = CONFIG.SHEETS_WEBAPP_URL;
-            
             const total = items.reduce((acc, item) => acc + item.subtotal, 0) + shipping;
             
             const orderData = {
