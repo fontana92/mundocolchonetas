@@ -128,8 +128,76 @@
         .current-price { font-size: 1.4rem; font-weight: 800; color: var(--primary); letter-spacing: -0.02em; }
         .old-price { font-size: 0.9rem; text-decoration: line-through; color: var(--slate-500); font-weight: 500; }
 
-        .btn-add-circle { width: 45px; height: 45px; border-radius: 50%; background: var(--dark); color: var(--white); display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; transition: var(--transition); }
-        .btn-add-circle:hover { background: var(--primary); transform: scale(1.05); }
+        /* ========================================= */
+        /* ESTILOS PARA SELECTOR DE CANTIDAD */
+        /* ========================================= */
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--slate-100);
+            border-radius: 99px;
+            padding: 3px;
+            border: 1px solid var(--border);
+        }
+        .quantity-selector button {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            background: var(--white);
+            color: var(--dark);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .quantity-selector button:hover {
+            background: var(--primary);
+            color: white;
+        }
+        .quantity-selector input {
+            width: 35px;
+            height: 30px;
+            border: none;
+            background: transparent;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--dark);
+            outline: none;
+        }
+        .quantity-selector input::-webkit-outer-spin-button,
+        .quantity-selector input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .quantity-selector input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        .btn-add-cart {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--dark);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+        .btn-add-cart:hover {
+            background: var(--primary);
+            transform: scale(1.05);
+        }
 
         .detail-gallery-container { display: flex; flex-direction: column; gap: 15px; }
         .main-detail-img { width: 100%; height: 350px; background: var(--slate-100); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; overflow: hidden; }
@@ -360,7 +428,7 @@
         .share-ig { background: linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); }
 
         /* ========================================= */
-        /* ESTILOS PARA OFERTAS DESTACADAS - ESTILO WHATSAPP */
+        /* ESTILOS PARA OFERTAS DESTACADAS - MÁS GRANDES */
         /* ========================================= */
         .ofertas-destacadas {
             background: var(--white);
@@ -370,6 +438,7 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             margin: 15px 0 25px 0;
             overflow: hidden;
+            position: relative;
         }
 
         .ofertas-header {
@@ -408,14 +477,21 @@
             font-weight: 800;
         }
 
+        .ofertas-carousel-wrapper {
+            position: relative;
+            overflow: hidden;
+            padding: 10px 0;
+        }
+
         .ofertas-carousel {
             display: flex;
-            gap: 10px;
+            gap: 15px;
             overflow-x: auto;
             padding: 10px 15px 15px 15px;
             scrollbar-width: none;
             -webkit-overflow-scrolling: touch;
-            flex: 1;
+            scroll-behavior: smooth;
+            transition: transform 0.5s ease;
         }
 
         .ofertas-carousel::-webkit-scrollbar {
@@ -424,19 +500,20 @@
 
         .oferta-item {
             flex: 0 0 auto;
-            width: 165px;
+            width: 200px;
             background: var(--white);
             border-radius: var(--radius-md);
             border: 1px solid var(--border);
-            padding: 12px;
+            padding: 15px;
             cursor: pointer;
             transition: var(--transition);
             position: relative;
-            min-height: 185px;
+            min-height: 220px;
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
 
         .oferta-item:hover {
@@ -451,9 +528,9 @@
             right: -8px;
             background: linear-gradient(135deg, #ff4757, #ff6b81);
             color: white;
-            padding: 3px 12px;
+            padding: 4px 14px;
             border-radius: 99px;
-            font-size: 0.65rem;
+            font-size: 0.75rem;
             font-weight: 800;
             box-shadow: 0 4px 12px rgba(255, 71, 87, 0.4);
             z-index: 5;
@@ -465,24 +542,24 @@
             left: -8px;
             background: linear-gradient(135deg, var(--primary), #a855f7);
             color: white;
-            padding: 3px 12px;
+            padding: 4px 14px;
             border-radius: 99px;
-            font-size: 0.65rem;
+            font-size: 0.75rem;
             font-weight: 800;
             box-shadow: 0 4px 12px rgba(142, 68, 173, 0.4);
             z-index: 5;
         }
 
         .oferta-item .img-container {
-            width: 85px;
-            height: 85px;
+            width: 100px;
+            height: 100px;
             background: var(--slate-100);
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             flex-shrink: 0;
         }
 
@@ -493,37 +570,37 @@
         }
 
         .oferta-item .nombre-oferta {
-            font-size: 0.7rem;
+            font-size: 0.8rem;
             font-weight: 600;
             line-height: 1.2;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-            height: 34px;
+            height: 38px;
             margin-bottom: 2px;
         }
 
         .oferta-item .precio-oferta {
-            font-size: 0.95rem;
+            font-size: 1.1rem;
             font-weight: 800;
             color: var(--primary);
             margin-top: 2px;
         }
 
         .oferta-item .precio-viejo {
-            font-size: 0.65rem;
+            font-size: 0.7rem;
             text-decoration: line-through;
             color: var(--slate-500);
         }
 
         .oferta-item .ver-producto {
-            font-size: 0.6rem;
+            font-size: 0.65rem;
             color: var(--primary);
             font-weight: 600;
-            margin-top: 6px;
+            margin-top: 8px;
             background: var(--slate-100);
-            padding: 3px 14px;
+            padding: 4px 16px;
             border-radius: 99px;
             transition: var(--transition);
         }
@@ -531,6 +608,26 @@
         .oferta-item:hover .ver-producto {
             background: var(--primary);
             color: white;
+        }
+
+        /* Indicador de autodeslizamiento */
+        .autoplay-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px 0 4px 0;
+        }
+        .autoplay-indicator .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border);
+            transition: var(--transition);
+        }
+        .autoplay-indicator .dot.active {
+            background: var(--primary);
+            width: 20px;
+            border-radius: 99px;
         }
 
         @keyframes slideUp {
@@ -548,20 +645,20 @@
                 gap: 8px;
             }
             .oferta-item {
-                width: 135px;
-                padding: 10px;
-                min-height: 160px;
+                width: 160px;
+                padding: 12px;
+                min-height: 185px;
             }
             .oferta-item .img-container {
-                width: 65px;
-                height: 65px;
+                width: 80px;
+                height: 80px;
             }
             .oferta-item .nombre-oferta {
-                font-size: 0.6rem;
-                height: 28px;
+                font-size: 0.7rem;
+                height: 32px;
             }
             .oferta-item .precio-oferta {
-                font-size: 0.8rem;
+                font-size: 0.95rem;
             }
             .ofertas-badge {
                 font-size: 0.7rem;
@@ -569,7 +666,7 @@
             }
             .ofertas-carousel {
                 padding: 8px 10px 12px 10px;
-                gap: 8px;
+                gap: 10px;
             }
         }
         
@@ -617,7 +714,7 @@
         </section>
 
         <!-- ========================================= -->
-        <!-- SECCIÓN DE OFERTAS DESTACADAS - ESTILO WHATSAPP -->
+        <!-- SECCIÓN DE OFERTAS DESTACADAS - CON AUTODESLIZAMIENTO -->
         <!-- ========================================= -->
         <section class="ofertas-destacadas" id="ofertas-destacadas" style="display: none;">
             <div class="ofertas-header">
@@ -625,11 +722,16 @@
                     <i class="fas fa-bolt"></i> OFERTAS <span class="ofertas-count" id="ofertas-count">0</span>
                 </div>
                 <div style="font-size: 0.7rem; color: var(--slate-500); font-weight: 500; white-space: nowrap;">
-                    <i class="fas fa-arrow-right"></i> Deslizá para ver más
+                    <i class="fas fa-arrow-right"></i> Deslizá o mirá
                 </div>
             </div>
-            <div class="ofertas-carousel" id="ofertas-carousel">
-                <!-- Las ofertas se cargan aquí dinámicamente -->
+            <div class="ofertas-carousel-wrapper">
+                <div class="ofertas-carousel" id="ofertas-carousel">
+                    <!-- Las ofertas se cargan aquí dinámicamente -->
+                </div>
+            </div>
+            <div class="autoplay-indicator" id="autoplay-indicator">
+                <!-- Los puntos se generan dinámicamente -->
             </div>
         </section>
 
@@ -764,8 +866,59 @@
         };
         
         let products = [], cart = [], currentCategory = 'todos', isAdminLoggedIn = false, shippingFee = 0, searchQuery = "";
+        let autoplayInterval = null;
+        let currentSlideIndex = 0;
+        let isAutoplayPaused = false;
 
         const norm = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
+
+        // =======================================================
+        // FUNCIÓN PARA ACTUALIZAR CANTIDAD EN EL CARRITO
+        // =======================================================
+        function updateQuantity(clave, delta) {
+            const item = cart.find(i => i.clave === clave);
+            if (!item) {
+                // Si no existe, lo agregamos con cantidad 1
+                const p = products.find(i => i.clave === clave);
+                if (p) {
+                    cart.push({...p, qty: 1});
+                }
+            } else {
+                item.qty = Math.max(1, item.qty + delta);
+            }
+            updateCartUI();
+        }
+
+        function setQuantity(clave, value) {
+            const item = cart.find(i => i.clave === clave);
+            const qty = parseInt(value) || 1;
+            if (item) {
+                item.qty = Math.max(1, qty);
+            } else {
+                const p = products.find(i => i.clave === clave);
+                if (p) {
+                    cart.push({...p, qty: Math.max(1, qty)});
+                }
+            }
+            updateCartUI();
+        }
+
+        function addToCartWithQuantity(clave) {
+            const p = products.find(i => i.clave === clave);
+            if (!p) return;
+            
+            const input = document.getElementById('qty-' + clave);
+            const qty = parseInt(input ? input.value : 1) || 1;
+            
+            const exist = cart.find(i => i.clave === clave);
+            if (exist) {
+                exist.qty += qty;
+            } else {
+                cart.push({...p, qty: qty});
+            }
+            updateCartUI();
+            showNotify(`¡${qty} unidad${qty > 1 ? 'es' : ''} añadida${qty > 1 ? 's' : ''}!`);
+        }
 
         // FUNCIÓN PARA COMPARTIR PRODUCTO
         function shareProduct(clave, platform) {
@@ -815,18 +968,23 @@
         }
 
         // =======================================================
-        // FUNCIÓN PARA RENDERIZAR OFERTAS DESTACADAS
+        // FUNCIÓN PARA RENDERIZAR OFERTAS DESTACADAS CON AUTODESLIZAMIENTO
         // =======================================================
         function renderOfertasDestacadas() {
             const container = document.getElementById('ofertas-destacadas');
             const carousel = document.getElementById('ofertas-carousel');
             const count = document.getElementById('ofertas-count');
+            const indicator = document.getElementById('autoplay-indicator');
             
-            // Filtrar productos con oferta (columna J = "SI")
+            // Filtrar productos con oferta
             const ofertas = products.filter(p => p.oferta && parseInt(p.stock) > 0);
             
             if (ofertas.length === 0) {
                 container.style.display = 'none';
+                if (autoplayInterval) {
+                    clearInterval(autoplayInterval);
+                    autoplayInterval = null;
+                }
                 return;
             }
             
@@ -848,7 +1006,7 @@
                 const imgSrc = p.fotos && p.fotos[0] ? p.fotos[0] : '';
                 
                 return `
-                    <div class="oferta-item" onclick="openDetail('${p.clave}')" style="animation-delay: ${index * 0.1}s">
+                    <div class="oferta-item" onclick="openDetail('${p.clave}')" style="animation-delay: ${index * 0.1}s" data-index="${index}">
                         ${p.oferta ? `<div class="badge-offer-small">${p.descuento}% OFF</div>` : ''}
                         ${esCombo ? `<div class="badge-combo">🎁 COMBO</div>` : ''}
                         <div class="img-container">
@@ -861,6 +1019,107 @@
                     </div>
                 `;
             }).join('');
+            
+            // Crear indicadores (puntos)
+            indicator.innerHTML = ofertas.map((_, i) => `
+                <span class="dot ${i === 0 ? 'active' : ''}" data-index="${i}"></span>
+            `).join('');
+            
+            // Iniciar autodeslizamiento
+            startAutoplay(ofertas.length);
+        }
+
+        // =======================================================
+        // FUNCIONES PARA AUTODESLIZAMIENTO DEL CARRUSEL
+        // =======================================================
+        function startAutoplay(totalItems) {
+            if (autoplayInterval) {
+                clearInterval(autoplayInterval);
+                autoplayInterval = null;
+            }
+            
+            if (totalItems <= 1) return;
+            
+            const carousel = document.getElementById('ofertas-carousel');
+            const items = carousel.querySelectorAll('.oferta-item');
+            
+            if (items.length === 0) return;
+            
+            // Calcular cuántos items se ven a la vez
+            let itemsPerView = 4;
+            if (window.innerWidth < 480) itemsPerView = 2;
+            else if (window.innerWidth < 768) itemsPerView = 3;
+            
+            const totalSlides = Math.max(1, items.length - itemsPerView + 1);
+            let currentIndex = 0;
+            
+            // Función para mover el carrusel
+            function slideTo(index) {
+                const itemWidth = items[0].offsetWidth + 15; // 15 es el gap
+                const scrollPosition = index * itemWidth;
+                carousel.scrollTo({
+                    left: scrollPosition,
+                    behavior: 'smooth'
+                });
+                
+                // Actualizar indicadores
+                const dots = document.querySelectorAll('.autoplay-indicator .dot');
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === index);
+                });
+                currentIndex = index;
+            }
+            
+            // Autodeslizamiento cada 4 segundos
+            autoplayInterval = setInterval(() => {
+                if (!isAutoplayPaused) {
+                    currentIndex = (currentIndex + 1) % totalSlides;
+                    slideTo(currentIndex);
+                }
+            }, 4000);
+            
+            // Pausar autoplay cuando el usuario interactúa con el carrusel
+            carousel.addEventListener('mouseenter', () => {
+                isAutoplayPaused = true;
+            });
+            
+            carousel.addEventListener('mouseleave', () => {
+                isAutoplayPaused = false;
+            });
+            
+            // Para móviles: pausar al tocar
+            carousel.addEventListener('touchstart', () => {
+                isAutoplayPaused = true;
+            });
+            
+            carousel.addEventListener('touchend', () => {
+                setTimeout(() => {
+                    isAutoplayPaused = false;
+                }, 3000);
+            });
+            
+            // Actualizar cuando cambia el tamaño de la ventana
+            window.addEventListener('resize', () => {
+                // Recalcular itemsPerView
+                let newItemsPerView = 4;
+                if (window.innerWidth < 480) newItemsPerView = 2;
+                else if (window.innerWidth < 768) newItemsPerView = 3;
+                
+                if (newItemsPerView !== itemsPerView) {
+                    itemsPerView = newItemsPerView;
+                    // Reiniciar autoplay con nuevo cálculo
+                    clearInterval(autoplayInterval);
+                    startAutoplay(totalItems);
+                }
+            });
+            
+            // Guardar referencia para limpiar
+            window.__autoplayCleanup = () => {
+                if (autoplayInterval) {
+                    clearInterval(autoplayInterval);
+                    autoplayInterval = null;
+                }
+            };
         }
 
         // FUNCIONES PARA CONTADOR DE VISITAS
@@ -1414,26 +1673,46 @@
             
             container.innerHTML = filtered.map(p => {
                 const pFinal = p.oferta ? p.precioOferta : p.precio;
+                const stock = parseInt(p.stock) || 0;
+                
                 return `
-                <div class="product-card" onclick="openDetail('${p.clave}')">
+                <div class="product-card">
                     ${p.oferta ? `<div class="badge-offer">-${p.descuento}% OFF</div>` : ''}
                     ${norm(p.categoria) === 'combos' ? `<div class="badge-offer" style="background: var(--primary); top: 45px;">🎁 COMBO</div>` : ''}
-                    <div class="product-image-container">${p.fotos[0] ? `<img src="${p.fotos[0]}" loading="lazy">` : '<i class="fas fa-image fa-2x" style="color:#eee"></i>'}</div>
-                    <div style="flex:1">
+                    <div class="product-image-container" onclick="openDetail('${p.clave}')">
+                        ${p.fotos[0] ? `<img src="${p.fotos[0]}" loading="lazy">` : '<i class="fas fa-image fa-2x" style="color:#eee"></i>'}
+                    </div>
+                    <div style="flex:1" onclick="openDetail('${p.clave}')">
                         <p style="font-size:0.7rem; color:var(--primary); font-weight:700; text-transform:uppercase;">${p.categoria}</p>
                         <h3 style="font-size:1rem; margin:5px 0 15px 0; font-weight:600; line-height:1.2;">${p.nombre}</h3>
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
                             <div style="display:flex; flex-direction:column;">
                                 ${p.oferta ? `<span class="old-price">$${p.precio.toLocaleString()}</span>` : ''}
                                 <span class="current-price">$${pFinal.toLocaleString()}</span>
                             </div>
-                            <div style="display:flex; gap:6px; align-items:center;">
-                                <button class="share-product-btn share-wa" onclick="event.stopPropagation(); shareProduct('${p.clave}', 'whatsapp')" title="WhatsApp"><i class="fab fa-whatsapp"></i></button>
-                                <button class="share-product-btn share-fb" onclick="event.stopPropagation(); shareProduct('${p.clave}', 'facebook')" title="Facebook"><i class="fab fa-facebook-f"></i></button>
-                                <button class="share-product-btn share-ig" onclick="event.stopPropagation(); shareProduct('${p.clave}', 'instagram')" title="Instagram"><i class="fab fa-instagram"></i></button>
-                                <div class="btn-add-circle" onclick="event.stopPropagation(); addToCart('${p.clave}')"><i class="fas fa-plus"></i></div>
-                            </div>
+                            ${stock > 0 ? `<span style="font-size:0.6rem; color:#22c55e; font-weight:600;">✓ Stock</span>` : `<span style="font-size:0.6rem; color:#ef4444; font-weight:600;">Sin stock</span>`}
                         </div>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:6px; margin-top:6px; flex-wrap:wrap;">
+                        <div style="display:flex; gap:4px; align-items:center; flex:1;">
+                            <button class="share-product-btn share-wa" onclick="event.stopPropagation(); shareProduct('${p.clave}', 'whatsapp')" title="WhatsApp"><i class="fab fa-whatsapp"></i></button>
+                            <button class="share-product-btn share-fb" onclick="event.stopPropagation(); shareProduct('${p.clave}', 'facebook')" title="Facebook"><i class="fab fa-facebook-f"></i></button>
+                            <button class="share-product-btn share-ig" onclick="event.stopPropagation(); shareProduct('${p.clave}', 'instagram')" title="Instagram"><i class="fab fa-instagram"></i></button>
+                        </div>
+                        ${stock > 0 ? `
+                            <div class="quantity-selector" onclick="event.stopPropagation();">
+                                <button onclick="event.stopPropagation(); updateQuantity('${p.clave}', -1)">−</button>
+                                <input type="number" id="qty-${p.clave}" value="1" min="1" max="${stock}" onchange="event.stopPropagation(); setQuantity('${p.clave}', this.value)">
+                                <button onclick="event.stopPropagation(); updateQuantity('${p.clave}', 1)">+</button>
+                            </div>
+                            <button class="btn-add-cart" onclick="event.stopPropagation(); addToCartWithQuantity('${p.clave}')" title="Añadir al carrito">
+                                <i class="fas fa-shopping-bag"></i>
+                            </button>
+                        ` : `
+                            <button class="btn-add-cart" style="background: #ef4444; opacity:0.5; cursor:not-allowed;" disabled>
+                                <i class="fas fa-times"></i>
+                            </button>
+                        `}
                     </div>
                 </div>`;
             }).join('');
@@ -1444,6 +1723,7 @@
             if(!p) return;
             const pFinal = p.oferta ? p.precioOferta : p.precio;
             const fotos = p.fotos.filter(f => f !== "");
+            const stock = parseInt(p.stock) || 0;
             
             document.getElementById('detail-content').innerHTML = `
                 <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:30px;">
@@ -1465,14 +1745,31 @@
                         <p style="color:var(--primary); font-weight:700; text-transform:uppercase; font-size:0.8rem;">${p.categoria}</p>
                         <h2 style="font-size:2rem; margin:10px 0; font-weight:800; line-height:1.1;">${p.nombre}</h2>
                         <p style="color:var(--slate-500); margin-bottom:25px; font-size:0.95rem;">${p.descripcion}</p>
-                        <div style="margin-bottom:30px;">
+                        <div style="margin-bottom:25px;">
                             ${p.oferta ? `<span class="old-price" style="font-size:1.2rem;">$${p.precio.toLocaleString()}</span>` : ''}
                             <div class="current-price" style="font-size:2.8rem;">$${pFinal.toLocaleString()}</div>
+                            ${stock > 0 ? `<p style="color:#22c55e; font-weight:600; font-size:0.9rem;">✓ ${stock} unidades disponibles</p>` : `<p style="color:#ef4444; font-weight:600; font-size:0.9rem;">❌ Sin stock</p>`}
                         </div>
-                        <div style="display:flex; gap:10px; margin-bottom:20px;">
-                            <button class="cat-btn active" style="flex:1; padding:15px;" onclick="addToCart('${p.clave}')">Añadir al Carrito</button>
+                        ${stock > 0 ? `
+                            <div style="display:flex; gap:10px; align-items:center; margin-bottom:20px;">
+                                <div class="quantity-selector">
+                                    <button onclick="updateQuantity('${p.clave}', -1)">−</button>
+                                    <input type="number" id="qty-${p.clave}" value="1" min="1" max="${stock}">
+                                    <button onclick="updateQuantity('${p.clave}', 1)">+</button>
+                                </div>
+                                <button class="cat-btn active" style="flex:1; padding:15px;" onclick="addToCartWithQuantity('${p.clave}')">
+                                    <i class="fas fa-shopping-bag"></i> Añadir al Carrito
+                                </button>
+                            </div>
+                        ` : `
+                            <button class="cat-btn" style="width:100%; padding:15px; background:#ef4444; color:white; cursor:not-allowed;" disabled>
+                                <i class="fas fa-times"></i> Sin Stock
+                            </button>
+                        `}
+                        <div style="display:flex; gap:10px;">
                             <button class="share-product-btn share-wa" style="width:50px; height:50px; font-size:1.2rem;" onclick="shareProduct('${p.clave}', 'whatsapp')" title="Compartir"><i class="fab fa-whatsapp"></i></button>
                             <button class="share-product-btn share-fb" style="width:50px; height:50px; font-size:1.2rem;" onclick="shareProduct('${p.clave}', 'facebook')" title="Compartir"><i class="fab fa-facebook-f"></i></button>
+                            <button class="share-product-btn share-ig" style="width:50px; height:50px; font-size:1.2rem;" onclick="shareProduct('${p.clave}', 'instagram')" title="Compartir"><i class="fab fa-instagram"></i></button>
                         </div>
                     </div>
                 </div>`;
@@ -1517,7 +1814,18 @@
             container.innerHTML = cart.map(item => {
                 const p = item.oferta ? item.precioOferta : item.precio;
                 sub += p * item.qty;
-                return `<div style="display:flex; gap:15px; margin-bottom:15px; align-items:center; background:var(--slate-100); padding:10px; border-radius:12px;"><div style="flex:1"><h4 style="font-size:0.9rem; font-weight:700;">${item.nombre}</h4><p style="font-weight:700; color:var(--primary);">$${p.toLocaleString()} x ${item.qty}</p></div><button onclick="removeFromCart('${item.clave}')" style="border:none; color:red; background:none; cursor:pointer;"><i class="fas fa-trash"></i></button></div>`;
+                return `<div style="display:flex; gap:15px; margin-bottom:15px; align-items:center; background:var(--slate-100); padding:10px; border-radius:12px;">
+                    <div style="flex:1">
+                        <h4 style="font-size:0.9rem; font-weight:700;">${item.nombre}</h4>
+                        <p style="font-weight:700; color:var(--primary);">$${p.toLocaleString()} x ${item.qty}</p>
+                    </div>
+                    <div style="display:flex; gap:6px; align-items:center;">
+                        <button onclick="updateQuantity('${item.clave}', -1)" style="border:none; background:var(--border); width:28px; height:28px; border-radius:50%; cursor:pointer; font-weight:700;">−</button>
+                        <span style="font-weight:700; min-width:20px; text-align:center;">${item.qty}</span>
+                        <button onclick="updateQuantity('${item.clave}', 1)" style="border:none; background:var(--border); width:28px; height:28px; border-radius:50%; cursor:pointer; font-weight:700;">+</button>
+                        <button onclick="removeFromCart('${item.clave}')" style="border:none; color:red; background:none; cursor:pointer; margin-left:5px;"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>`;
             }).join('');
             document.getElementById('cart-subtotal').innerText = `$${sub.toLocaleString()}`;
             document.getElementById('cart-shipping-fee').innerText = `$${shippingFee.toLocaleString()}`;
@@ -1525,7 +1833,10 @@
             document.getElementById('header-cart-count').innerText = cart.reduce((acc, i) => acc + i.qty, 0);
         }
 
-        function removeFromCart(clave) { cart = cart.filter(i => i.clave !== clave); updateCartUI(); }
+        function removeFromCart(clave) { 
+            cart = cart.filter(i => i.clave !== clave); 
+            updateCartUI(); 
+        }
 
         function checkoutViaWhatsApp() {
             if(cart.length === 0) return;
@@ -1760,6 +2071,13 @@
                 console.error("❌ Error al enviar a Google Sheets:", error);
             });
         }
+
+        // Limpiar autoplay al recargar la página
+        window.addEventListener('beforeunload', () => {
+            if (window.__autoplayCleanup) {
+                window.__autoplayCleanup();
+            }
+        });
 
     </script>
 </body>
