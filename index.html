@@ -430,8 +430,23 @@
             align-items: center;
             justify-content: center;
             color: white;
+            position: relative;
         }
         .share-product-btn:hover { transform: scale(1.1); }
+        .share-product-btn:hover::after {
+            content: attr(title);
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.6rem;
+            white-space: nowrap;
+            z-index: 10;
+        }
         .share-wa { background: #25D366; }
         .share-fb { background: #1877F2; }
         .share-ig { background: linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); }
@@ -643,7 +658,7 @@
         const norm = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
 
         // =======================================================
-        // FUNCIÓN PARA COMPARTIR PRODUCTO INDIVIDUAL - AGREGADA
+        // FUNCIÓN PARA COMPARTIR PRODUCTO INDIVIDUAL - MEJORADA
         // =======================================================
         function shareProduct(clave, platform) {
             const p = products.find(i => i.clave === clave);
@@ -651,26 +666,70 @@
             
             const pFinal = p.oferta ? p.precioOferta : p.precio;
             const productUrl = window.location.href;
-            const message = encodeURIComponent(`🪐 *${p.nombre}* - ${p.categoria}\n💰 $${pFinal.toLocaleString()}\n📝 ${p.descripcion.substring(0, 100)}...\n\n¡Mira este producto en Mundo Colchonetas! 👇\n${productUrl}`);
+            
+            // Usar la primera foto del producto o un logo por defecto
+            const productImage = p.fotos && p.fotos[0] ? p.fotos[0] : 'https://mundocolchonetas.com/logo-social.jpg';
+            const encodedImage = encodeURIComponent(productImage);
+            const encodedUrl = encodeURIComponent(productUrl);
+            
+            // Texto corto y limpio para compartir
+            const shortText = `🪐 ${p.nombre}\n💰 $${pFinal.toLocaleString()}`;
+            const encodedText = encodeURIComponent(shortText);
             
             let shareUrl = '';
+            
             switch(platform) {
                 case 'whatsapp':
-                    shareUrl = `https://wa.me/?text=${message}`;
+                    // WhatsApp usa texto + link, la imagen se muestra como preview
+                    shareUrl = `https://wa.me/?text=${encodedText}%0A👇%20${encodedUrl}`;
                     break;
+                    
                 case 'facebook':
-                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(productUrl)}&quote=${encodeURIComponent(`🪐 ${p.nombre} - $${pFinal.toLocaleString()}`)}`;
+                    // Facebook comparte con imagen, título y descripción automática
+                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedText}`;
                     break;
+                    
                 case 'instagram':
-                    const instaMsg = `🪐 ${p.nombre}\n💰 $${pFinal.toLocaleString()}\n${p.descripcion.substring(0, 80)}...\n\n${productUrl}`;
+                    // Instagram: copia texto + link + imagen para pegar en historia/story
+                    const instaMsg = `${p.nombre}\n$${pFinal.toLocaleString()}\n${productUrl}`;
                     const tempInput = document.createElement('input');
                     tempInput.value = instaMsg;
                     document.body.appendChild(tempInput);
                     tempInput.select();
                     document.execCommand('copy');
                     document.body.removeChild(tempInput);
-                    showNotify('¡Copiado! Pega en tu historia de Instagram 📱');
+                    
+                    // También intentar copiar la imagen si es posible
+                    if (p.fotos && p.fotos[0]) {
+                        fetch(p.fotos[0])
+                            .then(res => res.blob())
+                            .then(blob => {
+                                try {
+                                    navigator.clipboard.write([
+                                        new ClipboardItem({
+                                            [blob.type]: blob
+                                        })
+                                    ]);
+                                    showNotify('📸 Imagen y texto copiados para Instagram');
+                                } catch(e) {
+                                    showNotify('📋 Texto copiado para Instagram');
+                                }
+                            })
+                            .catch(() => {
+                                showNotify('📋 Texto copiado para Instagram');
+                            });
+                    } else {
+                        showNotify('📋 Texto copiado para Instagram');
+                    }
                     return;
+                    
+                case 'twitter':
+                    shareUrl = `https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`;
+                    break;
+                    
+                case 'linkedin':
+                    shareUrl = `https://www.linkedin.com/shareArticle?mini=true&url=${encodedUrl}&title=${encodeURIComponent(p.nombre)}&summary=${encodeURIComponent(`${p.categoria} - $${pFinal.toLocaleString()}`)}`;
+                    break;
             }
             
             if(shareUrl) {
@@ -1450,9 +1509,9 @@
                                 <span class="current-price">$${pFinal.toLocaleString()}</span>
                             </div>
                             <div style="display:flex; gap:6px; align-items:center;">
-                                <button class="share-product-btn share-wa" onclick="event.stopPropagation(); shareProduct('${p.clave}', 'whatsapp')" title="Compartir en WhatsApp"><i class="fab fa-whatsapp"></i></button>
-                                <button class="share-product-btn share-fb" onclick="event.stopPropagation(); shareProduct('${p.clave}', 'facebook')" title="Compartir en Facebook"><i class="fab fa-facebook-f"></i></button>
-                                <button class="share-product-btn share-ig" onclick="event.stopPropagation(); shareProduct('${p.clave}', 'instagram')" title="Compartir en Instagram"><i class="fab fa-instagram"></i></button>
+                                <button class="share-product-btn share-wa" onclick="event.stopPropagation(); shareProduct('${p.clave}', 'whatsapp')" title="WhatsApp"><i class="fab fa-whatsapp"></i></button>
+                                <button class="share-product-btn share-fb" onclick="event.stopPropagation(); shareProduct('${p.clave}', 'facebook')" title="Facebook"><i class="fab fa-facebook-f"></i></button>
+                                <button class="share-product-btn share-ig" onclick="event.stopPropagation(); shareProduct('${p.clave}', 'instagram')" title="Instagram"><i class="fab fa-instagram"></i></button>
                                 <div class="btn-add-circle" onclick="event.stopPropagation(); addToCart('${p.clave}')"><i class="fas fa-plus"></i></div>
                             </div>
                         </div>
