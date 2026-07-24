@@ -874,7 +874,7 @@
         const norm = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
 
         // =======================================================
-        // FUNCIONES DE CARRITO CORREGIDAS
+        // FUNCIONES DE CARRITO
         // =======================================================
         function updateQuantity(clave, delta) {
             const item = cart.find(i => i.clave === clave);
@@ -988,6 +988,7 @@
             const count = document.getElementById('ofertas-count');
             const indicator = document.getElementById('autoplay-indicator');
             
+            // ✅ SOLO productos con oferta = true y stock > 0
             const ofertas = products.filter(p => p.oferta && parseInt(p.stock) > 0);
             
             if (ofertas.length === 0) {
@@ -1112,7 +1113,7 @@
         }
 
         // =======================================================
-        // FUNCIONES DE VISITAS, CHATBOT, ETC (MANTENIDAS)
+        // FUNCIONES DE VISITAS
         // =======================================================
         function trackVisitor() {
             const today = new Date().toLocaleDateString('es-AR');
@@ -1153,11 +1154,164 @@
             return visitorsData;
         }
 
-        // ... (el resto de las funciones de visitas, chatbot, etc. permanecen igual)
-        // Por temas de espacio, acá va el resto del código que ya tenías funcionando
-        // Solo asegurate de que las funciones de carrito estén corregidas como mostré arriba.
+        function showVisitorStats() {
+            const visitorsData = JSON.parse(localStorage.getItem(CONFIG.VISITORS_KEY)) || {
+                total: 0,
+                today: 0,
+                todayDate: new Date().toLocaleDateString('es-AR'),
+                history: [],
+                dailyStats: {}
+            };
+            
+            const totalVisits = visitorsData.total;
+            const todayVisits = visitorsData.today;
+            const uniqueDays = Object.keys(visitorsData.dailyStats).length;
+            const avgPerDay = uniqueDays > 0 ? Math.round(totalVisits / uniqueDays) : 0;
+            
+            const last7Days = {};
+            const today = new Date();
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date(today);
+                date.setDate(today.getDate() - i);
+                const dateStr = date.toLocaleDateString('es-AR');
+                last7Days[dateStr] = visitorsData.dailyStats[dateStr] || 0;
+            }
+            
+            let chartHTML = '<div style="margin: 20px 0; height: 150px; display: flex; align-items: flex-end; gap: 10px; border-bottom: 2px solid var(--border); padding-bottom: 20px;">';
+            const maxVisits = Math.max(...Object.values(last7Days), 1);
+            
+            Object.entries(last7Days).forEach(([date, visits]) => {
+                const height = (visits / maxVisits) * 100;
+                const dayName = new Date(date.split('/').reverse().join('-')).toLocaleDateString('es-AR', { weekday: 'short' });
+                chartHTML += `
+                    <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+                        <div style="background: linear-gradient(to top, var(--primary) 0%, #9b59b6 100%); width: 30px; height: ${height}%; border-radius: 5px 5px 0 0;"></div>
+                        <div style="font-size: 0.7rem; margin-top: 5px; font-weight: 600;">${dayName}</div>
+                        <div style="font-size: 0.8rem; font-weight: 800; color: var(--primary);">${visits}</div>
+                    </div>
+                `;
+            });
+            chartHTML += '</div>';
+            
+            const statsHTML = `
+                <div style="background: var(--slate-100); padding: 20px; border-radius: 15px; margin: 20px 0;">
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px;">
+                        <div style="text-align: center; background: white; padding: 15px; border-radius: 10px; border: 2px solid var(--primary);">
+                            <div style="font-size: 2rem; font-weight: 800; color: var(--primary);">${totalVisits}</div>
+                            <div style="font-size: 0.8rem; color: var(--slate-500);">Visitas totales</div>
+                        </div>
+                        <div style="text-align: center; background: white; padding: 15px; border-radius: 10px; border: 2px solid var(--primary);">
+                            <div style="font-size: 2rem; font-weight: 800; color: var(--primary);">${todayVisits}</div>
+                            <div style="font-size: 0.8rem; color: var(--slate-500);">Visitas hoy</div>
+                        </div>
+                        <div style="text-align: center; background: white; padding: 15px; border-radius: 10px; border: 2px solid var(--border);">
+                            <div style="font-size: 1.5rem; font-weight: 800; color: var(--dark);">${uniqueDays}</div>
+                            <div style="font-size: 0.8rem; color: var(--slate-500);">Días registrados</div>
+                        </div>
+                        <div style="text-align: center; background: white; padding: 15px; border-radius: 10px; border: 2px solid var(--border);">
+                            <div style="font-size: 1.5rem; font-weight: 800; color: var(--dark);">${avgPerDay}</div>
+                            <div style="font-size: 0.8rem; color: var(--slate-500);">Promedio por día</div>
+                        </div>
+                    </div>
+                    
+                    <h4 style="margin: 20px 0 10px 0;">📈 Últimos 7 días</h4>
+                    ${chartHTML}
+                    
+                    <h4 style="margin: 20px 0 10px 0;">🕐 Últimas visitas</h4>
+                    <div style="max-height: 200px; overflow-y: auto; background: white; border-radius: 10px; padding: 10px; border: 1px solid var(--border);">
+                        ${visitorsData.history.slice(-10).reverse().map(visit => `
+                            <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--slate-100);">
+                                <span style="font-size: 0.8rem;">${visit.date}</span>
+                                <span style="font-size: 0.8rem; color: var(--primary); font-weight: 600;">${visit.time}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button class="cat-btn active" onclick="exportVisitorData()">📥 Exportar Datos</button>
+                    <button class="cat-btn" onclick="resetVisitorData()" style="background: #ff4757; color: white;">🗑️ Reiniciar Contador</button>
+                </div>
+            `;
+            
+            document.getElementById('detailed-stats-content').innerHTML = statsHTML;
+            document.getElementById('stats-modal').classList.add('active');
+        }
 
-        // Función principal de renderizado
+        function exportVisitorData() {
+            const visitorsData = JSON.parse(localStorage.getItem(CONFIG.VISITORS_KEY)) || {};
+            
+            let csv = "Fecha,Hora,Timestamp\n";
+            visitorsData.history.forEach(visit => {
+                csv += `"${visit.date}","${visit.time}",${visit.timestamp}\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `visitas_mundo_colchonetas_${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            showNotify('Datos exportados');
+        }
+
+        function resetVisitorData() {
+            if (confirm("¿Estás seguro de que deseas reiniciar TODOS los datos de visitantes? Esta acción no se puede deshacer.")) {
+                localStorage.removeItem(CONFIG.VISITORS_KEY);
+                trackVisitor();
+                showNotify('Contador reiniciado');
+                setTimeout(() => {
+                    closeModal('stats-modal');
+                    showVisitorStats();
+                }, 1000);
+            }
+        }
+
+        function updateVisitorStatsInPanel() {
+            const visitorsData = JSON.parse(localStorage.getItem(CONFIG.VISITORS_KEY)) || {
+                total: 0,
+                today: 0,
+                todayDate: new Date().toLocaleDateString('es-AR'),
+                history: [],
+                dailyStats: {}
+            };
+            
+            const totalVisits = visitorsData.total;
+            const todayVisits = visitorsData.today;
+            const uniqueDays = Object.keys(visitorsData.dailyStats).length;
+            const avgPerDay = uniqueDays > 0 ? Math.round(totalVisits / uniqueDays) : 0;
+            
+            const statsHTML = `
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 15px 0;">
+                    <div style="background: var(--slate-100); padding: 12px; border-radius: 10px; text-align: center;">
+                        <div style="font-size: 1.2rem; font-weight: 800; color: var(--primary);">${totalVisits}</div>
+                        <div style="font-size: 0.7rem; color: var(--slate-500);">Total visitas</div>
+                    </div>
+                    <div style="background: var(--slate-100); padding: 12px; border-radius: 10px; text-align: center;">
+                        <div style="font-size: 1.2rem; font-weight: 800; color: var(--primary);">${todayVisits}</div>
+                        <div style="font-size: 0.7rem; color: var(--slate-500);">Visitas hoy</div>
+                    </div>
+                    <div style="background: var(--slate-100); padding: 12px; border-radius: 10px; text-align: center;">
+                        <div style="font-size: 1.1rem; font-weight: 800; color: var(--dark);">${uniqueDays}</div>
+                        <div style="font-size: 0.7rem; color: var(--slate-500);">Días registrados</div>
+                    </div>
+                    <div style="background: var(--slate-100); padding: 12px; border-radius: 10px; text-align: center;">
+                        <div style="font-size: 1.1rem; font-weight: 800; color: var(--dark);">${avgPerDay}</div>
+                        <div style="font-size: 0.7rem; color: var(--slate-500);">Promedio/día</div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('visitor-data').innerHTML = statsHTML;
+        }
+
+        // =======================================================
+        // FUNCIONES DE RENDERIZADO
+        // =======================================================
         function renderAll() { 
             renderCategories(); 
             renderProducts(); 
@@ -1186,7 +1340,7 @@
         function filterCat(c) { currentCategory = c; renderAll(); }
 
         // =======================================================
-        // RENDERIZAR PRODUCTOS - CORREGIDO
+        // RENDERIZAR PRODUCTOS - ORDEN ALFABÉTICO (SIN PRIORIDAD PARA COMBOS)
         // =======================================================
         function renderProducts() {
             const container = document.getElementById('products-container');
@@ -1209,13 +1363,10 @@
                 );
             }
             
+            // ✅ ORDEN ALFABÉTICO - SIN PRIORIDAD PARA COMBOS
             if (currentCategory === 'todos') {
                 filtered.sort((a, b) => {
-                    const aIsCombo = norm(a.categoria) === 'combos';
-                    const bIsCombo = norm(b.categoria) === 'combos';
-                    if (aIsCombo && !bIsCombo) return -1;
-                    if (!aIsCombo && bIsCombo) return 1;
-                    return 0;
+                    return a.nombre.localeCompare(b.nombre);
                 });
             }
             
@@ -1272,7 +1423,7 @@
         }
 
         // =======================================================
-        // OPEN DETAIL - CORREGIDO
+        // OPEN DETAIL
         // =======================================================
         function openDetail(clave) {
             const p = products.find(i => i.clave === clave);
@@ -1573,7 +1724,7 @@
         }
 
         // =======================================================
-        // FUNCIONES COMPARTIR, CHATBOT, ADMIN, ETC.
+        // FUNCIONES COMPARTIR, CHATBOT, ADMIN
         // =======================================================
         function toggleChatbot() {
             const chatbot = document.getElementById('chatbot-container');
@@ -1674,7 +1825,6 @@
             }
         }
 
-        // Funciones de compartir
         function toggleShare() {
             const shareContainer = document.getElementById('share-container');
             shareContainer.classList.toggle('active');
@@ -1796,7 +1946,7 @@
                     products = newProducts;
                     localStorage.setItem(CONFIG.KEY, JSON.stringify(products));
                     localStorage.setItem('sheet_url', urlInput);
-                    renderAll();
+                    renderAll(); // ✅ Esto actualiza ofertas y productos
                     checkProductInUrl();
                 }
             } catch (e) { 
@@ -1811,7 +1961,7 @@
         }
 
         // =======================================================
-        // CHATBOT RESPONSES (simplificados)
+        // CHATBOT RESPONSES
         // =======================================================
         const CHATBOT_RESPONSES = {
             "hola": "¡Hola! 👋 Soy tu asistente de Mundo Colchonetas.",
