@@ -782,21 +782,16 @@
         </div>
         <div id="cart-items" style="flex:1; overflow-y:auto;"></div>
         
+        <!-- ✅ CARRITO SIN CP - SOLO NOMBRE -->
         <div class="shipping-box">
             <label style="font-weight:700; font-size:0.8rem;">Nombre Completo *</label>
-            <input type="text" id="customer-name" class="form-input" style="margin-top:5px; margin-bottom:10px;" placeholder="Tu nombre y apellido">
-            
-            <label style="font-weight:700; font-size:0.8rem;">Código Postal (CP) *</label>
-            <div style="display:flex; gap:5px; margin-top:5px;">
-                <input type="text" id="shipping-cp" class="form-input" style="margin:0;" placeholder="Ej: 1629" required>
-                <button class="cat-btn active" onclick="calculateShipping()">Calcular</button>
-            </div>
-            <p id="shipping-result" style="font-size:0.75rem; margin-top:5px; color:var(--primary); font-weight:600;"></p>
+            <input type="text" id="customer-name" class="form-input" style="margin-top:5px;" placeholder="Tu nombre y apellido">
+            <p style="font-size:0.7rem; color:var(--slate-500); margin-top:5px;">📦 El costo de envío lo cotizamos por WhatsApp</p>
         </div>
 
         <div style="padding-top:15px; border-top:2px solid var(--dark);">
             <div style="display:flex; justify-content:space-between; font-size:0.9rem;"><span>Subtotal</span><span id="cart-subtotal">$0</span></div>
-            <div style="display:flex; justify-content:space-between; font-size:0.9rem; color:var(--primary);"><span>Envío</span><span id="cart-shipping-fee">$0</span></div>
+            <div style="display:flex; justify-content:space-between; font-size:0.9rem; color:var(--primary);"><span>Envío</span><span id="cart-shipping-fee">A cotizar</span></div>
             <div style="display:flex; justify-content:space-between; font-weight:800; font-size:1.4rem; margin:10px 0;"><span>Total</span><span id="cart-total">$0</span></div>
             <button class="cat-btn active" style="width:100%; padding:18px;" onclick="checkoutViaWhatsApp()">Enviar solicitud de pedido</button>
         </div>
@@ -1423,7 +1418,7 @@
         }
 
         // =======================================================
-        // OPEN DETAIL
+        // OPEN DETAIL - CORREGIDO (FOTOS SIN SUPERPOSICIÓN)
         // =======================================================
         function openDetail(clave) {
             const p = products.find(i => i.clave === clave);
@@ -1432,17 +1427,20 @@
             const fotos = p.fotos.filter(f => f !== "");
             const stock = parseInt(p.stock) || 0;
             
+            // Si no hay fotos, usar una imagen por defecto
+            const fotosParaMostrar = fotos.length > 0 ? fotos : ['https://i.postimg.cc/T1wLrvhH/logo-mundo-colchonetas.jpg'];
+            
             document.getElementById('detail-content').innerHTML = `
-                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:30px;">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px;">
                     <div class="detail-gallery-container">
-                        <div class="main-detail-img" id="main-view">
-                            <img src="${fotos[0] || ''}" id="active-img">
+                        <div class="main-detail-img" id="main-view" style="height:400px; background:var(--slate-100); border-radius:var(--radius-md); display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative;">
+                            <img src="${fotosParaMostrar[0]}" id="active-img" style="max-width:100%; max-height:100%; object-fit:contain; transition: opacity 0.3s ease;">
                         </div>
-                        ${fotos.length > 1 ? `
-                            <div class="thumbnail-strip">
-                                ${fotos.map((f, i) => `
-                                    <div class="thumb-item ${i === 0 ? 'active' : ''}" onclick="updateGallery(this, '${f}')">
-                                        <img src="${f}">
+                        ${fotosParaMostrar.length > 1 ? `
+                            <div class="thumbnail-strip" style="display:flex; gap:10px; overflow-x:auto; padding-bottom:10px; scrollbar-width:thin; margin-top:10px;">
+                                ${fotosParaMostrar.map((f, i) => `
+                                    <div class="thumb-item ${i === 0 ? 'active' : ''}" style="width:70px; height:70px; border-radius:12px; border:2px solid ${i === 0 ? 'var(--primary)' : 'transparent'}; cursor:pointer; overflow:hidden; flex-shrink:0; transition:var(--transition); background:var(--slate-100);" onclick="updateGallery(this, '${f}')">
+                                        <img src="${f}" style="width:100%; height:100%; object-fit:cover;">
                                     </div>
                                 `).join('')}
                             </div>
@@ -1479,7 +1477,45 @@
                             <button class="share-product-btn share-ig" style="width:50px; height:50px; font-size:1.2rem;" onclick="shareProduct('${p.clave}', 'instagram')" title="Compartir"><i class="fab fa-instagram"></i></button>
                         </div>
                     </div>
-                </div>`;
+                </div>
+                <style>
+                    .detail-gallery-container {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 15px;
+                    }
+                    .thumb-item {
+                        width: 70px;
+                        height: 70px;
+                        border-radius: 12px;
+                        border: 2px solid transparent;
+                        cursor: pointer;
+                        overflow: hidden;
+                        flex-shrink: 0;
+                        transition: all 0.3s ease;
+                        background: var(--slate-100);
+                    }
+                    .thumb-item.active {
+                        border-color: var(--primary);
+                    }
+                    .thumb-item img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                    .thumb-item:hover {
+                        transform: scale(1.05);
+                    }
+                    @media (max-width: 768px) {
+                        .detail-gallery-container {
+                            grid-column: 1 / -1;
+                        }
+                        #detail-content > div {
+                            grid-template-columns: 1fr !important;
+                        }
+                    }
+                </style>
+            `;
             document.getElementById('detail-modal').classList.add('active');
         }
 
@@ -1495,18 +1531,11 @@
         }
 
         // =======================================================
-        // FUNCIONES DE CARRITO Y CHECKOUT
+        // FUNCIONES DE CARRITO Y CHECKOUT (SIN CP)
         // =======================================================
         function calculateShipping() {
-            const cp = document.getElementById('shipping-cp').value.trim();
-            const res = document.getElementById('shipping-result');
-            if (SHIPPING_RATES[cp]) {
-                shippingFee = SHIPPING_RATES[cp].price;
-                res.innerText = `✅ Envío a ${SHIPPING_RATES[cp].loc}: $${shippingFee.toLocaleString()}`;
-            } else {
-                shippingFee = 0;
-                res.innerText = "❌ CP no disponible para envío local.";
-            }
+            // Función desactivada - ya no se usa
+            shippingFee = 0;
             updateCartUI();
         }
 
@@ -1530,8 +1559,8 @@
                 </div>`;
             }).join('');
             document.getElementById('cart-subtotal').innerText = `$${sub.toLocaleString()}`;
-            document.getElementById('cart-shipping-fee').innerText = `$${shippingFee.toLocaleString()}`;
-            document.getElementById('cart-total').innerText = `$${(sub + shippingFee).toLocaleString()}`;
+            document.getElementById('cart-shipping-fee').innerText = 'A cotizar';
+            document.getElementById('cart-total').innerText = `$${sub.toLocaleString()}`;
             document.getElementById('header-cart-count').innerText = cart.reduce((acc, i) => acc + i.qty, 0);
         }
 
@@ -1540,58 +1569,47 @@
             updateCartUI(); 
         }
 
+        // ✅ CHECKOUT SIN CP
         function checkoutViaWhatsApp() {
             if(cart.length === 0) return;
             
             const customerName = document.getElementById('customer-name').value.trim();
             if (!customerName) {
-                alert("Por favor ingresa tu nombre.");
+                alert("Por favor ingresa tu nombre para continuar.");
                 document.getElementById('customer-name').focus();
                 return;
             }
             
-            const cp = document.getElementById('shipping-cp').value.trim();
-            if (!cp) {
-                alert("Por favor ingresa tu código postal.");
-                document.getElementById('shipping-cp').focus();
-                return;
-            }
-            
-            let shippingInfo = "";
-            if (SHIPPING_RATES[cp]) {
-                shippingInfo = `📍 Envío a ${SHIPPING_RATES[cp].loc}: $${SHIPPING_RATES[cp].price.toLocaleString()}`;
-            } else {
-                shippingInfo = "📍 Fuera del área de cobertura";
-            }
-            
             let msg = `¡Hola Mundo Colchonetas! 🪐\n`;
-            msg += `Cliente: ${customerName}\n`;
-            msg += `Código Postal: ${cp}\n\n`;
+            msg += `Cliente: ${customerName}\n\n`;
             msg += `📦 PEDIDO:\n`;
             
             const itemsForSheet = [];
+            let subtotal = 0;
             
             cart.forEach(i => {
                 const price = i.oferta ? i.precioOferta : i.precio;
-                const subtotal = price * i.qty;
-                msg += `• ${i.nombre} (x${i.qty}) - $${subtotal.toLocaleString()}\n`;
+                const subtotalItem = price * i.qty;
+                subtotal += subtotalItem;
+                msg += `• ${i.nombre} (x${i.qty}) - $${subtotalItem.toLocaleString()}\n`;
                 itemsForSheet.push({
                     name: i.nombre,
                     quantity: i.qty,
                     unitPrice: price,
-                    subtotal: subtotal
+                    subtotal: subtotalItem
                 });
             });
             
-            msg += `\n${shippingInfo}\n`;
-            msg += `💰 TOTAL: ${document.getElementById('cart-total').innerText}`;
+            msg += `\n💰 SUBTOTAL: $${subtotal.toLocaleString()}`;
+            msg += `\n📦 Envío: a cotizar por WhatsApp`;
             
-            registerSale(customerName, cp);
-            sendToGoogleSheets(customerName, cp, itemsForSheet, shippingFee);
+            registerSale(customerName, '');
+            sendToGoogleSheets(customerName, '', itemsForSheet, 0);
             
             window.open(`https://wa.me/5491168705261?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
+        // ✅ REGISTER SALE SIN CP
         function registerSale(customerName, cp) {
             const sale = {
                 date: new Date().toLocaleString('es-AR', { 
@@ -1602,15 +1620,15 @@
                     minute: '2-digit' 
                 }),
                 customerName: customerName,
-                postalCode: cp,
+                postalCode: cp || 'A cotizar',
                 items: cart.map(item => ({
                     name: item.nombre,
                     quantity: item.qty,
                     price: item.oferta ? item.precioOferta : item.precio
                 })),
                 subtotal: cart.reduce((acc, item) => acc + ((item.oferta ? item.precioOferta : item.precio) * item.qty), 0),
-                shipping: shippingFee,
-                total: cart.reduce((acc, item) => acc + ((item.oferta ? item.precioOferta : item.precio) * item.qty), 0) + shippingFee
+                shipping: 0,
+                total: cart.reduce((acc, item) => acc + ((item.oferta ? item.precioOferta : item.precio) * item.qty), 0)
             };
             
             let salesHistory = JSON.parse(localStorage.getItem(CONFIG.SALES_KEY)) || [];
@@ -1620,8 +1638,6 @@
             cart = [];
             updateCartUI();
             document.getElementById('customer-name').value = '';
-            document.getElementById('shipping-cp').value = '';
-            document.getElementById('shipping-result').innerText = '';
         }
 
         function showSalesReport() {
@@ -1635,11 +1651,10 @@
             
             const totalSales = salesHistory.length;
             const totalRevenue = salesHistory.reduce((acc, sale) => acc + sale.total, 0);
-            const totalShipping = salesHistory.reduce((acc, sale) => acc + sale.shipping, 0);
             
             let html = `
             <div style="background: var(--slate-100); padding: 15px; border-radius: 15px; margin-bottom: 20px;">
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: center;">
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; text-align: center;">
                     <div>
                         <div style="font-size: 1.2rem; font-weight: 800; color: var(--primary);">${totalSales}</div>
                         <div style="font-size: 0.8rem;">Ventas Totales</div>
@@ -1647,10 +1662,6 @@
                     <div>
                         <div style="font-size: 1.2rem; font-weight: 800; color: var(--primary);">$${totalRevenue.toLocaleString()}</div>
                         <div style="font-size: 0.8rem;">Ingresos Totales</div>
-                    </div>
-                    <div>
-                        <div style="font-size: 1.2rem; font-weight: 800; color: var(--primary);">$${totalShipping.toLocaleString()}</div>
-                        <div style="font-size: 0.8rem;">Envíos Cobrados</div>
                     </div>
                 </div>
             </div>
@@ -1661,7 +1672,6 @@
                         <tr style="background: var(--dark); color: white;">
                             <th style="padding: 10px; text-align: left;">Fecha</th>
                             <th style="padding: 10px; text-align: left;">Cliente</th>
-                            <th style="padding: 10px; text-align: left;">CP</th>
                             <th style="padding: 10px; text-align: left;">Artículos</th>
                             <th style="padding: 10px; text-align: left;">Total</th>
                         </tr>
@@ -1676,7 +1686,6 @@
                     <tr style="border-bottom: 1px solid var(--border);">
                         <td style="padding: 10px;">${sale.date}</td>
                         <td style="padding: 10px;">${sale.customerName}</td>
-                        <td style="padding: 10px;">${sale.postalCode}</td>
                         <td style="padding: 10px;">${itemCount} artículos</td>
                         <td style="padding: 10px; font-weight: 700; color: var(--primary);">$${sale.total.toLocaleString()}</td>
                     </tr>`;
@@ -1698,11 +1707,11 @@
                 return;
             }
             
-            let csv = "Fecha,Cliente,Código Postal,Artículos,Subtotal,Envío,Total\n";
+            let csv = "Fecha,Cliente,Artículos,Total\n";
             
             salesHistory.forEach(sale => {
                 const itemCount = sale.items.reduce((acc, item) => acc + item.quantity, 0);
-                csv += `"${sale.date}","${sale.customerName}","${sale.postalCode}",${itemCount},${sale.subtotal},${sale.shipping},${sale.total}\n`;
+                csv += `"${sale.date}","${sale.customerName}",${itemCount},${sale.total}\n`;
             });
             
             const blob = new Blob([csv], { type: 'text/csv' });
@@ -1976,8 +1985,8 @@
                 });
                 return response;
             },
-            "hacen envios": "¡Sí! Hacemos envíos a todo el país. Ingresa tu código postal en el carrito.",
-            "envios": "Sí hacemos envíos 🚚. Ingresa tu código postal en el carrito.",
+            "hacen envios": "¡Sí! Hacemos envíos a todo el país. El costo lo cotizamos por WhatsApp.",
+            "envios": "Sí hacemos envíos 🚚. El costo lo cotizamos por WhatsApp.",
             "metodos de pago": "Aceptamos:\n💳 Mercado Pago\n💰 Efectivo\n🏦 Transferencia\n📱 Depósito",
             "ofertas": function() {
                 const ofertas = products.filter(p => p.oferta && parseInt(p.stock) > 0);
@@ -2036,7 +2045,7 @@
                     minute: '2-digit' 
                 }),
                 customerName: customerName,
-                postalCode: postalCode,
+                postalCode: postalCode || 'A cotizar',
                 items: items,
                 shipping: shipping,
                 total: total
