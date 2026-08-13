@@ -1804,12 +1804,28 @@
                 total: total
             };
             
-            fetch(STATS_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(orderData)
-            }).catch(error => console.error("❌ Error en estadísticas (venta):", error));
+                // --- NUEVO ENVÍO A GOOGLE SHEETS ---
+    fetch(STATS_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            timestamp: new Date().toLocaleString('es-AR'),
+            customerName: customerName,
+            postalCode: "",  // Si tienes el código postal, pon la variable aquí
+            items: items,
+            shipping: shipping,
+            total: total
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.success) {
+            console.log("✅ Pedido registrado en Google:", data.message);
+        } else {
+            console.error("❌ Error en la Sheets:", data.error);
+        }
+    })
+    .catch(error => console.error("❌ Error de red al enviar a Google:", error));
         }
 
         function sendVisitorToStats() {
