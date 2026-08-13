@@ -1132,6 +1132,9 @@
             PRODUCT_VIEWS_KEY: "mundo_colchonetas_product_views",
             MASTER_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQX_MteY9z1Of-MIimoruabnLSCY2p1mMDl0RvYeDWivYTfXljryTikNsCGM3yFdF-PcoWo2Zyb5EiS/pub?gid=0&single=true&output=csv",
             SHEETS_WEBAPP_URL: "https://script.google.com/macros/s/AKfycbwhqmZQdheEmlcQfpNRbIGMHXSXbYXhPc5ySN56Q6QutgdMG3K6Kqm_8dD9PRw2E-InuQ/exec"
+            // ✅ NUEVA URL PARA ESTADÍSTICAS
+    STATS_WEBAPP_URL: "https://script.google.com/macros/s/AKfycbx7SZt9OkiTJ8LtUxiFoi2Exdf4zDL7clHtS7BUr6JG8CEItBvQ6DWvv0KieZ-YrI2_/exec"  // <--- CAMBIÁ ESTA
+};
         };
 
         const SHIPPING_RATES = { 
@@ -1421,6 +1424,65 @@
             
             startAutoplay(ofertas.length);
         }
+        // =======================================================
+// FUNCIONES PARA ESTADÍSTICAS (NUEVAS)
+// =======================================================
+
+function sendSaleToStats(customerName, items, shipping, total) {
+    const STATS_URL = CONFIG.STATS_WEBAPP_URL;
+    
+    const orderData = {
+        tipo: "venta",
+        timestamp: new Date().toLocaleString('es-AR'),
+        customerName: customerName,
+        items: items,
+        shipping: shipping,
+        subtotal: items.reduce((acc, item) => acc + item.subtotal, 0),
+        total: total
+    };
+    
+    fetch(STATS_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData)
+    }).catch(error => console.error("Error en estadísticas:", error));
+}
+
+function sendVisitorToStats() {
+    const STATS_URL = CONFIG.STATS_WEBAPP_URL;
+    
+    const visitorData = {
+        tipo: "visita",
+        fecha: new Date().toLocaleDateString('es-AR'),
+        hora: new Date().toLocaleTimeString('es-AR'),
+        dispositivo: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "Móvil" : "Escritorio"
+    };
+    
+    fetch(STATS_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(visitorData)
+    }).catch(error => console.error("Error en estadísticas:", error));
+}
+
+function sendProductViewToStats(clave, nombre) {
+    const STATS_URL = CONFIG.STATS_WEBAPP_URL;
+    
+    const productData = {
+        tipo: "producto_visto",
+        clave: clave,
+        nombre: nombre
+    };
+    
+    fetch(STATS_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(productData)
+    }).catch(error => console.error("Error en estadísticas:", error));
+}
 
         // =======================================================
         // AUTODESLIZAMIENTO DEL CARRUSEL
@@ -1536,6 +1598,11 @@
             
             localStorage.setItem(CONFIG.VISITORS_KEY, JSON.stringify(visitorsData));
             return visitorsData;
+            // ✅ NUEVO: Guardar también en Google Sheets de estadísticas
+    sendVisitorToStats();
+    
+    return visitorsData;
+}
         }
 
         function trackProductView(clave) {
@@ -1627,6 +1694,12 @@
             
             document.getElementById('detailed-stats-content').innerHTML = statsHTML;
             document.getElementById('stats-modal').classList.add('active');
+            // ✅ NUEVO: Guardar también en Google Sheets de estadísticas
+    const product = products.find(p => p.clave === clave);
+    if (product) {
+        sendProductViewToStats(clave, product.nombre);
+    }
+
         }
 
         function exportVisitorData() {
@@ -2082,7 +2155,8 @@
             msg += `\n📦 Envío: a cotizar por WhatsApp`;
             
             registerSale(customerName, '');
-            sendToGoogleSheets(customerName, '', itemsForSheet, 0);
+            sendToGoogleSheets(customerName, '', itemsForSheet, shippingFee);
+    sendSaleToStats(customerName, itemsForSheet, shippingFee, subtotal + shippingFee); // Nueva URL
             
             window.open(`https://wa.me/5491168705261?text=${encodeURIComponent(msg)}`, '_blank');
         }
