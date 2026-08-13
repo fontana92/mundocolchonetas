@@ -211,6 +211,7 @@
             align-items: center; 
             justify-content: center; 
             overflow: hidden; 
+            position: relative;
         }
         .product-image-container img { max-width: 100%; max-height: 100%; object-fit: contain; }
         
@@ -226,6 +227,94 @@
             color: var(--slate-500); 
             font-weight: 500; 
         }
+
+        /* ========================================= */
+        /* TOOLTIP PARA MANTENER PRESIONADO */
+        /* ========================================= */
+        .hold-to-share {
+            position: relative;
+            cursor: pointer;
+        }
+        .hold-to-share .hold-tip {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 5px 14px;
+            border-radius: 99px;
+            font-size: 0.6rem;
+            font-weight: 600;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            white-space: nowrap;
+            z-index: 20;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .hold-to-share:hover .hold-tip,
+        .hold-to-share.pressing .hold-tip {
+            opacity: 1;
+        }
+        .hold-to-share.pressing .hold-tip {
+            background: var(--primary);
+            animation: pulse-hold 0.5s ease infinite alternate;
+        }
+        @keyframes pulse-hold {
+            0% { transform: translateX(-50%) scale(1); }
+            100% { transform: translateX(-50%) scale(1.05); }
+        }
+
+        /* ========================================= */
+        /* MODAL COMPARTIR ADMIN */
+        /* ========================================= */
+        #share-admin-modal .modal-content {
+            max-width: 450px;
+            text-align: center;
+            padding: 25px;
+        }
+        #share-admin-modal .modal-content h3 {
+            color: var(--text-body);
+            margin-bottom: 15px;
+        }
+        #share-admin-preview {
+            background: var(--slate-100);
+            border-radius: var(--radius-md);
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        #share-admin-preview img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 12px;
+            object-fit: contain;
+        }
+        .share-admin-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .share-admin-buttons button {
+            padding: 12px 24px;
+            border-radius: 99px;
+            border: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+        }
+        .share-admin-buttons button:hover {
+            transform: scale(1.05);
+        }
+        .btn-share-wa { background: #25D366; }
+        .btn-share-fb { background: #1877F2; }
+        .btn-share-cancel { background: var(--slate-500); color: white; }
 
         /* SELECTOR DE CANTIDAD */
         .quantity-selector {
@@ -810,61 +899,6 @@
             font-size: 0.8rem;
         }
 
-        /* ========================================= */
-        /* PREVIEW PARA COMPARTIR EN ESTADO */
-        /* ========================================= */
-        #preview-modal .modal-content {
-            max-width: 500px;
-            text-align: center;
-            padding: 25px;
-        }
-        #preview-modal .modal-content h3 {
-            color: var(--text-body);
-            margin-bottom: 15px;
-        }
-        #preview-content {
-            background: var(--slate-100);
-            border-radius: var(--radius-md);
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-        #preview-image {
-            max-width: 100%;
-            max-height: 300px;
-            border-radius: 12px;
-            object-fit: contain;
-        }
-        .preview-text {
-            margin-top: 12px;
-            text-align: left;
-            background: var(--card-bg);
-            padding: 12px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-        }
-        .preview-text .name {
-            font-weight: 700;
-            color: var(--text-body);
-        }
-        .preview-text .price {
-            color: var(--primary);
-            font-weight: 800;
-            font-size: 1.2rem;
-        }
-        .preview-text .link {
-            color: var(--slate-500);
-            font-size: 0.7rem;
-            word-break: break-all;
-        }
-        #preview-share-btn {
-            background: linear-gradient(135deg, #25D366, #128C7E);
-            color: white;
-            border: none;
-        }
-        #preview-share-btn:hover {
-            transform: scale(1.05);
-        }
-
         @media (max-width: 480px) {
             .ofertas-header { flex-wrap: wrap; gap: 10px; padding: 0 15px 15px 15px; }
             .oferta-item { width: 190px; padding: 15px; min-height: 230px; }
@@ -882,8 +916,7 @@
             .share-float { left: 10px; bottom: 25px; }
             .share-container { left: 10px; bottom: 100px; width: 280px; }
             #back-to-top { left: 10px; bottom: 90px; width: 45px; height: 45px; font-size: 1.2rem; }
-            #preview-modal .modal-content { padding: 15px; margin: 10px; }
-            #preview-image { max-height: 200px; }
+            #share-admin-modal .modal-content { padding: 15px; margin: 10px; }
         }
 
         @media (min-width: 768px) and (max-width: 1024px) {
@@ -1026,23 +1059,29 @@
         </div>
     </div>
 
-    <!-- PREVIEW PARA COMPARTIR EN ESTADO -->
-    <div class="modal" id="preview-modal">
-        <div class="modal-content" style="max-width: 500px; text-align: center; padding: 25px;">
-            <span onclick="closeModal('preview-modal')" style="position:absolute; top:15px; right:20px; font-size:2rem; cursor:pointer; z-index:10; color: var(--text-body);">&times;</span>
-            <h3 style="margin-bottom: 15px; color: var(--text-body);">📸 Vista previa para tu estado</h3>
-            <div id="preview-content" style="background: var(--slate-100); border-radius: var(--radius-md); padding: 15px; margin-bottom: 15px;">
-                <img id="preview-image" src="" alt="Preview" style="max-width: 100%; max-height: 300px; border-radius: 12px; object-fit: contain;">
-                <div class="preview-text">
-                    <p class="name" id="preview-name">Nombre del producto</p>
-                    <p class="price" id="preview-price">$0</p>
-                    <p class="link" id="preview-link">https://...</p>
+    <!-- MODAL COMPARTIR ADMIN (SOLO PARA VOS) -->
+    <div class="modal" id="share-admin-modal">
+        <div class="modal-content" style="max-width: 450px; text-align: center; padding: 25px;">
+            <span onclick="closeModal('share-admin-modal')" style="position:absolute; top:15px; right:20px; font-size:2rem; cursor:pointer; z-index:10; color: var(--text-body);">&times;</span>
+            <h3 style="margin-bottom: 15px; color: var(--text-body);">📤 Compartir Producto</h3>
+            <div id="share-admin-preview">
+                <img id="share-admin-img" src="" alt="Producto" style="max-width: 100%; max-height: 200px; border-radius: 12px; object-fit: contain;">
+                <div style="margin-top: 10px; text-align: left; background: var(--card-bg); padding: 10px; border-radius: 10px; border: 1px solid var(--border);">
+                    <p style="font-weight: 700; color: var(--text-body);" id="share-admin-name">Nombre</p>
+                    <p style="color: var(--primary); font-weight: 800; font-size: 1.1rem;" id="share-admin-price">$0</p>
+                    <p style="color: var(--slate-500); font-size: 0.65rem; word-break: break-all;" id="share-admin-link">https://...</p>
                 </div>
             </div>
-            <div style="display: flex; gap: 10px; justify-content: center;">
-                <button class="cat-btn" onclick="closeModal('preview-modal')" style="border-color: var(--border);">Cancelar</button>
-                <button class="cat-btn active" id="preview-share-btn" onclick="confirmShareToStatus()">Compartir en Estado</button>
+            <div class="share-admin-buttons">
+                <button class="btn-share-wa" onclick="confirmShareAdmin('whatsapp')">
+                    <i class="fab fa-whatsapp"></i> WhatsApp
+                </button>
+                <button class="btn-share-fb" onclick="confirmShareAdmin('facebook')">
+                    <i class="fab fa-facebook-f"></i> Facebook
+                </button>
+                <button class="btn-share-cancel" onclick="closeModal('share-admin-modal')">Cancelar</button>
             </div>
+            <p style="font-size: 0.6rem; color: var(--slate-500); margin-top: 10px;">🔒 Solo visible para administradores</p>
         </div>
     </div>
 
@@ -1108,7 +1147,8 @@
         let products = [], cart = [], currentCategory = 'todos', isAdminLoggedIn = false, shippingFee = 0, searchQuery = "";
         let autoplayInterval = null;
         let isAutoplayPaused = false;
-        let pendingShareClave = null;
+        let holdTimer = null;
+        let holdClave = null;
 
         const norm = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
 
@@ -1145,6 +1185,77 @@
                 btn.classList.remove('visible');
             }
         });
+
+        // =======================================================
+        // COMPARTIR ADMIN - MANTENER PRESIONADO 3 SEGUNDOS
+        // =======================================================
+        function startHold(clave, event) {
+            if (!isAdminLoggedIn) return;
+            
+            holdClave = clave;
+            const imgContainer = event.currentTarget;
+            imgContainer.classList.add('pressing');
+            
+            const tip = imgContainer.querySelector('.hold-tip');
+            if (tip) tip.textContent = '🔄 Mantené 3 seg...';
+            
+            holdTimer = setTimeout(() => {
+                openShareAdmin(clave);
+                imgContainer.classList.remove('pressing');
+                if (tip) tip.textContent = '📤 Mantené 3 seg';
+                holdTimer = null;
+            }, 3000);
+        }
+
+        function cancelHold(event) {
+            if (holdTimer) {
+                clearTimeout(holdTimer);
+                holdTimer = null;
+            }
+            const imgContainer = event.currentTarget;
+            imgContainer.classList.remove('pressing');
+            const tip = imgContainer.querySelector('.hold-tip');
+            if (tip) tip.textContent = '📤 Mantené 3 seg';
+            holdClave = null;
+        }
+
+        function openShareAdmin(clave) {
+            const p = products.find(i => i.clave === clave);
+            if(!p) return;
+            
+            const pFinal = p.oferta ? p.precioOferta : p.precio;
+            const imageUrl = p.fotos && p.fotos[0] ? p.fotos[0] : 'https://i.postimg.cc/T1wLrvhH/logo-mundo-colchonetas.jpg';
+            const productUrl = window.location.origin + window.location.pathname + '?producto=' + encodeURIComponent(clave);
+            
+            document.getElementById('share-admin-img').src = imageUrl;
+            document.getElementById('share-admin-name').textContent = p.nombre;
+            document.getElementById('share-admin-price').textContent = `$${pFinal.toLocaleString()}`;
+            document.getElementById('share-admin-link').textContent = productUrl;
+            
+            window._shareAdminData = { clave, imageUrl, productUrl, pFinal, nombre: p.nombre };
+            
+            document.getElementById('share-admin-modal').classList.add('active');
+        }
+
+        function confirmShareAdmin(platform) {
+            const data = window._shareAdminData;
+            if (!data) return;
+            
+            const { imageUrl, productUrl, pFinal, nombre } = data;
+            
+            const message = `${imageUrl}\n\n🪐 ${nombre}\n💰 $${pFinal.toLocaleString()}\n👇 ${productUrl}`;
+            
+            closeModal('share-admin-modal');
+            
+            if (platform === 'whatsapp') {
+                window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+            } else if (platform === 'facebook') {
+                window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(productUrl)}&quote=${encodeURIComponent(`🪐 ${nombre} - $${pFinal.toLocaleString()}`)}`, '_blank');
+            }
+            
+            showNotify(`📤 Compartiendo en ${platform === 'whatsapp' ? 'WhatsApp' : 'Facebook'}`);
+            window._shareAdminData = null;
+        }
 
         // =======================================================
         // FUNCIONES DE CARRITO
@@ -1202,59 +1313,7 @@
         }
 
         // =======================================================
-        // COMPARTIR EN ESTADO DE WHATSAPP - CON PREVIEW
-        // =======================================================
-        function shareToWhatsAppStatus(clave) {
-            const p = products.find(i => i.clave === clave);
-            if(!p) return;
-            
-            const pFinal = p.oferta ? p.precioOferta : p.precio;
-            let imageUrl = p.fotos && p.fotos[0] ? p.fotos[0] : 'https://i.postimg.cc/T1wLrvhH/logo-mundo-colchonetas.jpg';
-            const productUrl = window.location.origin + window.location.pathname + '?producto=' + encodeURIComponent(clave);
-            
-            // Guardar clave para compartir después
-            pendingShareClave = clave;
-            
-            // Mostrar preview
-            document.getElementById('preview-image').src = imageUrl;
-            document.getElementById('preview-name').textContent = p.nombre;
-            document.getElementById('preview-price').textContent = `$${pFinal.toLocaleString()}`;
-            document.getElementById('preview-link').textContent = productUrl;
-            
-            document.getElementById('preview-modal').classList.add('active');
-        }
-
-        function confirmShareToStatus() {
-            if (!pendingShareClave) return;
-            
-            const p = products.find(i => i.clave === pendingShareClave);
-            if(!p) return;
-            
-            const pFinal = p.oferta ? p.precioOferta : p.precio;
-            let imageUrl = p.fotos && p.fotos[0] ? p.fotos[0] : 'https://i.postimg.cc/T1wLrvhH/logo-mundo-colchonetas.jpg';
-            const productUrl = window.location.origin + window.location.pathname + '?producto=' + encodeURIComponent(pendingShareClave);
-            
-            // Forzar extensión JPG para mejor compatibilidad
-            if (imageUrl.endsWith('.png')) {
-                imageUrl = imageUrl.replace('.png', '.jpg');
-            }
-            
-            // Mensaje con imagen al principio
-            const message = `${imageUrl}\n\n🪐 ${p.nombre}\n💰 $${pFinal.toLocaleString()}\n👇 ${productUrl}`;
-            
-            // Cerrar preview
-            closeModal('preview-modal');
-            
-            // Abrir WhatsApp con el mensaje listo para estado
-            window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
-            
-            showNotify('📤 Abriendo WhatsApp para compartir en tu estado');
-            
-            pendingShareClave = null;
-        }
-
-        // =======================================================
-        // FUNCIÓN PARA COMPARTIR PRODUCTO
+        // FUNCIÓN PARA COMPARTIR PRODUCTO (CLIENTES)
         // =======================================================
         function shareProduct(clave, platform) {
             const p = products.find(i => i.clave === clave);
@@ -1728,7 +1787,7 @@
         function filterCat(c) { currentCategory = c; renderAll(); }
 
         // =======================================================
-        // RENDERIZAR PRODUCTOS
+        // RENDERIZAR PRODUCTOS - CON HOLD TO SHARE
         // =======================================================
         function renderProducts() {
             const container = document.getElementById('products-container');
@@ -1768,14 +1827,23 @@
                 const etiqueta = p.etiqueta || '';
                 const etiquetaClass = etiqueta.toLowerCase().replace(/ /g, '-');
                 const isLowStock = stock <= 3 && stock > 0;
+                const showHoldTip = isAdminLoggedIn;
                 
                 return `
                 <div class="product-card">
                     ${p.oferta ? `<div class="badge-offer">🔥 -${p.descuento}% OFF</div>` : ''}
                     ${etiqueta ? `<div class="badge-tag ${etiquetaClass}">${etiqueta}</div>` : ''}
                     ${isLowStock ? `<div class="badge-low-stock">🔥 ¡Últimas unidades!</div>` : ''}
-                    <div class="product-image-container" onclick="openDetail('${p.clave}')">
+                    <div class="product-image-container hold-to-share" 
+                         onclick="openDetail('${p.clave}')"
+                         onmousedown="startHold('${p.clave}', event)" 
+                         onmouseup="cancelHold(event)" 
+                         onmouseleave="cancelHold(event)"
+                         ontouchstart="startHold('${p.clave}', event)" 
+                         ontouchend="cancelHold(event)" 
+                         ontouchcancel="cancelHold(event)">
                         ${p.fotos[0] ? `<img src="${p.fotos[0]}" loading="lazy">` : '<i class="fas fa-image fa-3x" style="color:#ddd"></i>'}
+                        ${showHoldTip ? `<span class="hold-tip">📤 Mantené 3 seg</span>` : ''}
                     </div>
                     <div style="flex:1" onclick="openDetail('${p.clave}')">
                         <p style="font-size:0.75rem; color:var(--primary); font-weight:700; text-transform:uppercase;">${p.categoria}</p>
@@ -1793,9 +1861,6 @@
                             <button class="share-product-btn share-wa" onclick="event.stopPropagation(); shareProduct('${p.clave}', 'whatsapp')" title="WhatsApp"><i class="fab fa-whatsapp"></i></button>
                             <button class="share-product-btn share-fb" onclick="event.stopPropagation(); shareProduct('${p.clave}', 'facebook')" title="Facebook"><i class="fab fa-facebook-f"></i></button>
                             <button class="share-product-btn share-ig" onclick="event.stopPropagation(); shareProduct('${p.clave}', 'instagram')" title="Instagram"><i class="fab fa-instagram"></i></button>
-                            <button class="share-product-btn" style="background: linear-gradient(135deg, #25D366, #128C7E); width:32px; height:32px; border-radius:50%; border:none; color:white; cursor:pointer; font-size:12px;" onclick="event.stopPropagation(); shareToWhatsAppStatus('${p.clave}')" title="📸 Estado">
-                                <i class="fas fa-camera"></i>
-                            </button>
                         </div>
                         ${stock > 0 ? `
                             <div class="quantity-selector" onclick="event.stopPropagation();">
@@ -1817,7 +1882,7 @@
         }
 
         // =======================================================
-        // OPEN DETAIL
+        // OPEN DETAIL - CON HOLD TO SHARE
         // =======================================================
         function openDetail(clave) {
             const p = products.find(i => i.clave === clave);
@@ -1831,14 +1896,23 @@
             const etiqueta = p.etiqueta || '';
             const etiquetaClass = etiqueta.toLowerCase().replace(/ /g, '-');
             const isLowStock = stock <= 3 && stock > 0;
+            const showHoldTip = isAdminLoggedIn;
             
             const fotosParaMostrar = fotos.length > 0 ? fotos : ['https://i.postimg.cc/T1wLrvhH/logo-mundo-colchonetas.jpg'];
             
             document.getElementById('detail-content').innerHTML = `
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px;">
                     <div class="detail-gallery-container">
-                        <div class="main-detail-img" id="main-view" style="height:400px; background:var(--slate-100); border-radius:var(--radius-md); display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative;">
+                        <div class="main-detail-img hold-to-share" id="main-view" 
+                             style="height:400px; background:var(--slate-100); border-radius:var(--radius-md); display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative;"
+                             onmousedown="startHold('${p.clave}', event)" 
+                             onmouseup="cancelHold(event)" 
+                             onmouseleave="cancelHold(event)"
+                             ontouchstart="startHold('${p.clave}', event)" 
+                             ontouchend="cancelHold(event)" 
+                             ontouchcancel="cancelHold(event)">
                             <img src="${fotosParaMostrar[0]}" id="active-img" style="max-width:100%; max-height:100%; object-fit:contain; transition: opacity 0.3s ease;">
+                            ${showHoldTip ? `<span class="hold-tip">📤 Mantené 3 seg</span>` : ''}
                         </div>
                         ${fotosParaMostrar.length > 1 ? `
                             <div class="thumbnail-strip" style="display:flex; gap:10px; overflow-x:auto; padding-bottom:10px; scrollbar-width:thin; margin-top:10px;">
@@ -1881,9 +1955,6 @@
                             <button class="share-product-btn share-wa" style="width:50px; height:50px; font-size:1.2rem;" onclick="shareProduct('${p.clave}', 'whatsapp')" title="Compartir"><i class="fab fa-whatsapp"></i></button>
                             <button class="share-product-btn share-fb" style="width:50px; height:50px; font-size:1.2rem;" onclick="shareProduct('${p.clave}', 'facebook')" title="Compartir"><i class="fab fa-facebook-f"></i></button>
                             <button class="share-product-btn share-ig" style="width:50px; height:50px; font-size:1.2rem;" onclick="shareProduct('${p.clave}', 'instagram')" title="Compartir"><i class="fab fa-instagram"></i></button>
-                            <button class="share-product-btn" style="background: linear-gradient(135deg, #25D366, #128C7E); width:50px; height:50px; font-size:1.2rem; border-radius:50%; border:none; color:white; cursor:pointer;" onclick="shareToWhatsAppStatus('${p.clave}')" title="📸 Estado">
-                                <i class="fas fa-camera"></i>
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -2438,6 +2509,25 @@
                 document.getElementById('admin-panel').classList.add('visible');
                 showProductAnalytics();
                 updateVisitorStatsInPanel();
+                // Forzar re-render para mostrar tooltips de admin
+                renderProducts();
+                // Actualizar también el detalle si está abierto
+                const detailModal = document.getElementById('detail-modal');
+                if (detailModal.classList.contains('active')) {
+                    const detailContent = document.getElementById('detail-content');
+                    // Buscar la clave del producto en el detalle actual
+                    const img = document.querySelector('#active-img');
+                    if (img) {
+                        // Re-abrir el detalle con el mismo producto
+                        const productClave = Object.keys(products).find(key => {
+                            const p = products.find(p => p.fotos && p.fotos[0] === img.src);
+                            return p;
+                        });
+                        if (productClave) {
+                            openDetail(productClave);
+                        }
+                    }
+                }
             } else alert("Error");
         }
 
