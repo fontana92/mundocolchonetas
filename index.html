@@ -1149,7 +1149,7 @@
             PRODUCT_VIEWS_KEY: "mundo_colchonetas_product_views",
             MASTER_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQX_MteY9z1Of-MIimoruabnLSCY2p1mMDl0RvYeDWivYTfXljryTikNsCGM3yFdF-PcoWo2Zyb5EiS/pub?gid=0&single=true&output=csv",
             SHEETS_WEBAPP_URL: "https://script.google.com/macros/s/AKfycbwhqmZQdheEmlcQfpNRbIGMHXSXbYXhPc5ySN56Q6QutgdMG3K6Kqm_8dD9PRw2E-InuQ/exec",
-            STATS_WEBAPP_URL: "https://script.google.com/macros/s/AKfycbwJU61TGPX4ISk8-4uBb4cBF-DPFHa1nqan1NvRgJkaRImNgfpT1Rr5hqn0spZ2cTou/exec"  // <--- CAMBIÁ ESTA URL
+            STATS_WEBAPP_URL: "https://script.google.com/macros/s/AKfycby3nXAt1_YG_cunsoImWLyYlBIoEEuc9VOIA60LVMmn5axNdGFukdPbZB7Wm8D-SZsy/exec"  // <--- CAMBIÁ ESTA URL
         };
 
         const SHIPPING_RATES = { 
@@ -1789,7 +1789,7 @@
         // =======================================================
         function sendSaleToStats(customerName, items, shipping, total) {
             const STATS_URL = CONFIG.STATS_WEBAPP_URL;
-            if (!STATS_URL || STATS_URL === "https://script.google.com/macros/s/AKfycbwJU61TGPX4ISk8-4uBb4cBF-DPFHa1nqan1NvRgJkaRImNgfpT1Rr5hqn0spZ2cTou/exec") {
+            if (!STATS_URL || STATS_URL === "https://script.google.com/macros/s/AKfycby3nXAt1_YG_cunsoImWLyYlBIoEEuc9VOIA60LVMmn5axNdGFukdPbZB7Wm8D-SZsy/exec") {
                 console.log("⚠️ STATS_WEBAPP_URL no configurada. Estadísticas no guardadas.");
                 return;
             }
@@ -1830,7 +1830,7 @@
 
         function sendVisitorToStats() {
             const STATS_URL = CONFIG.STATS_WEBAPP_URL;
-            if (!STATS_URL || STATS_URL === "https://script.google.com/macros/s/AKfycbwJU61TGPX4ISk8-4uBb4cBF-DPFHa1nqan1NvRgJkaRImNgfpT1Rr5hqn0spZ2cTou/exec") return;
+            if (!STATS_URL || STATS_URL === "https://script.google.com/macros/s/AKfycby3nXAt1_YG_cunsoImWLyYlBIoEEuc9VOIA60LVMmn5axNdGFukdPbZB7Wm8D-SZsy/exec") return;
             
             const visitorData = {
                 tipo: "visita",
@@ -1849,7 +1849,7 @@
 
         function sendProductViewToStats(clave, nombre) {
             const STATS_URL = CONFIG.STATS_WEBAPP_URL;
-            if (!STATS_URL || STATS_URL === "https://script.google.com/macros/s/AKfycbwJU61TGPX4ISk8-4uBb4cBF-DPFHa1nqan1NvRgJkaRImNgfpT1Rr5hqn0spZ2cTou/exec") return;
+            if (!STATS_URL || STATS_URL === "https://script.google.com/macros/s/AKfycby3nXAt1_YG_cunsoImWLyYlBIoEEuc9VOIA60LVMmn5axNdGFukdPbZB7Wm8D-SZsy/exec") return;
             
             const productData = {
                 tipo: "producto_visto",
