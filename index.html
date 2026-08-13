@@ -228,94 +228,6 @@
             font-weight: 500; 
         }
 
-        /* ========================================= */
-        /* TOOLTIP PARA MANTENER PRESIONADO */
-        /* ========================================= */
-        .hold-to-share {
-            position: relative;
-            cursor: pointer;
-        }
-        .hold-to-share .hold-tip {
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0,0,0,0.8);
-            color: white;
-            padding: 5px 14px;
-            border-radius: 99px;
-            font-size: 0.6rem;
-            font-weight: 600;
-            opacity: 0;
-            transition: all 0.3s ease;
-            pointer-events: none;
-            white-space: nowrap;
-            z-index: 20;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .hold-to-share:hover .hold-tip,
-        .hold-to-share.pressing .hold-tip {
-            opacity: 1;
-        }
-        .hold-to-share.pressing .hold-tip {
-            background: var(--primary);
-            animation: pulse-hold 0.5s ease infinite alternate;
-        }
-        @keyframes pulse-hold {
-            0% { transform: translateX(-50%) scale(1); }
-            100% { transform: translateX(-50%) scale(1.05); }
-        }
-
-        /* ========================================= */
-        /* MODAL COMPARTIR ADMIN */
-        /* ========================================= */
-        #share-admin-modal .modal-content {
-            max-width: 450px;
-            text-align: center;
-            padding: 25px;
-        }
-        #share-admin-modal .modal-content h3 {
-            color: var(--text-body);
-            margin-bottom: 15px;
-        }
-        #share-admin-preview {
-            background: var(--slate-100);
-            border-radius: var(--radius-md);
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-        #share-admin-preview img {
-            max-width: 100%;
-            max-height: 200px;
-            border-radius: 12px;
-            object-fit: contain;
-        }
-        .share-admin-buttons {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        .share-admin-buttons button {
-            padding: 12px 24px;
-            border-radius: 99px;
-            border: none;
-            font-weight: 700;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: white;
-        }
-        .share-admin-buttons button:hover {
-            transform: scale(1.05);
-        }
-        .btn-share-wa { background: #25D366; }
-        .btn-share-fb { background: #1877F2; }
-        .btn-share-cancel { background: var(--slate-500); color: white; }
-
         /* SELECTOR DE CANTIDAD */
         .quantity-selector {
             display: flex;
@@ -899,6 +811,94 @@
             font-size: 0.8rem;
         }
 
+        /* ========================================= */
+        /* TOOLTIP PARA MANTENER PRESIONADO */
+        /* ========================================= */
+        .hold-to-share {
+            position: relative;
+            cursor: pointer;
+        }
+        .hold-to-share .hold-tip {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 5px 14px;
+            border-radius: 99px;
+            font-size: 0.6rem;
+            font-weight: 600;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            white-space: nowrap;
+            z-index: 20;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .hold-to-share:hover .hold-tip,
+        .hold-to-share.pressing .hold-tip {
+            opacity: 1;
+        }
+        .hold-to-share.pressing .hold-tip {
+            background: var(--primary);
+            animation: pulse-hold 0.5s ease infinite alternate;
+        }
+        @keyframes pulse-hold {
+            0% { transform: translateX(-50%) scale(1); }
+            100% { transform: translateX(-50%) scale(1.05); }
+        }
+
+        /* ========================================= */
+        /* MODAL COMPARTIR ADMIN */
+        /* ========================================= */
+        #share-admin-modal .modal-content {
+            max-width: 450px;
+            text-align: center;
+            padding: 25px;
+        }
+        #share-admin-modal .modal-content h3 {
+            color: var(--text-body);
+            margin-bottom: 15px;
+        }
+        #share-admin-preview {
+            background: var(--slate-100);
+            border-radius: var(--radius-md);
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        #share-admin-preview img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 12px;
+            object-fit: contain;
+        }
+        .share-admin-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .share-admin-buttons button {
+            padding: 12px 24px;
+            border-radius: 99px;
+            border: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+        }
+        .share-admin-buttons button:hover {
+            transform: scale(1.05);
+        }
+        .btn-share-wa { background: #25D366; }
+        .btn-share-fb { background: #1877F2; }
+        .btn-share-cancel { background: var(--slate-500); color: white; }
+
         @media (max-width: 480px) {
             .ofertas-header { flex-wrap: wrap; gap: 10px; padding: 0 15px 15px 15px; }
             .oferta-item { width: 190px; padding: 15px; min-height: 230px; }
@@ -1022,6 +1022,23 @@
                 <div id="analytics-data" style="margin-top: 15px;"></div>
                 <button class="cat-btn" style="margin: 10px 0;" onclick="showProductAnalytics()">Actualizar Analíticas</button>
             </div>
+
+            <!-- EXPORTAR TODOS LOS DATOS -->
+            <div style="margin-top: 25px; padding-top: 20px; border-top: 2px solid var(--border);">
+                <h4>📥 Exportar Todos los Datos</h4>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
+                    <button class="cat-btn active" onclick="exportAllData()" style="background: linear-gradient(135deg, #2ecc71, #27ae60); color: white; border: none;">
+                        <i class="fas fa-file-csv"></i> Exportar Todo (CSV)
+                    </button>
+                    <button class="cat-btn" onclick="exportSalesData()" style="background: #3498db; color: white; border: none;">
+                        <i class="fas fa-file-csv"></i> Solo Ventas
+                    </button>
+                    <button class="cat-btn" onclick="exportVisitorData()" style="background: #f39c12; color: white; border: none;">
+                        <i class="fas fa-file-csv"></i> Solo Visitas
+                    </button>
+                </div>
+                <p style="font-size: 0.7rem; color: var(--slate-500); margin-top: 8px;">📌 Los archivos CSV se pueden abrir con Excel, Google Sheets o cualquier editor de texto</p>
+            </div>
         </section>
     </main>
 
@@ -1131,10 +1148,8 @@
             VISITORS_KEY: "mundo_colchonetas_visitors",
             PRODUCT_VIEWS_KEY: "mundo_colchonetas_product_views",
             MASTER_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQX_MteY9z1Of-MIimoruabnLSCY2p1mMDl0RvYeDWivYTfXljryTikNsCGM3yFdF-PcoWo2Zyb5EiS/pub?gid=0&single=true&output=csv",
-            SHEETS_WEBAPP_URL: "https://script.google.com/macros/s/AKfycbwhqmZQdheEmlcQfpNRbIGMHXSXbYXhPc5ySN56Q6QutgdMG3K6Kqm_8dD9PRw2E-InuQ/exec"
-            // ✅ NUEVA URL PARA ESTADÍSTICAS
-    STATS_WEBAPP_URL: "https://script.google.com/macros/s/AKfycbx7SZt9OkiTJ8LtUxiFoi2Exdf4zDL7clHtS7BUr6JG8CEItBvQ6DWvv0KieZ-YrI2_/exec"  // <--- CAMBIÁ ESTA
-};
+            SHEETS_WEBAPP_URL: "https://script.google.com/macros/s/AKfycbwhqmZQdheEmlcQfpNRbIGMHXSXbYXhPc5ySN56Q6QutgdMG3K6Kqm_8dD9PRw2E-InuQ/exec",
+            STATS_WEBAPP_URL: "https://script.google.com/macros/s/TU_NUEVA_URL_AQUI/exec"  // <--- CAMBIÁ ESTA URL
         };
 
         const SHIPPING_RATES = { 
@@ -1424,65 +1439,6 @@
             
             startAutoplay(ofertas.length);
         }
-        // =======================================================
-// FUNCIONES PARA ESTADÍSTICAS (NUEVAS)
-// =======================================================
-
-function sendSaleToStats(customerName, items, shipping, total) {
-    const STATS_URL = CONFIG.STATS_WEBAPP_URL;
-    
-    const orderData = {
-        tipo: "venta",
-        timestamp: new Date().toLocaleString('es-AR'),
-        customerName: customerName,
-        items: items,
-        shipping: shipping,
-        subtotal: items.reduce((acc, item) => acc + item.subtotal, 0),
-        total: total
-    };
-    
-    fetch(STATS_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(orderData)
-    }).catch(error => console.error("Error en estadísticas:", error));
-}
-
-function sendVisitorToStats() {
-    const STATS_URL = CONFIG.STATS_WEBAPP_URL;
-    
-    const visitorData = {
-        tipo: "visita",
-        fecha: new Date().toLocaleDateString('es-AR'),
-        hora: new Date().toLocaleTimeString('es-AR'),
-        dispositivo: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "Móvil" : "Escritorio"
-    };
-    
-    fetch(STATS_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(visitorData)
-    }).catch(error => console.error("Error en estadísticas:", error));
-}
-
-function sendProductViewToStats(clave, nombre) {
-    const STATS_URL = CONFIG.STATS_WEBAPP_URL;
-    
-    const productData = {
-        tipo: "producto_visto",
-        clave: clave,
-        nombre: nombre
-    };
-    
-    fetch(STATS_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(productData)
-    }).catch(error => console.error("Error en estadísticas:", error));
-}
 
         // =======================================================
         // AUTODESLIZAMIENTO DEL CARRUSEL
@@ -1597,12 +1553,11 @@ function sendProductViewToStats(clave, nombre) {
             visitorsData.dailyStats[today]++;
             
             localStorage.setItem(CONFIG.VISITORS_KEY, JSON.stringify(visitorsData));
+            
+            // ✅ ENVIAR A ESTADÍSTICAS
+            sendVisitorToStats();
+            
             return visitorsData;
-            // ✅ NUEVO: Guardar también en Google Sheets de estadísticas
-    sendVisitorToStats();
-    
-    return visitorsData;
-}
         }
 
         function trackProductView(clave) {
@@ -1610,6 +1565,12 @@ function sendProductViewToStats(clave, nombre) {
             if (!viewsData[clave]) viewsData[clave] = 0;
             viewsData[clave]++;
             localStorage.setItem(CONFIG.PRODUCT_VIEWS_KEY, JSON.stringify(viewsData));
+            
+            // ✅ ENVIAR A ESTADÍSTICAS
+            const product = products.find(p => p.clave === clave);
+            if (product) {
+                sendProductViewToStats(clave, product.nombre);
+            }
         }
 
         function showVisitorStats() {
@@ -1694,12 +1655,6 @@ function sendProductViewToStats(clave, nombre) {
             
             document.getElementById('detailed-stats-content').innerHTML = statsHTML;
             document.getElementById('stats-modal').classList.add('active');
-            // ✅ NUEVO: Guardar también en Google Sheets de estadísticas
-    const product = products.find(p => p.clave === clave);
-    if (product) {
-        sendProductViewToStats(clave, product.nombre);
-    }
-
         }
 
         function exportVisitorData() {
@@ -1827,6 +1782,118 @@ function sendProductViewToStats(clave, nombre) {
                 showNotify('Contador de vistas reiniciado');
                 setTimeout(() => showProductAnalytics(), 500);
             }
+        }
+
+        // =======================================================
+        // FUNCIONES DE ESTADÍSTICAS EN GOOGLE SHEETS (NUEVAS)
+        // =======================================================
+        function sendSaleToStats(customerName, items, shipping, total) {
+            const STATS_URL = CONFIG.STATS_WEBAPP_URL;
+            if (!STATS_URL || STATS_URL === "https://script.google.com/macros/s/AKfycbx7SZt9OkiTJ8LtUxiFoi2Exdf4zDL7clHtS7BUr6JG8CEItBvQ6DWvv0KieZ-YrI2_/exec") {
+                console.log("⚠️ STATS_WEBAPP_URL no configurada. Estadísticas no guardadas.");
+                return;
+            }
+            
+            const orderData = {
+                tipo: "venta",
+                timestamp: new Date().toLocaleString('es-AR'),
+                customerName: customerName,
+                items: items,
+                shipping: shipping,
+                subtotal: items.reduce((acc, item) => acc + item.subtotal, 0),
+                total: total
+            };
+            
+            fetch(STATS_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(orderData)
+            }).catch(error => console.error("❌ Error en estadísticas (venta):", error));
+        }
+
+        function sendVisitorToStats() {
+            const STATS_URL = CONFIG.STATS_WEBAPP_URL;
+            if (!STATS_URL || STATS_URL === "https://script.google.com/macros/s/AKfycbx7SZt9OkiTJ8LtUxiFoi2Exdf4zDL7clHtS7BUr6JG8CEItBvQ6DWvv0KieZ-YrI2_/exec") return;
+            
+            const visitorData = {
+                tipo: "visita",
+                fecha: new Date().toLocaleDateString('es-AR'),
+                hora: new Date().toLocaleTimeString('es-AR'),
+                dispositivo: /Mobi|Android|iPhone/i.test(navigator.userAgent) ? "Móvil" : "Escritorio"
+            };
+            
+            fetch(STATS_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(visitorData)
+            }).catch(error => console.error("❌ Error en estadísticas (visita):", error));
+        }
+
+        function sendProductViewToStats(clave, nombre) {
+            const STATS_URL = CONFIG.STATS_WEBAPP_URL;
+            if (!STATS_URL || STATS_URL === "https://script.google.com/macros/s/AKfycbx7SZt9OkiTJ8LtUxiFoi2Exdf4zDL7clHtS7BUr6JG8CEItBvQ6DWvv0KieZ-YrI2_/exec") return;
+            
+            const productData = {
+                tipo: "producto_visto",
+                clave: clave,
+                nombre: nombre
+            };
+            
+            fetch(STATS_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(productData)
+            }).catch(error => console.error("❌ Error en estadísticas (producto):", error));
+        }
+
+        // =======================================================
+        // EXPORTAR TODOS LOS DATOS
+        // =======================================================
+        function exportAllData() {
+            // Exportar ventas
+            const salesData = JSON.parse(localStorage.getItem(CONFIG.SALES_KEY)) || [];
+            let salesCSV = "Fecha,Cliente,Artículos,Total\n";
+            salesData.forEach(sale => {
+                const items = sale.items.reduce((acc, item) => acc + item.quantity, 0);
+                salesCSV += `"${sale.date}","${sale.customerName}",${items},${sale.total}\n`;
+            });
+            
+            // Exportar visitas
+            const visitorsData = JSON.parse(localStorage.getItem(CONFIG.VISITORS_KEY)) || { history: [] };
+            let visitorsCSV = "Fecha,Hora\n";
+            visitorsData.history.forEach(visit => {
+                visitorsCSV += `"${visit.date}","${visit.time}"\n`;
+            });
+            
+            // Exportar productos vistos
+            const viewsData = JSON.parse(localStorage.getItem(CONFIG.PRODUCT_VIEWS_KEY)) || {};
+            let viewsCSV = "Producto,Visualizaciones\n";
+            Object.entries(viewsData).forEach(([clave, views]) => {
+                const product = products.find(p => p.clave === clave);
+                const name = product ? product.nombre : clave;
+                viewsCSV += `"${name}",${views}\n`;
+            });
+            
+            // Crear archivos y descargar
+            downloadCSV(salesCSV, 'ventas_mundo_colchonetas.csv');
+            setTimeout(() => downloadCSV(visitorsCSV, 'visitas_mundo_colchonetas.csv'), 500);
+            setTimeout(() => downloadCSV(viewsCSV, 'productos_vistos_mundo_colchonetas.csv'), 1000);
+            
+            showNotify('📥 Archivos CSV descargados');
+        }
+
+        function downloadCSV(content, filename) {
+            const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
         }
 
         // =======================================================
@@ -2151,13 +2218,22 @@ function sendProductViewToStats(clave, nombre) {
                 });
             });
             
+            const shippingFee = 0;
+            const total = subtotal + shippingFee;
+            
             msg += `\n💰 SUBTOTAL: $${subtotal.toLocaleString()}`;
             msg += `\n📦 Envío: a cotizar por WhatsApp`;
             
+            // ✅ GUARDAR EN LOCAL
             registerSale(customerName, '');
-            sendToGoogleSheets(customerName, '', itemsForSheet, shippingFee);
-    sendSaleToStats(customerName, itemsForSheet, shippingFee, subtotal + shippingFee); // Nueva URL
             
+            // ✅ GUARDAR EN URL ORIGINAL (para productos)
+            sendToGoogleSheets(customerName, '', itemsForSheet, shippingFee);
+            
+            // ✅ GUARDAR EN NUEVA URL DE ESTADÍSTICAS
+            sendSaleToStats(customerName, itemsForSheet, shippingFee, total);
+            
+            // ✅ ABRIR WHATSAPP
             window.open(`https://wa.me/5491168705261?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
@@ -2583,16 +2659,11 @@ function sendProductViewToStats(clave, nombre) {
                 document.getElementById('admin-panel').classList.add('visible');
                 showProductAnalytics();
                 updateVisitorStatsInPanel();
-                // Forzar re-render para mostrar tooltips de admin
                 renderProducts();
-                // Actualizar también el detalle si está abierto
                 const detailModal = document.getElementById('detail-modal');
                 if (detailModal.classList.contains('active')) {
-                    const detailContent = document.getElementById('detail-content');
-                    // Buscar la clave del producto en el detalle actual
                     const img = document.querySelector('#active-img');
                     if (img) {
-                        // Re-abrir el detalle con el mismo producto
                         const productClave = Object.keys(products).find(key => {
                             const p = products.find(p => p.fotos && p.fotos[0] === img.src);
                             return p;
@@ -2639,7 +2710,7 @@ function sendProductViewToStats(clave, nombre) {
                 body: JSON.stringify(orderData)
             })
             .then(response => {
-                console.log("✅ Pedido enviado a Google Sheets");
+                console.log("✅ Pedido enviado a Google Sheets (URL original)");
             })
             .catch(error => {
                 console.error("❌ Error al enviar a Google Sheets:", error);
