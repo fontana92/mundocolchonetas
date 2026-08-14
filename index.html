@@ -1789,7 +1789,7 @@
         // =======================================================
         function sendSaleToStats(customerName, items, shipping, total) {
             const STATS_URL = CONFIG.STATS_WEBAPP_URL;
-            if (!STATS_URL || STATS_URL === "https://script.google.com/macros/s/AKfycbw_QFako8t6N-GOAkV1KngiVssiwTEscBn_1QxmPKbIJ1fUwFsAZRIAU6lb4YcsC4W4/exec") {
+           if (!STATS_URL  return; {
                 console.log("⚠️ STATS_WEBAPP_URL no configurada. Estadísticas no guardadas.");
                 return;
             }
@@ -1814,7 +1814,7 @@
 
         function sendVisitorToStats() {
             const STATS_URL = CONFIG.STATS_WEBAPP_URL;
-            if (!STATS_URL || STATS_URL === "https://script.google.com/macros/s/AKfycbw_QFako8t6N-GOAkV1KngiVssiwTEscBn_1QxmPKbIJ1fUwFsAZRIAU6lb4YcsC4W4/exec") return;
+            if (!STATS_URL  return;
             
             const visitorData = {
                 tipo: "visita",
@@ -1833,7 +1833,7 @@
 
         function sendProductViewToStats(clave, nombre) {
             const STATS_URL = CONFIG.STATS_WEBAPP_URL;
-            if (!STATS_URL || STATS_URL === "https://script.google.com/macros/s/AKfycbw_QFako8t6N-GOAkV1KngiVssiwTEscBn_1QxmPKbIJ1fUwFsAZRIAU6lb4YcsC4W4/exec") return;
+            if (!STATS_URL  return;
             
             const productData = {
                 tipo: "producto_visto",
