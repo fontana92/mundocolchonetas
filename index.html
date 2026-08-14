@@ -981,10 +981,142 @@
             .oferta-item { width: 210px; min-height: 250px; }
             .oferta-item .img-container { width: 110px; height: 110px; }
         }
-    </style>
+
+        /* ========================================= */
+        /* BARRA DE NOVEDADES */
+        /* ========================================= */
+        .news-bar {
+            background: linear-gradient(135deg, #8e44ad 0%, #6c3483 50%, #9b59b6 100%);
+            color: white;
+            padding: 12px 0;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+            z-index: 1001;
+        }
+        .news-bar-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            animation: newsSlide 20s linear infinite;
+        }
+        .news-bar-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+        .news-bar-item i {
+            font-size: 1rem;
+        }
+        .news-bar-highlight {
+            background: #ff4757;
+            padding: 4px 12px;
+            border-radius: 99px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            animation: pulse-news 2s infinite;
+        }
+        @keyframes pulse-news {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        @keyframes newsSlide {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        @media (max-width: 768px) {
+            .news-bar-content {
+                animation: none;
+                gap: 10px;
+                padding: 0 10px;
+            }
+            .news-bar-item {
+                font-size: 0.75rem;
+            }
+        }
+
+        /* ========================================= */
+        /* SELLOS DE CONFIANZA */
+        /* ========================================= */
+        .trust-badges {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+            padding: 15px;
+            background: var(--slate-100);
+            border-radius: 15px;
+            border: 1px solid var(--border);
+        }
+        .trust-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 6px;
+            padding: 10px;
+        }
+        .trust-badge i {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+        .trust-badge span {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-body);
+            line-height: 1.2;
+        }
+        .trust-badge .trust-title {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--text-body);
+        }
+        @media (max-width: 480px) {
+            .trust-badges {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+                padding: 10px;
+            }
+            .trust-badge i {
+                font-size: 1.2rem;
+            }
+            .trust-badge span {
+                font-size: 0.6rem;
+            }
+            .trust-badge .trust-title {
+                font-size: 0.65rem;
+            }
+        }
 </head>
 <body>
 
+ <!-- BARRA DE NOVEDADES -->
+    <div class="news-bar">
+        <div class="news-bar-content">
+            <div class="news-bar-item">
+                <span class="news-bar-highlight">🔥 ¡DÍA DEL NIÑO!</span>
+                <span>10% OFF con cupón: <strong>DIADELNIÑO10</strong></span>
+            </div>
+            <div class="news-bar-item">
+                <i class="fas fa-truck"></i>
+                <span>Envíos a todo el país</span>
+            </div>
+            <div class="news-bar-item">
+                <i class="fas fa-shield-alt"></i>
+                <span>Compra 100% segura</span>
+            </div>
+            <div class="news-bar-item">
+                <i class="fas fa-credit-card"></i>
+                <span>Mercado Pago aceptado</span>
+            </div>
+        </div>
+    </div>
     <header>
         <div class="container header-content">
             <svg class="logo-svg" viewBox="0 0 450 100" fill="none">
@@ -1140,6 +1272,24 @@
             <div style="display:flex; justify-content:space-between; font-size:0.9rem; color: var(--text-body);"><span>Subtotal</span><span id="cart-subtotal">$0</span></div>
             <div style="display:flex; justify-content:space-between; font-size:0.9rem; color:var(--primary);"><span>Descuento/Envío</span><span id="cart-shipping-fee">A cotizar</span></div>
             <div style="display:flex; justify-content:space-between; font-weight:800; font-size:1.4rem; margin:10px 0; color: var(--text-body);"><span>Total</span><span id="cart-total">$0</span></div>
+                        <div class="trust-badges" style="margin-bottom: 15px;">
+                <div class="trust-badge">
+                    <i class="fas fa-shield-alt"></i>
+                    <span class="trust-title">Compra Segura</span>
+                </div>
+                <div class="trust-badge">
+                    <i class="fas fa-truck"></i>
+                    <span class="trust-title">Envío a todo el país</span>
+                </div>
+                <div class="trust-badge">
+                    <i class="fas fa-credit-card"></i>
+                    <span class="trust-title">Mercado Pago</span>
+                </div>
+                <div class="trust-badge">
+                    <i class="fas fa-headset"></i>
+                    <span class="trust-title">Soporte 24/7</span>
+                </div>
+            </div>
             <button class="cat-btn active" style="width:100%; padding:18px;" onclick="checkoutViaWhatsApp()">Enviar solicitud de pedido</button>
         </div>
     </div>
@@ -2262,7 +2412,30 @@
                             <div class="current-price" style="font-size:2.8rem;">$${pFinal.toLocaleString()}</div>
                             ${isLowStock ? `<p style="color:#ff4757; font-weight:700; font-size:0.9rem;">🔥 ¡Últimas ${stock} unidades disponibles!</p>` : ''}
                             ${stock > 0 ? `<p style="color:#22c55e; font-weight:600; font-size:0.9rem;">✓ ${stock} unidades disponibles</p>` : `<p style="color:#ef4444; font-weight:600; font-size:0.9rem;">❌ Sin stock</p>`}
+</div>
+                        <div class="trust-badges">
+                            <div class="trust-badge">
+                                <i class="fas fa-shield-alt"></i>
+                                <span class="trust-title">Compra Segura</span>
+                                <span>Protegemos tus datos</span>
+                            </div>
+                            <div class="trust-badge">
+                                <i class="fas fa-truck"></i>
+                                <span class="trust-title">Envío Rápido</span>
+                                <span>A todo el país</span>
+                            </div>
+                            <div class="trust-badge">
+                                <i class="fas fa-credit-card"></i>
+                                <span class="trust-title">Múltiples Pagos</span>
+                                <span>Mercado Pago</span>
+                            </div>
+                            <div class="trust-badge">
+                                <i class="fas fa-undo"></i>
+                                <span class="trust-title">Garantía</span>
+                                <span>Calidad premium</span>
+                            </div>
                         </div>
+                       
                         ${stock > 0 ? `
                             <div style="display:flex; gap:10px; align-items:center; margin-bottom:20px; flex-wrap:wrap;">
                                 <div class="quantity-selector">
