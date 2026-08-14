@@ -1093,6 +1093,7 @@
                 font-size: 0.65rem;
             }
         }
+</style>
 </head>
 <body>
 
@@ -1397,8 +1398,6 @@
         let holdTimer = null;
         let holdClave = null;
         let cuponActivo = null;
-        let calificacionTestimonio = 0;
-        const TESTIMONIOS_KEY = "mundo_colchonetas_testimonios";
         const CUPONES_KEY = "mundo_colchonetas_cupones";
 
         const norm = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
@@ -2922,7 +2921,6 @@
             trackVisitor();
             updateShareLinks();
             checkProductInUrl();
-            mostrarTestimonios();
             mostrarCupones();
             
             setTimeout(() => {
