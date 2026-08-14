@@ -1048,36 +1048,6 @@
              <p id="status-msg" style="text-align:center; grid-column: 1/-1; padding: 50px; color:#999;">Sincronizando catálogo premium...</p>
         </div>
 
-        <!-- TESTIMONIOS -->
-        <section class="testimonios-section" id="testimonios-section">
-            <h3 style="margin-bottom: 20px; font-weight: 800; color: var(--text-body);">⭐ Lo que dicen nuestros clientes</h3>
-            <div id="testimonios-container"></div>
-            <button class="cat-btn active" style="width:100%; margin-top:15px;" onclick="mostrarFormularioTestimonio()">
-                <i class="fas fa-star"></i> Dejar mi reseña
-            </button>
-            <div id="testimonio-form" style="display:none; margin-top:20px;">
-                <div style="margin-bottom:15px;">
-                    <label style="font-weight:700; font-size:0.8rem;">Tu nombre *</label>
-                    <input type="text" id="testimonio-nombre" class="form-input" placeholder="Tu nombre">
-                </div>
-                <div style="margin-bottom:15px;">
-                    <label style="font-weight:700; font-size:0.8rem;">Calificación *</label>
-                    <div style="display:flex; gap:10px; margin-top:10px;">
-                        <button onclick="setCalificacion(1)" class="star-btn" id="star-1" style="background:none; border:none; font-size:2rem; cursor:pointer; color:#ddd;">★</button>
-                        <button onclick="setCalificacion(2)" class="star-btn" id="star-2" style="background:none; border:none; font-size:2rem; cursor:pointer; color:#ddd;">★</button>
-                        <button onclick="setCalificacion(3)" class="star-btn" id="star-3" style="background:none; border:none; font-size:2rem; cursor:pointer; color:#ddd;">★</button>
-                        <button onclick="setCalificacion(4)" class="star-btn" id="star-4" style="background:none; border:none; font-size:2rem; cursor:pointer; color:#ddd;">★</button>
-                        <button onclick="setCalificacion(5)" class="star-btn" id="star-5" style="background:none; border:none; font-size:2rem; cursor:pointer; color:#ddd;">★</button>
-                    </div>
-                </div>
-                <div style="margin-bottom:15px;">
-                    <label style="font-weight:700; font-size:0.8rem;">Tu comentario *</label>
-                    <textarea id="testimonio-comentario" class="form-input" rows="3" placeholder="Cuéntanos tu experiencia..." style="resize:vertical;"></textarea>
-                </div>
-                <button class="cat-btn active" style="width:100%;" onclick="enviarTestimonio()">Enviar reseña</button>
-            </div>
-        </section>
-
         <div style="text-align: center; margin: 40px 0;">
             <button class="cat-btn" onclick="checkAdminAccess()">Acceso Administración</button>
         </div>
