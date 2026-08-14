@@ -912,40 +912,6 @@
             transform: scale(1.02);
         }
 
-        .testimonios-section {
-            background: var(--card-bg);
-            border-radius: var(--radius-lg);
-            padding: 25px;
-            border: 1px solid var(--border);
-            margin: 30px 0;
-        }
-        .testimonio-card {
-            background: var(--slate-100);
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 15px;
-            border: 1px solid var(--border);
-        }
-        .testimonio-stars {
-            color: #f39c12;
-            font-size: 1.1rem;
-            margin-bottom: 8px;
-        }
-        .testimonio-text {
-            font-size: 0.9rem;
-            color: var(--text-body);
-            margin-bottom: 8px;
-        }
-        .testimonio-author {
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-        .testimonio-date {
-            font-size: 0.7rem;
-            color: var(--slate-500);
-        }
-
         .cupon-input-container {
             display: flex;
             gap: 10px;
@@ -2104,75 +2070,7 @@
             showNotify(`🎟️ Cupón ${cupon.codigo} aplicado`);
         }
 
-        // =======================================================
-        // TESTIMONIOS
-        // =======================================================
-        function cargarTestimonios() {
-            return JSON.parse(localStorage.getItem(TESTIMONIOS_KEY)) || [];
-        }
-
-        function mostrarTestimonios() {
-            const testimonios = cargarTestimonios();
-            const container = document.getElementById('testimonios-container');
-            
-            if (testimonios.length === 0) {
-                container.innerHTML = '<p style="text-align:center; color:var(--slate-500);">Sé el primero en dejar una reseña</p>';
-                return;
-            }
-            
-            container.innerHTML = testimonios.slice(0, 10).map(t => `
-                <div class="testimonio-card">
-                    <div class="testimonio-stars">${'★'.repeat(t.calificacion)}${'☆'.repeat(5 - t.calificacion)}</div>
-                    <div class="testimonio-text">${t.comentario}</div>
-                    <div class="testimonio-author">- ${t.nombre}</div>
-                    <div class="testimonio-date">${t.fecha}</div>
-                </div>
-            `).join('');
-        }
-
-        function mostrarFormularioTestimonio() {
-            const form = document.getElementById('testimonio-form');
-            form.style.display = form.style.display === 'none' ? 'block' : 'none';
-        }
-
-        function setCalificacion(calificacion) {
-            calificacionTestimonio = calificacion;
-            for (let i = 1; i <= 5; i++) {
-                const star = document.getElementById(`star-${i}`);
-                star.style.color = i <= calificacion ? '#f39c12' : '#ddd';
-            }
-        }
-
-        function enviarTestimonio() {
-            const nombre = document.getElementById('testimonio-nombre').value.trim();
-            const comentario = document.getElementById('testimonio-comentario').value.trim();
-            
-            if (!nombre || !comentario || calificacionTestimonio === 0) {
-                alert("Completa todos los campos y selecciona una calificación");
-                return;
-            }
-            
-            const testimonios = cargarTestimonios();
-            testimonios.unshift({
-                nombre,
-                calificacion: calificacionTestimonio,
-                comentario,
-                fecha: new Date().toLocaleDateString('es-AR')
-            });
-            localStorage.setItem(TESTIMONIOS_KEY, JSON.stringify(testimonios));
-            
-            document.getElementById('testimonio-nombre').value = '';
-            document.getElementById('testimonio-comentario').value = '';
-            calificacionTestimonio = 0;
-            for (let i = 1; i <= 5; i++) {
-                document.getElementById(`star-${i}`).style.color = '#ddd';
-            }
-            document.getElementById('testimonio-form').style.display = 'none';
-            
-            mostrarTestimonios();
-            showNotify('⭐ ¡Gracias por tu reseña!');
-        }
-
+        
         // =======================================================
         // EXPORTAR TODOS LOS DATOS
         // =======================================================
