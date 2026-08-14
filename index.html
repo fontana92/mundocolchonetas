@@ -725,9 +725,7 @@
         .share-fb { background: #1877F2; }
         .share-ig { background: linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); }
 
-        /* ========================================= */
         /* BOTÓN VOLVER ARRIBA */
-        /* ========================================= */
         #back-to-top {
             position: fixed;
             bottom: 100px;
@@ -755,9 +753,7 @@
             display: flex;
         }
 
-        /* ========================================= */
         /* BOTÓN MODO OSCURO */
-        /* ========================================= */
         .dark-mode-toggle {
             background: none;
             border: none;
@@ -772,9 +768,7 @@
             transform: rotate(20deg);
         }
 
-        /* ========================================= */
         /* ESTADÍSTICAS EN ADMIN */
-        /* ========================================= */
         .stat-cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -811,9 +805,7 @@
             font-size: 0.8rem;
         }
 
-        /* ========================================= */
         /* TOOLTIP PARA MANTENER PRESIONADO */
-        /* ========================================= */
         .hold-to-share {
             position: relative;
             cursor: pointer;
@@ -849,9 +841,7 @@
             100% { transform: translateX(-50%) scale(1.05); }
         }
 
-        /* ========================================= */
         /* MODAL COMPARTIR ADMIN */
-        /* ========================================= */
         #share-admin-modal .modal-content {
             max-width: 450px;
             text-align: center;
@@ -899,6 +889,101 @@
         .btn-share-fb { background: #1877F2; }
         .btn-share-cancel { background: var(--slate-500); color: white; }
 
+        /* NUEVAS FUNCIONALIDADES */
+        .wa-direct-btn {
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 99px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            margin-top: 10px;
+            width: 100%;
+            justify-content: center;
+        }
+        .wa-direct-btn:hover {
+            background: #128C7E;
+            transform: scale(1.02);
+        }
+
+        .testimonios-section {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 25px;
+            border: 1px solid var(--border);
+            margin: 30px 0;
+        }
+        .testimonio-card {
+            background: var(--slate-100);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border);
+        }
+        .testimonio-stars {
+            color: #f39c12;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+        .testimonio-text {
+            font-size: 0.9rem;
+            color: var(--text-body);
+            margin-bottom: 8px;
+        }
+        .testimonio-author {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .testimonio-date {
+            font-size: 0.7rem;
+            color: var(--slate-500);
+        }
+
+        .cupon-input-container {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .cupon-input {
+            flex: 1;
+            padding: 12px 15px;
+            border-radius: 99px;
+            border: 1px solid var(--border);
+            font-size: 0.9rem;
+            outline: none;
+            text-transform: uppercase;
+            background: var(--bg-body);
+            color: var(--text-body);
+        }
+        .cupon-input:focus {
+            border-color: var(--primary);
+        }
+        .cupon-aplicado {
+            background: #2ecc71;
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+        .cupon-invalido {
+            background: #e74c3c;
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
         @media (max-width: 480px) {
             .ofertas-header { flex-wrap: wrap; gap: 10px; padding: 0 15px 15px 15px; }
             .oferta-item { width: 190px; padding: 15px; min-height: 230px; }
@@ -910,13 +995,20 @@
             .product-card { padding: 15px; }
             .product-image-container { height: 200px; }
             .current-price { font-size: 1.3rem; }
-            .bento-grid { gap: 15px; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+            .bento-grid { gap: 15px; grid-template-columns: repeat(2, 1fr); }
             .chatbot-container { width: 300px; height: 450px; right: 10px; bottom: 150px; }
             .chatbot-toggle { right: 10px; bottom: 90px; }
             .share-float { left: 10px; bottom: 25px; }
             .share-container { left: 10px; bottom: 100px; width: 280px; }
             #back-to-top { left: 10px; bottom: 90px; width: 45px; height: 45px; font-size: 1.2rem; }
             #share-admin-modal .modal-content { padding: 15px; margin: 10px; }
+            .product-card h3 { font-size: 0.85rem !important; }
+            .product-image-container { height: 150px; }
+            .current-price { font-size: 1.1rem; }
+            .quantity-selector button { width: 28px; height: 28px; font-size: 0.9rem; }
+            .quantity-selector input { width: 30px; height: 28px; font-size: 0.8rem; }
+            .btn-add-cart { width: 38px; height: 38px; font-size: 0.9rem; }
+            .share-product-btn { width: 28px; height: 28px; font-size: 10px; }
         }
 
         @media (min-width: 768px) and (max-width: 1024px) {
@@ -990,6 +1082,36 @@
              <p id="status-msg" style="text-align:center; grid-column: 1/-1; padding: 50px; color:#999;">Sincronizando catálogo premium...</p>
         </div>
 
+        <!-- TESTIMONIOS -->
+        <section class="testimonios-section" id="testimonios-section">
+            <h3 style="margin-bottom: 20px; font-weight: 800; color: var(--text-body);">⭐ Lo que dicen nuestros clientes</h3>
+            <div id="testimonios-container"></div>
+            <button class="cat-btn active" style="width:100%; margin-top:15px;" onclick="mostrarFormularioTestimonio()">
+                <i class="fas fa-star"></i> Dejar mi reseña
+            </button>
+            <div id="testimonio-form" style="display:none; margin-top:20px;">
+                <div style="margin-bottom:15px;">
+                    <label style="font-weight:700; font-size:0.8rem;">Tu nombre *</label>
+                    <input type="text" id="testimonio-nombre" class="form-input" placeholder="Tu nombre">
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label style="font-weight:700; font-size:0.8rem;">Calificación *</label>
+                    <div style="display:flex; gap:10px; margin-top:10px;">
+                        <button onclick="setCalificacion(1)" class="star-btn" id="star-1" style="background:none; border:none; font-size:2rem; cursor:pointer; color:#ddd;">★</button>
+                        <button onclick="setCalificacion(2)" class="star-btn" id="star-2" style="background:none; border:none; font-size:2rem; cursor:pointer; color:#ddd;">★</button>
+                        <button onclick="setCalificacion(3)" class="star-btn" id="star-3" style="background:none; border:none; font-size:2rem; cursor:pointer; color:#ddd;">★</button>
+                        <button onclick="setCalificacion(4)" class="star-btn" id="star-4" style="background:none; border:none; font-size:2rem; cursor:pointer; color:#ddd;">★</button>
+                        <button onclick="setCalificacion(5)" class="star-btn" id="star-5" style="background:none; border:none; font-size:2rem; cursor:pointer; color:#ddd;">★</button>
+                    </div>
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label style="font-weight:700; font-size:0.8rem;">Tu comentario *</label>
+                    <textarea id="testimonio-comentario" class="form-input" rows="3" placeholder="Cuéntanos tu experiencia..." style="resize:vertical;"></textarea>
+                </div>
+                <button class="cat-btn active" style="width:100%;" onclick="enviarTestimonio()">Enviar reseña</button>
+            </div>
+        </section>
+
         <div style="text-align: center; margin: 40px 0;">
             <button class="cat-btn" onclick="checkAdminAccess()">Acceso Administración</button>
         </div>
@@ -1000,6 +1122,18 @@
                 <label style="font-size:0.8rem; font-weight:700;">URL de Google Sheets:</label>
                 <input type="text" id="excel-url" class="form-input" placeholder="Pega aquí la URL de tu Excel">
                 <button class="cat-btn active" style="margin-top:15px; width:100%;" onclick="syncWithExcel()">Actualizar Datos Ahora</button>
+            </div>
+            
+            <!-- GESTIÓN DE CUPONES -->
+            <div style="margin-top: 25px; padding-top: 20px; border-top: 2px solid var(--border);">
+                <h4>🎟️ Gestión de Cupones</h4>
+                <div style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;">
+                    <input type="text" id="nuevo-cupon-codigo" class="form-input" placeholder="Código (ej: VERANO10)" style="flex:1; min-width:150px;">
+                    <input type="number" id="nuevo-cupon-descuento" class="form-input" placeholder="% descuento" style="flex:1; min-width:100px;">
+                    <input type="date" id="nuevo-cupon-fecha" class="form-input" style="flex:1; min-width:150px;">
+                    <button class="cat-btn active" onclick="crearCupon()">Crear Cupón</button>
+                </div>
+                <div id="cupones-lista" style="margin-top:15px;"></div>
             </div>
             
             <!-- ESTADÍSTICAS DE VISITAS -->
@@ -1056,9 +1190,19 @@
             <p style="font-size:0.7rem; color:var(--slate-500); margin-top:5px;">📦 El costo de envío lo cotizamos por WhatsApp</p>
         </div>
 
+        <!-- CUPÓN DE DESCUENTO -->
+        <div style="margin-bottom: 15px;">
+            <label style="font-weight:700; font-size:0.8rem; color: var(--text-body);">🎟️ ¿Tenés un cupón de descuento?</label>
+            <div class="cupon-input-container">
+                <input type="text" id="cupon-input" class="cupon-input" placeholder="Ej: DIADELNIÑO10" oninput="this.value = this.value.toUpperCase()">
+                <button class="cat-btn" onclick="aplicarCupon()">Aplicar</button>
+            </div>
+            <div id="cupon-mensaje"></div>
+        </div>
+
         <div style="padding-top:15px; border-top:2px solid var(--dark);">
             <div style="display:flex; justify-content:space-between; font-size:0.9rem; color: var(--text-body);"><span>Subtotal</span><span id="cart-subtotal">$0</span></div>
-            <div style="display:flex; justify-content:space-between; font-size:0.9rem; color:var(--primary);"><span>Envío</span><span id="cart-shipping-fee">A cotizar</span></div>
+            <div style="display:flex; justify-content:space-between; font-size:0.9rem; color:var(--primary);"><span>Descuento/Envío</span><span id="cart-shipping-fee">A cotizar</span></div>
             <div style="display:flex; justify-content:space-between; font-weight:800; font-size:1.4rem; margin:10px 0; color: var(--text-body);"><span>Total</span><span id="cart-total">$0</span></div>
             <button class="cat-btn active" style="width:100%; padding:18px;" onclick="checkoutViaWhatsApp()">Enviar solicitud de pedido</button>
         </div>
@@ -1138,8 +1282,7 @@
 
     <div id="notification">¡Añadido!</div>
     <a href="https://wa.me/5491168705261" class="wa-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
-
-    <script>
+        <script>
         const CONFIG = {
             ADMIN: { user: "admin", pass: "mundo123" },
             KEY: "mundo_colch_vFinal_Robust",
@@ -1149,7 +1292,7 @@
             PRODUCT_VIEWS_KEY: "mundo_colchonetas_product_views",
             MASTER_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQX_MteY9z1Of-MIimoruabnLSCY2p1mMDl0RvYeDWivYTfXljryTikNsCGM3yFdF-PcoWo2Zyb5EiS/pub?gid=0&single=true&output=csv",
             SHEETS_WEBAPP_URL: "https://script.google.com/macros/s/AKfycbwhqmZQdheEmlcQfpNRbIGMHXSXbYXhPc5ySN56Q6QutgdMG3K6Kqm_8dD9PRw2E-InuQ/exec",
-            STATS_WEBAPP_URL: "https://script.google.com/macros/s/AKfycbwY21TfMkol3u6AUOx6Kq2LWJZ1b2FJ5C-fkbj0vCKgbrQg4epgPHD6bzpGu7G0m4o_/exec"  // <--- CAMBIÁ ESTA URL
+            STATS_WEBAPP_URL: "https://script.google.com/macros/s/AKfycbwY21TfMkol3u6AUOx6Kq2LWJZ1b2FJ5C-fkbj0vCKgbrQg4epgPHD6bzpGu7G0m4o_/exec"
         };
 
         const SHIPPING_RATES = { 
@@ -1167,6 +1310,10 @@
         let isAutoplayPaused = false;
         let holdTimer = null;
         let holdClave = null;
+        let cuponActivo = null;
+        let calificacionTestimonio = 0;
+        const TESTIMONIOS_KEY = "mundo_colchonetas_testimonios";
+        const CUPONES_KEY = "mundo_colchonetas_cupones";
 
         const norm = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
 
@@ -1357,6 +1504,18 @@
                 document.body.removeChild(tempInput);
                 showNotify('📋 Copiado para Instagram');
             }
+        }
+
+        // =======================================================
+        // WHATSAPP DIRECTO
+        // =======================================================
+        function consultarPorWhatsApp(clave) {
+            const p = products.find(i => i.clave === clave);
+            if (!p) return;
+            
+            const pFinal = p.oferta ? p.precioOferta : p.precio;
+            const msg = `Hola! Me interesa el producto:\n\n🪐 ${p.nombre}\n💰 $${pFinal.toLocaleString()}\n\n¿Podrían darme más información?`;
+            window.open(`https://wa.me/5491168705261?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
         // =======================================================
@@ -1554,7 +1713,6 @@
             
             localStorage.setItem(CONFIG.VISITORS_KEY, JSON.stringify(visitorsData));
             
-            // ✅ ENVIAR A ESTADÍSTICAS
             sendVisitorToStats();
             
             return visitorsData;
@@ -1566,7 +1724,6 @@
             viewsData[clave]++;
             localStorage.setItem(CONFIG.PRODUCT_VIEWS_KEY, JSON.stringify(viewsData));
             
-            // ✅ ENVIAR A ESTADÍSTICAS
             const product = products.find(p => p.clave === clave);
             if (product) {
                 sendProductViewToStats(clave, product.nombre);
@@ -1785,14 +1942,11 @@
         }
 
         // =======================================================
-        // FUNCIONES DE ESTADÍSTICAS EN GOOGLE SHEETS (NUEVAS)
+        // FUNCIONES DE ESTADÍSTICAS EN GOOGLE SHEETS
         // =======================================================
         function sendSaleToStats(customerName, items, shipping, total) {
             const STATS_URL = CONFIG.STATS_WEBAPP_URL;
-           if (!STATS_URL)  return; {
-                console.log("⚠️ STATS_WEBAPP_URL no configurada. Estadísticas no guardadas.");
-                return;
-            }
+            if (!STATS_URL) return;
             
             const orderData = {
                 tipo: "venta",
@@ -1814,7 +1968,7 @@
 
         function sendVisitorToStats() {
             const STATS_URL = CONFIG.STATS_WEBAPP_URL;
-            if (!STATS_URL)  return;
+            if (!STATS_URL) return;
             
             const visitorData = {
                 tipo: "visita",
@@ -1833,7 +1987,7 @@
 
         function sendProductViewToStats(clave, nombre) {
             const STATS_URL = CONFIG.STATS_WEBAPP_URL;
-            if (!STATS_URL)  return;
+            if (!STATS_URL) return;
             
             const productData = {
                 tipo: "producto_visto",
@@ -1850,10 +2004,179 @@
         }
 
         // =======================================================
+        // CUPONES DE DESCUENTO
+        // =======================================================
+        function cargarCupones() {
+            const cupones = JSON.parse(localStorage.getItem(CUPONES_KEY)) || [];
+            if (cupones.length === 0) {
+                const cuponInicial = [{
+                    codigo: "DIADELNIÑO10",
+                    descuento: 10,
+                    fechaVencimiento: "2026-08-31",
+                    usos: 0,
+                    activo: true
+                }];
+                localStorage.setItem(CUPONES_KEY, JSON.stringify(cuponInicial));
+                return cuponInicial;
+            }
+            return cupones;
+        }
+
+        function crearCupon() {
+            const codigo = document.getElementById('nuevo-cupon-codigo').value.toUpperCase().trim();
+            const descuento = parseInt(document.getElementById('nuevo-cupon-descuento').value);
+            const fecha = document.getElementById('nuevo-cupon-fecha').value;
+            
+            if (!codigo || !descuento || !fecha) {
+                alert("Completa todos los campos");
+                return;
+            }
+            
+            const cupones = cargarCupones();
+            cupones.push({
+                codigo,
+                descuento,
+                fechaVencimiento: fecha,
+                usos: 0,
+                activo: true
+            });
+            localStorage.setItem(CUPONES_KEY, JSON.stringify(cupones));
+            
+            document.getElementById('nuevo-cupon-codigo').value = '';
+            document.getElementById('nuevo-cupon-descuento').value = '';
+            document.getElementById('nuevo-cupon-fecha').value = '';
+            
+            mostrarCupones();
+            showNotify('✅ Cupón creado');
+        }
+
+        function mostrarCupones() {
+            const cupones = cargarCupones();
+            const container = document.getElementById('cupones-lista');
+            
+            container.innerHTML = cupones.map((cupon, index) => `
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; border-bottom:1px solid var(--border);">
+                    <div>
+                        <strong>${cupon.codigo}</strong> - ${cupon.descuento}% OFF
+                        <br><small style="color:var(--slate-500);">Vence: ${cupon.fechaVencimiento}</small>
+                        <br><small style="color:var(--slate-500);">Usos: ${cupon.usos}</small>
+                    </div>
+                    <button class="cat-btn" onclick="eliminarCupon(${index})" style="background:#ff4757; color:white;">🗑️</button>
+                </div>
+            `).join('');
+        }
+
+        function eliminarCupon(index) {
+            const cupones = cargarCupones();
+            cupones.splice(index, 1);
+            localStorage.setItem(CUPONES_KEY, JSON.stringify(cupones));
+            mostrarCupones();
+            showNotify('Cupón eliminado');
+        }
+
+        function aplicarCupon() {
+            const codigo = document.getElementById('cupon-input').value.toUpperCase().trim();
+            const cupones = cargarCupones();
+            const cupon = cupones.find(c => c.codigo === codigo && c.activo);
+            
+            const mensajeContainer = document.getElementById('cupon-mensaje');
+            
+            if (!cupon) {
+                cuponActivo = null;
+                mensajeContainer.innerHTML = '<div class="cupon-invalido">❌ Cupón inválido</div>';
+                updateCartUI();
+                return;
+            }
+            
+            const hoy = new Date();
+            const vencimiento = new Date(cupon.fechaVencimiento);
+            
+            if (hoy > vencimiento) {
+                cuponActivo = null;
+                mensajeContainer.innerHTML = '<div class="cupon-invalido">❌ Cupón vencido</div>';
+                updateCartUI();
+                return;
+            }
+            
+            cuponActivo = cupon;
+            mensajeContainer.innerHTML = `<div class="cupon-aplicado">✅ ${cupon.descuento}% OFF aplicado</div>`;
+            updateCartUI();
+            showNotify(`🎟️ Cupón ${cupon.codigo} aplicado`);
+        }
+
+        // =======================================================
+        // TESTIMONIOS
+        // =======================================================
+        function cargarTestimonios() {
+            return JSON.parse(localStorage.getItem(TESTIMONIOS_KEY)) || [];
+        }
+
+        function mostrarTestimonios() {
+            const testimonios = cargarTestimonios();
+            const container = document.getElementById('testimonios-container');
+            
+            if (testimonios.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:var(--slate-500);">Sé el primero en dejar una reseña</p>';
+                return;
+            }
+            
+            container.innerHTML = testimonios.slice(0, 10).map(t => `
+                <div class="testimonio-card">
+                    <div class="testimonio-stars">${'★'.repeat(t.calificacion)}${'☆'.repeat(5 - t.calificacion)}</div>
+                    <div class="testimonio-text">${t.comentario}</div>
+                    <div class="testimonio-author">- ${t.nombre}</div>
+                    <div class="testimonio-date">${t.fecha}</div>
+                </div>
+            `).join('');
+        }
+
+        function mostrarFormularioTestimonio() {
+            const form = document.getElementById('testimonio-form');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function setCalificacion(calificacion) {
+            calificacionTestimonio = calificacion;
+            for (let i = 1; i <= 5; i++) {
+                const star = document.getElementById(`star-${i}`);
+                star.style.color = i <= calificacion ? '#f39c12' : '#ddd';
+            }
+        }
+
+        function enviarTestimonio() {
+            const nombre = document.getElementById('testimonio-nombre').value.trim();
+            const comentario = document.getElementById('testimonio-comentario').value.trim();
+            
+            if (!nombre || !comentario || calificacionTestimonio === 0) {
+                alert("Completa todos los campos y selecciona una calificación");
+                return;
+            }
+            
+            const testimonios = cargarTestimonios();
+            testimonios.unshift({
+                nombre,
+                calificacion: calificacionTestimonio,
+                comentario,
+                fecha: new Date().toLocaleDateString('es-AR')
+            });
+            localStorage.setItem(TESTIMONIOS_KEY, JSON.stringify(testimonios));
+            
+            document.getElementById('testimonio-nombre').value = '';
+            document.getElementById('testimonio-comentario').value = '';
+            calificacionTestimonio = 0;
+            for (let i = 1; i <= 5; i++) {
+                document.getElementById(`star-${i}`).style.color = '#ddd';
+            }
+            document.getElementById('testimonio-form').style.display = 'none';
+            
+            mostrarTestimonios();
+            showNotify('⭐ ¡Gracias por tu reseña!');
+        }
+
+        // =======================================================
         // EXPORTAR TODOS LOS DATOS
         // =======================================================
         function exportAllData() {
-            // Exportar ventas
             const salesData = JSON.parse(localStorage.getItem(CONFIG.SALES_KEY)) || [];
             let salesCSV = "Fecha,Cliente,Artículos,Total\n";
             salesData.forEach(sale => {
@@ -1861,14 +2184,12 @@
                 salesCSV += `"${sale.date}","${sale.customerName}",${items},${sale.total}\n`;
             });
             
-            // Exportar visitas
             const visitorsData = JSON.parse(localStorage.getItem(CONFIG.VISITORS_KEY)) || { history: [] };
             let visitorsCSV = "Fecha,Hora\n";
             visitorsData.history.forEach(visit => {
                 visitorsCSV += `"${visit.date}","${visit.time}"\n`;
             });
             
-            // Exportar productos vistos
             const viewsData = JSON.parse(localStorage.getItem(CONFIG.PRODUCT_VIEWS_KEY)) || {};
             let viewsCSV = "Producto,Visualizaciones\n";
             Object.entries(viewsData).forEach(([clave, views]) => {
@@ -1877,7 +2198,6 @@
                 viewsCSV += `"${name}",${views}\n`;
             });
             
-            // Crear archivos y descargar
             downloadCSV(salesCSV, 'ventas_mundo_colchonetas.csv');
             setTimeout(() => downloadCSV(visitorsCSV, 'visitas_mundo_colchonetas.csv'), 500);
             setTimeout(() => downloadCSV(viewsCSV, 'productos_vistos_mundo_colchonetas.csv'), 1000);
@@ -1927,7 +2247,7 @@
         function filterCat(c) { currentCategory = c; renderAll(); }
 
         // =======================================================
-        // RENDERIZAR PRODUCTOS - CON HOLD TO SHARE
+        // RENDERIZAR PRODUCTOS
         // =======================================================
         function renderProducts() {
             const container = document.getElementById('products-container');
@@ -2022,7 +2342,7 @@
         }
 
         // =======================================================
-        // OPEN DETAIL - CON HOLD TO SHARE
+        // OPEN DETAIL
         // =======================================================
         function openDetail(clave) {
             const p = products.find(i => i.clave === clave);
@@ -2091,7 +2411,10 @@
                                 <i class="fas fa-times"></i> Sin Stock
                             </button>
                         `}
-                        <div style="display:flex; gap:10px;">
+                        <button class="wa-direct-btn" onclick="consultarPorWhatsApp('${p.clave}')">
+                            <i class="fab fa-whatsapp"></i> Consultar por WhatsApp
+                        </button>
+                        <div style="display:flex; gap:10px; margin-top:10px;">
                             <button class="share-product-btn share-wa" style="width:50px; height:50px; font-size:1.2rem;" onclick="shareProduct('${p.clave}', 'whatsapp')" title="Compartir"><i class="fab fa-whatsapp"></i></button>
                             <button class="share-product-btn share-fb" style="width:50px; height:50px; font-size:1.2rem;" onclick="shareProduct('${p.clave}', 'facebook')" title="Compartir"><i class="fab fa-facebook-f"></i></button>
                             <button class="share-product-btn share-ig" style="width:50px; height:50px; font-size:1.2rem;" onclick="shareProduct('${p.clave}', 'instagram')" title="Compartir"><i class="fab fa-instagram"></i></button>
@@ -2153,11 +2476,6 @@
         // =======================================================
         // FUNCIONES DE CARRITO Y CHECKOUT
         // =======================================================
-        function calculateShipping() {
-            shippingFee = 0;
-            updateCartUI();
-        }
-
         function updateCartUI() {
             const container = document.getElementById('cart-items');
             let sub = 0;
@@ -2177,9 +2495,20 @@
                     </div>
                 </div>`;
             }).join('');
+            
+            let descuento = 0;
+            if (cuponActivo) {
+                descuento = Math.round(sub * (cuponActivo.descuento / 100));
+            }
+            const totalFinal = sub - descuento;
+            
             document.getElementById('cart-subtotal').innerText = `$${sub.toLocaleString()}`;
-            document.getElementById('cart-shipping-fee').innerText = 'A cotizar';
-            document.getElementById('cart-total').innerText = `$${sub.toLocaleString()}`;
+            if (descuento > 0) {
+                document.getElementById('cart-shipping-fee').innerHTML = `<span style="color:#2ecc71;">-$${descuento.toLocaleString()}</span>`;
+            } else {
+                document.getElementById('cart-shipping-fee').innerText = 'A cotizar';
+            }
+            document.getElementById('cart-total').innerText = `$${totalFinal.toLocaleString()}`;
             document.getElementById('header-cart-count').innerText = cart.reduce((acc, i) => acc + i.qty, 0);
         }
 
@@ -2219,21 +2548,32 @@
             });
             
             const shippingFee = 0;
-            const total = subtotal + shippingFee;
+            let total = subtotal + shippingFee;
             
             msg += `\n💰 SUBTOTAL: $${subtotal.toLocaleString()}`;
+            
+            if (cuponActivo) {
+                const descuento = Math.round(subtotal * (cuponActivo.descuento / 100));
+                total = subtotal - descuento;
+                msg += `\n🎟️ Cupón ${cuponActivo.codigo}: -$${descuento.toLocaleString()}`;
+                
+                const cupones = cargarCupones();
+                const cuponIndex = cupones.findIndex(c => c.codigo === cuponActivo.codigo);
+                if (cuponIndex >= 0) {
+                    cupones[cuponIndex].usos++;
+                    localStorage.setItem(CUPONES_KEY, JSON.stringify(cupones));
+                }
+                cuponActivo = null;
+                document.getElementById('cupon-mensaje').innerHTML = '';
+            }
+            
             msg += `\n📦 Envío: a cotizar por WhatsApp`;
+            msg += `\n💰 TOTAL: $${total.toLocaleString()}`;
             
-            // ✅ GUARDAR EN LOCAL
             registerSale(customerName, '');
-            
-            // ✅ GUARDAR EN URL ORIGINAL (para productos)
             sendToGoogleSheets(customerName, '', itemsForSheet, shippingFee);
-            
-            // ✅ GUARDAR EN NUEVA URL DE ESTADÍSTICAS
             sendSaleToStats(customerName, itemsForSheet, shippingFee, total);
             
-            // ✅ ABRIR WHATSAPP
             window.open(`https://wa.me/5491168705261?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
@@ -2541,6 +2881,8 @@
             trackVisitor();
             updateShareLinks();
             checkProductInUrl();
+            mostrarTestimonios();
+            mostrarCupones();
             
             setTimeout(() => {
                 if (!localStorage.getItem('chatbot_shown')) {
@@ -2659,20 +3001,8 @@
                 document.getElementById('admin-panel').classList.add('visible');
                 showProductAnalytics();
                 updateVisitorStatsInPanel();
+                mostrarCupones();
                 renderProducts();
-                const detailModal = document.getElementById('detail-modal');
-                if (detailModal.classList.contains('active')) {
-                    const img = document.querySelector('#active-img');
-                    if (img) {
-                        const productClave = Object.keys(products).find(key => {
-                            const p = products.find(p => p.fotos && p.fotos[0] === img.src);
-                            return p;
-                        });
-                        if (productClave) {
-                            openDetail(productClave);
-                        }
-                    }
-                }
             } else alert("Error");
         }
 
