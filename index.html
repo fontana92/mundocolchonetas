@@ -1149,7 +1149,7 @@
             PRODUCT_VIEWS_KEY: "mundo_colchonetas_product_views",
             MASTER_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQX_MteY9z1Of-MIimoruabnLSCY2p1mMDl0RvYeDWivYTfXljryTikNsCGM3yFdF-PcoWo2Zyb5EiS/pub?gid=0&single=true&output=csv",
             SHEETS_WEBAPP_URL: "https://script.google.com/macros/s/AKfycbwhqmZQdheEmlcQfpNRbIGMHXSXbYXhPc5ySN56Q6QutgdMG3K6Kqm_8dD9PRw2E-InuQ/exec",
-            STATS_WEBAPP_URL: "https://script.google.com/macros/s/AKfycby3nXAt1_YG_cunsoImWLyYlBIoEEuc9VOIA60LVMmn5axNdGFukdPbZB7Wm8D-SZsy/exec"  // <--- CAMBIÁ ESTA URL
+            STATS_WEBAPP_URL: "https://script.google.com/macros/s/AKfycbxURa1voHPZa1qF4wZpNikDbpPh1WbO3VqzBOaxZXzhGUbVoqP_5YTHvf8FUj6bshdN/exec"  // <--- CAMBIÁ ESTA URL
         };
 
         const SHIPPING_RATES = { 
@@ -1789,7 +1789,7 @@
         // =======================================================
         function sendSaleToStats(customerName, items, shipping, total) {
             const STATS_URL = CONFIG.STATS_WEBAPP_URL;
-            if (!STATS_URL || STATS_URL === "https://script.google.com/macros/s/AKfycby3nXAt1_YG_cunsoImWLyYlBIoEEuc9VOIA60LVMmn5axNdGFukdPbZB7Wm8D-SZsy/exec") {
+            if (!STATS_URL || STATS_URL === "https://script.google.com/macros/s/AKfycbxURa1voHPZa1qF4wZpNikDbpPh1WbO3VqzBOaxZXzhGUbVoqP_5YTHvf8FUj6bshdN/exec") {
                 console.log("⚠️ STATS_WEBAPP_URL no configurada. Estadísticas no guardadas.");
                 return;
             }
@@ -1804,33 +1804,17 @@
                 total: total
             };
             
-                // --- NUEVO ENVÍO A GOOGLE SHEETS ---
-    fetch(STATS_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            timestamp: new Date().toLocaleString('es-AR'),
-            customerName: customerName,
-            postalCode: "",  // Si tienes el código postal, pon la variable aquí
-            items: items,
-            shipping: shipping,
-            total: total
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if(data.success) {
-            console.log("✅ Pedido registrado en Google:", data.message);
-        } else {
-            console.error("❌ Error en la Sheets:", data.error);
-        }
-    })
-    .catch(error => console.error("❌ Error de red al enviar a Google:", error));
+            fetch(STATS_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(orderData)
+            }).catch(error => console.error("❌ Error en estadísticas (venta):", error));
         }
 
         function sendVisitorToStats() {
             const STATS_URL = CONFIG.STATS_WEBAPP_URL;
-            if (!STATS_URL || STATS_URL === "https://script.google.com/macros/s/AKfycby3nXAt1_YG_cunsoImWLyYlBIoEEuc9VOIA60LVMmn5axNdGFukdPbZB7Wm8D-SZsy/exec") return;
+            if (!STATS_URL || STATS_URL === "https://script.google.com/macros/s/AKfycbxURa1voHPZa1qF4wZpNikDbpPh1WbO3VqzBOaxZXzhGUbVoqP_5YTHvf8FUj6bshdN/exec") return;
             
             const visitorData = {
                 tipo: "visita",
@@ -1849,7 +1833,7 @@
 
         function sendProductViewToStats(clave, nombre) {
             const STATS_URL = CONFIG.STATS_WEBAPP_URL;
-            if (!STATS_URL || STATS_URL === "https://script.google.com/macros/s/AKfycby3nXAt1_YG_cunsoImWLyYlBIoEEuc9VOIA60LVMmn5axNdGFukdPbZB7Wm8D-SZsy/exec") return;
+            if (!STATS_URL || STATS_URL === "https://script.google.com/macros/s/AKfycbxURa1voHPZa1qF4wZpNikDbpPh1WbO3VqzBOaxZXzhGUbVoqP_5YTHvf8FUj6bshdN/exec") return;
             
             const productData = {
                 tipo: "producto_visto",
