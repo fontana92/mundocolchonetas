@@ -166,14 +166,19 @@
             position: absolute;
             top: 70px;
             left: 15px;
-            padding: 3px 14px;
+            padding: 6px 18px;
             border-radius: 99px;
-            font-size: 0.6rem;
-            font-weight: 700;
+            font-size: 0.8rem;
+            font-weight: 800;
             z-index: 5;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            animation: pulse-badge 2s infinite;
+        }
+        @keyframes pulse-badge {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
         .badge-tag.nuevo { background: #2ecc71; color: white; }
         .badge-tag.mas-vendido { background: #f39c12; color: white; }
@@ -201,9 +206,9 @@
             50% { transform: scale(1.05); }
         }
 
-        .product-image-container { 
+                .product-image-container { 
             width: 100%; 
-            height: 260px; 
+            height: 200px; 
             background: var(--slate-100); 
             border-radius: var(--radius-md); 
             margin-bottom: 15px; 
@@ -958,10 +963,11 @@
             .oferta-item .precio-oferta { font-size: 1.1rem; }
             .ofertas-badge { font-size: 0.8rem; padding: 6px 16px; }
             .ofertas-carousel { padding: 8px 15px 15px 15px; gap: 15px; }
-            .product-card { padding: 15px; }
-            .product-image-container { height: 200px; }
-            .current-price { font-size: 1.3rem; }
-            .bento-grid { gap: 15px; grid-template-columns: repeat(2, 1fr); }
+                        .product-card { padding: 10px; }
+            .product-image-container { height: 140px; }
+            .current-price { font-size: 1.1rem; }
+            .bento-grid { gap: 10px; grid-template-columns: repeat(2, 1fr); }
+            .product-card h3 { font-size: 0.8rem !important; }
             .chatbot-container { width: 300px; height: 450px; right: 10px; bottom: 150px; }
             .chatbot-toggle { right: 10px; bottom: 90px; }
             .share-float { left: 10px; bottom: 25px; }
@@ -2298,7 +2304,10 @@
                 return;
             }
             
-            container.innerHTML = filtered.map(p => {
+            // Mostrar TODOS los productos sin límite
+            const productosAMostrar = filtered;
+            
+            container.innerHTML = productosAMostrar.map(p => {
                 const pFinal = p.oferta ? p.precioOferta : p.precio;
                 const stock = parseInt(p.stock) || 0;
                 const etiqueta = p.etiqueta || '';
@@ -2333,12 +2342,7 @@
                             ${stock > 0 ? `<span style="font-size:0.65rem; color:#22c55e; font-weight:600;">✓ ${stock}</span>` : `<span style="font-size:0.65rem; color:#ef4444; font-weight:600;">Sin stock</span>`}
                         </div>
                     </div>
-                    <div style="display:flex; align-items:center; gap:8px; margin-top:6px; flex-wrap:wrap;">
-                        <div style="display:flex; gap:4px; align-items:center;">
-                            <button class="share-product-btn share-wa" onclick="event.stopPropagation(); shareProduct('${p.clave}', 'whatsapp')" title="WhatsApp"><i class="fab fa-whatsapp"></i></button>
-                            <button class="share-product-btn share-fb" onclick="event.stopPropagation(); shareProduct('${p.clave}', 'facebook')" title="Facebook"><i class="fab fa-facebook-f"></i></button>
-                            <button class="share-product-btn share-ig" onclick="event.stopPropagation(); shareProduct('${p.clave}', 'instagram')" title="Instagram"><i class="fab fa-instagram"></i></button>
-                        </div>
+                                        <div style="display:flex; align-items:center; gap:8px; margin-top:6px; flex-wrap:wrap;">
                         ${stock > 0 ? `
                             <div class="quantity-selector" onclick="event.stopPropagation();">
                                 <button onclick="event.stopPropagation(); updateQuantity('${p.clave}', -1)">−</button>
