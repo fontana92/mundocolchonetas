@@ -148,45 +148,52 @@
             border-color: var(--primary); 
         }
         
-        .badge-offer { 
+                .badge-offer { 
             position: absolute; 
-            top: 15px; 
-            left: 15px; 
+            top: 10px; 
+            left: 10px; 
             background: linear-gradient(135deg, #ff4757, #ff6b81); 
             color: white; 
-            padding: 6px 16px; 
+            padding: 5px 12px; 
             border-radius: 99px; 
-            font-size: 0.8rem; 
+            font-size: 0.7rem; 
             font-weight: 800; 
             z-index: 5;
             box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
+            border: 2px solid rgba(255,255,255,0.8);
         }
 
-        .badge-tag {
+                .badge-tag {
             position: absolute;
-            top: 70px;
-            left: 15px;
-            padding: 6px 18px;
+            top: 10px;
+            right: 10px;
+            left: auto;
+            padding: 8px 16px;
             border-radius: 99px;
-            font-size: 0.8rem;
-            font-weight: 800;
+            font-size: 0.75rem;
+            font-weight: 900;
             z-index: 5;
             text-transform: uppercase;
             letter-spacing: 1px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
             animation: pulse-badge 2s infinite;
+            border: 2px solid rgba(255,255,255,0.8);
+        }
+        @keyframes pulse-badge {
+            0%, 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+            50% { transform: scale(1.1); box-shadow: 0 6px 25px rgba(0,0,0,0.7); }
         }
         @keyframes pulse-badge {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
         }
-        .badge-tag.nuevo { background: #2ecc71; color: white; }
-        .badge-tag.mas-vendido { background: #f39c12; color: white; }
-        .badge-tag.recomendado { background: #3498db; color: white; }
-        .badge-tag.oferta-especial { background: #e74c3c; color: white; }
-        .badge-tag.stock-limitado { background: #e67e22; color: white; }
-        .badge-tag.premium { background: #9b59b6; color: white; }
-        .badge-tag.novedad { background: #1abc9c; color: white; }
+                .badge-tag.nuevo { background: linear-gradient(135deg, #00ff87, #00cc6a); color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .badge-tag.mas-vendido { background: linear-gradient(135deg, #ff6b00, #ff4500); color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .badge-tag.recomendado { background: linear-gradient(135deg, #00c6ff, #0072ff); color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .badge-tag.oferta-especial { background: linear-gradient(135deg, #ff0000, #cc0000); color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .badge-tag.stock-limitado { background: linear-gradient(135deg, #ff9500, #ff6b00); color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .badge-tag.premium { background: linear-gradient(135deg, #ffd700, #ffaa00); color: #000; text-shadow: 0 2px 4px rgba(255,255,255,0.5); }
+        .badge-tag.novedad { background: linear-gradient(135deg, #00e676, #00b85c); color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 
         .badge-low-stock {
             position: absolute;
@@ -963,11 +970,16 @@
             .oferta-item .precio-oferta { font-size: 1.1rem; }
             .ofertas-badge { font-size: 0.8rem; padding: 6px 16px; }
             .ofertas-carousel { padding: 8px 15px 15px 15px; gap: 15px; }
-                        .product-card { padding: 10px; }
-            .product-image-container { height: 140px; }
-            .current-price { font-size: 1.1rem; }
-            .bento-grid { gap: 10px; grid-template-columns: repeat(2, 1fr); }
-            .product-card h3 { font-size: 0.8rem !important; }
+                                    .product-card { padding: 8px; }
+            .product-image-container { height: 130px; margin-bottom: 8px; }
+            .current-price { font-size: 1rem; }
+            .old-price { font-size: 0.7rem; }
+            .bento-grid { gap: 8px; grid-template-columns: repeat(2, 1fr); }
+            .product-card h3 { font-size: 0.75rem !important; margin: 3px 0 8px 0 !important; }
+            .product-card p { font-size: 0.65rem !important; }
+            .quantity-selector button { width: 25px; height: 25px; font-size: 0.8rem; }
+            .quantity-selector input { width: 25px; height: 25px; font-size: 0.7rem; }
+            .btn-add-cart { width: 32px; height: 32px; font-size: 0.8rem; }
             .chatbot-container { width: 300px; height: 450px; right: 10px; bottom: 150px; }
             .chatbot-toggle { right: 10px; bottom: 90px; }
             .share-float { left: 10px; bottom: 25px; }
