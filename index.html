@@ -113,12 +113,26 @@
         .search-input:focus { background: var(--card-bg); border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-glow); }
         .search-icon { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--slate-500); }
 
-        .category-nav { display: flex; gap: 8px; margin-bottom: 25px; overflow-x: auto; padding: 10px 5px; scrollbar-width: none; }
+         .category-nav { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 8px; 
+            margin-bottom: 25px; 
+            padding: 10px 5px; 
+            position: sticky; 
+            top: 80px; 
+            max-height: 80vh; 
+            overflow-y: auto; 
+            scrollbar-width: none; 
+            min-width: 150px;
+        }
         .category-nav::-webkit-scrollbar { display: none; }
-        .cat-btn {
+                .cat-btn {
             padding: 10px 20px; border-radius: 99px; border: 1px solid var(--border);
             background: var(--card-bg); cursor: pointer; font-weight: 600; white-space: nowrap;
             transition: var(--transition); color: var(--text-body); font-size: 0.8rem;
+            width: 100%;
+            text-align: left;
         }
         .cat-btn.active { background: var(--dark); color: var(--white); border-color: var(--dark); }
         .cat-btn.offer-btn { border-color: #ff4757; color: #ff4757; }
@@ -529,111 +543,8 @@
         #notification { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(150px); background: var(--dark); color: white; padding: 12px 30px; border-radius: 99px; z-index: 3000; transition: var(--transition); font-weight: 500; }
         .wa-float { position: fixed; bottom: 25px; right: 25px; width: 60px; height: 60px; background: #25D366; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; z-index: 900; box-shadow: 0 10px 30px rgba(37,211,102,0.4); text-decoration: none; }
         
-        .chatbot-toggle {
-            position: fixed;
-            bottom: 100px;
-            right: 25px;
-            width: 60px;
-            height: 60px;
-            background: var(--primary);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            z-index: 900;
-            box-shadow: 0 10px 30px rgba(142, 68, 173, 0.4);
-            cursor: pointer;
-            border: none;
-            transition: var(--transition);
-        }
-        .chatbot-toggle:hover { transform: scale(1.1); box-shadow: 0 15px 40px rgba(142, 68, 173, 0.6); }
         
-        .chatbot-container {
-            position: fixed;
-            bottom: 170px;
-            right: 25px;
-            width: 350px;
-            height: 500px;
-            background: var(--card-bg);
-            border-radius: 20px;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.2);
-            z-index: 899;
-            display: none;
-            flex-direction: column;
-            overflow: hidden;
-            border: 3px solid var(--primary);
-            color: var(--text-body);
-        }
-        .chatbot-container.active { display: flex; }
-        
-        .chatbot-header {
-            background: var(--primary);
-            color: white;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .chatbot-header h3 { font-weight: 700; font-size: 1rem; margin: 0; }
-        .chatbot-close { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
-        
-        .chatbot-messages {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        .message { max-width: 80%; padding: 12px 15px; border-radius: 18px; font-size: 0.9rem; line-height: 1.4; }
-        .bot-message { background: var(--slate-100); align-self: flex-start; border-bottom-left-radius: 5px; color: var(--text-body); }
-        .user-message { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 5px; }
-        
-        .quick-options { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-        .quick-option {
-            background: var(--slate-100);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 8px 15px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: var(--transition);
-            color: var(--text-body);
-        }
-        .quick-option:hover { background: var(--primary); color: white; border-color: var(--primary); }
-        
-        .chatbot-input {
-            display: flex;
-            padding: 15px;
-            border-top: 1px solid var(--border);
-            gap: 10px;
-        }
-        .chatbot-input input {
-            flex: 1;
-            padding: 12px 15px;
-            border: 1px solid var(--border);
-            border-radius: 25px;
-            font-size: 0.9rem;
-            outline: none;
-            background: var(--bg-body);
-            color: var(--text-body);
-        }
-        .chatbot-input input:focus { border-color: var(--primary); }
-        .chatbot-input button {
-            background: var(--primary);
-            color: white;
-            border: none;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
+  
         .share-float {
             position: fixed;
             bottom: 25px;
@@ -984,9 +895,17 @@
             .badge-tag { font-size: 0.55rem !important; padding: 3px 10px !important; top: 5px !important; right: 5px !important; }
             .product-card > div:last-child { gap: 4px !important; margin-top: 3px !important; }
             .product-card > div:last-child .quantity-selector { padding: 2px !important; }
-            .chatbot-container { width: 300px; height: 450px; right: 10px; bottom: 150px; }
-            .chatbot-toggle { right: 10px; bottom: 90px; }
-            .share-float { left: 10px; bottom: 25px; }
+                        .category-nav { 
+                flex-direction: row !important; 
+                position: static !important; 
+                max-height: none !important; 
+                overflow-x: auto !important; 
+                min-width: auto !important;
+                margin-bottom: 15px !important;
+            }
+            .cat-btn { width: auto !important; text-align: center !important; }
+            #products-container + div { display: none; }
+   .share-float { left: 10px; bottom: 25px; }
             .share-container { left: 10px; bottom: 100px; width: 280px; }
             #back-to-top { left: 10px; bottom: 90px; width: 45px; height: 45px; font-size: 1.2rem; }
             #share-admin-modal .modal-content { padding: 15px; margin: 10px; }
@@ -1191,10 +1110,15 @@
             <input type="text" id="product-search" class="search-input" placeholder="Buscar por nombre, categoría o detalle..." oninput="handleSearch()">
         </div>
 
-        <div class="category-nav" id="categories-container"></div>
-        
-        <div class="bento-grid" id="products-container">
+            <div style="display:flex; gap:20px; align-items:flex-start;">
+            <div class="category-nav" id="categories-container" style="flex-shrink:0;"></div>
+            <div style="flex:1;">
+                <div class="bento-grid" id="products-container">
              <p id="status-msg" style="text-align:center; grid-column: 1/-1; padding: 50px; color:#999;">Sincronizando catálogo premium...</p>
+        </div>
+
+                        </div>
+            </div>
         </div>
 
         <div style="text-align: center; margin: 40px 0;">
@@ -1267,8 +1191,7 @@
             <h2 style="font-weight: 800; color: var(--text-body);">Tu Carrito</h2>
             <button onclick="toggleCart()" style="background:none; border:none; font-size:2rem; cursor:pointer; color: var(--text-body);">&times;</button>
         </div>
-        <div id="cart-items" style="flex:1; overflow-y:auto;"></div>
-        
+                <div id="cart-items" style="flex:1; overflow-y:auto; max-height:60vh; padding-right:5px;"></div>        
         <div class="shipping-box">
             <label style="font-weight:700; font-size:0.8rem; color: var(--text-body);">Nombre Completo *</label>
             <input type="text" id="customer-name" class="form-input" style="margin-top:5px;" placeholder="Tu nombre y apellido">
@@ -1349,24 +1272,7 @@
         </div>
     </div>
 
-    <!-- CHATBOT -->
-    <button class="chatbot-toggle" onclick="toggleChatbot()">
-        <i class="fas fa-robot"></i>
-    </button>
     
-    <div class="chatbot-container" id="chatbot-container">
-        <div class="chatbot-header">
-            <h3>Asistente Mundo Colchonetas</h3>
-            <button class="chatbot-close" onclick="toggleChatbot()">×</button>
-        </div>
-        <div class="chatbot-messages" id="chatbot-messages"></div>
-        <div class="chatbot-input">
-            <input type="text" id="chatbot-input" placeholder="Escribe tu pregunta..." onkeypress="handleChatbotKeypress(event)">
-            <button onclick="sendChatbotMessage()">
-                <i class="fas fa-paper-plane"></i>
-            </button>
-        </div>
-    </div>
 
     <!-- BOTÓN DE COMPARTIR -->
     <button class="share-float" onclick="toggleShare()">
@@ -2754,106 +2660,8 @@
         }
 
         // =======================================================
-        // FUNCIONES COMPARTIR, CHATBOT, ADMIN
+        // FUNCIONES COMPARTIR, ADMIN
         // =======================================================
-        function toggleChatbot() {
-            const chatbot = document.getElementById('chatbot-container');
-            chatbot.classList.toggle('active');
-            if (chatbot.classList.contains('active') && document.getElementById('chatbot-messages').children.length === 0) {
-                setTimeout(() => {
-                    addBotMessage("¡Hola! 👋 Soy tu asistente de Mundo Colchonetas.");
-                    setTimeout(() => showQuickOptions(), 500);
-                }, 300);
-            }
-        }
-
-        function addBotMessage(text) {
-            const messagesContainer = document.getElementById('chatbot-messages');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'message bot-message';
-            messageDiv.innerHTML = text.replace(/\n/g, '<br>');
-            messagesContainer.appendChild(messageDiv);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
-
-        function addUserMessage(text) {
-            const messagesContainer = document.getElementById('chatbot-messages');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'message user-message';
-            messageDiv.textContent = text;
-            messagesContainer.appendChild(messageDiv);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
-
-        function showQuickOptions() {
-            const messagesContainer = document.getElementById('chatbot-messages');
-            const quickOptionsDiv = document.createElement('div');
-            quickOptionsDiv.className = 'quick-options';
-            
-            const options = ["📋 Productos", "💰 Ofertas", "🚚 Envíos", "💳 Pagos", "🏋️‍♂️ Recomendación"];
-            
-            options.forEach(option => {
-                const optionBtn = document.createElement('button');
-                optionBtn.className = 'quick-option';
-                optionBtn.textContent = option;
-                optionBtn.onclick = () => handleQuickOption(option);
-                quickOptionsDiv.appendChild(optionBtn);
-            });
-            
-            messagesContainer.appendChild(quickOptionsDiv);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
-
-        function handleQuickOption(option) {
-            addUserMessage(option);
-            setTimeout(() => {
-                const responses = {
-                    "📋 Productos": CHATBOT_RESPONSES["que productos tienen"],
-                    "💰 Ofertas": CHATBOT_RESPONSES["ofertas"],
-                    "🚚 Envíos": CHATBOT_RESPONSES["envios"],
-                    "💳 Pagos": CHATBOT_RESPONSES["metodos de pago"],
-                    "🏋️‍♂️ Recomendación": CHATBOT_RESPONSES["recomendacion"]
-                };
-                const resp = responses[option] || "No tengo respuesta para eso.";
-                addBotMessage(typeof resp === 'function' ? resp() : resp);
-                setTimeout(() => showQuickOptions(), 1000);
-            }, 500);
-        }
-
-        function sendChatbotMessage() {
-            const input = document.getElementById('chatbot-input');
-            const message = input.value.trim();
-            if (!message) return;
-            addUserMessage(message);
-            input.value = '';
-            
-            setTimeout(() => {
-                const normalizedMessage = norm(message);
-                let response = CHATBOT_RESPONSES[normalizedMessage];
-                if (!response) {
-                    for (const key in CHATBOT_RESPONSES) {
-                        if (normalizedMessage.includes(key) && key.length > 3) {
-                            response = CHATBOT_RESPONSES[key];
-                            break;
-                        }
-                    }
-                    if (!response) {
-                        response = CHATBOT_DEFAULT_RESPONSE.replace('{query}', message);
-                    }
-                }
-                if (typeof response === 'function') {
-                    response = response();
-                }
-                addBotMessage(response);
-                setTimeout(() => showQuickOptions(), 500);
-            }, 800);
-        }
-
-        function handleChatbotKeypress(event) {
-            if (event.key === 'Enter') {
-                sendChatbotMessage();
-            }
-        }
 
         function toggleShare() {
             const shareContainer = document.getElementById('share-container');
@@ -2937,12 +2745,7 @@
             checkProductInUrl();
             mostrarCupones();
             
-            setTimeout(() => {
-                if (!localStorage.getItem('chatbot_shown')) {
-                    toggleChatbot();
-                    localStorage.setItem('chatbot_shown', 'true');
-                }
-            }, 10000);
+            
         });
 
         async function syncWithExcel(silent = false) {
@@ -2997,51 +2800,6 @@
             searchQuery = norm(document.getElementById('product-search').value);
             renderProducts();
         }
-
-        // =======================================================
-        // CHATBOT RESPONSES
-        // =======================================================
-        const CHATBOT_RESPONSES = {
-            "hola": "¡Hola! 👋 Soy tu asistente de Mundo Colchonetas.",
-            "que productos tienen": function() {
-                const categorias = [...new Set(products.map(p => p.categoria))];
-                let response = "📋 **PRODUCTOS DISPONIBLES** 📋\n\n";
-                categorias.forEach(cat => {
-                    const productosCat = products.filter(p => p.categoria === cat && parseInt(p.stock) > 0);
-                    if (productosCat.length > 0) {
-                        response += `**${cat.toUpperCase()}** (${productosCat.length} productos)\n`;
-                    }
-                });
-                return response;
-            },
-            "hacen envios": "¡Sí! Hacemos envíos a todo el país. El costo lo cotizamos por WhatsApp.",
-            "envios": "Sí hacemos envíos 🚚. El costo lo cotizamos por WhatsApp.",
-            "metodos de pago": "Aceptamos:\n💳 Mercado Pago\n💰 Efectivo\n🏦 Transferencia\n📱 Depósito",
-            "ofertas": function() {
-                const ofertas = products.filter(p => p.oferta && parseInt(p.stock) > 0);
-                if (ofertas.length === 0) return "No hay ofertas activas.";
-                let response = "🎯 **OFERTAS EN STOCK** 🎯\n\n";
-                ofertas.slice(0, 5).forEach((prod, index) => {
-                    response += `${index + 1}. ${prod.nombre}\n   💰 $${prod.precioOferta.toLocaleString()} (${prod.descuento}% OFF)\n`;
-                });
-                return response;
-            },
-            "recomendacion": function() {
-                const recomendados = products.filter(p => parseInt(p.stock) > 0).sort((a, b) => b.oferta - a.oferta).slice(0, 3);
-                if (recomendados.length === 0) return "Todos los productos están agotados.";
-                let response = "💪 **TE RECOMIENDO:**\n\n";
-                recomendados.forEach((prod, index) => {
-                    const price = prod.oferta ? prod.precioOferta : prod.precio;
-                    response += `${index + 1}. **${prod.nombre}**\n   💰 $${price.toLocaleString()}\n`;
-                });
-                return response;
-            },
-            "gracias": "¡De nada! 😊",
-            "adios": "¡Hasta luego! 👋",
-            "contacto": "📱 WhatsApp: 11-6870-5261\n📍 Instagram: @mundo_colchonetas"
-        };
-
-        const CHATBOT_DEFAULT_RESPONSE = "Entiendo que preguntas sobre: '{query}'. Puedo ayudarte con:\n\n• 📋 Productos\n• 💰 Ofertas\n• 🚚 Envíos\n• 💳 Pagos\n\n¿En qué tema específico?";
 
         // =======================================================
         // FUNCIONES ADMIN Y UTILITIES
