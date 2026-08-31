@@ -1105,14 +1105,14 @@
             <div class="autoplay-indicator" id="autoplay-indicator"></div>
         </section>
 
-        <div class="search-container">
+               <div class="search-container">
             <i class="fas fa-search search-icon"></i>
             <input type="text" id="product-search" class="search-input" placeholder="Buscar por nombre, categoría o detalle..." oninput="handleSearch()">
         </div>
 
-                           <div style="display:flex; gap:20px; align-items:flex-start;">
-            <div class="category-nav" id="categories-container" style="flex-shrink:0;"></div>
-            <div style="flex:1;">
+        <div style="display: flex; gap: 20px; align-items: flex-start;">
+            <div class="category-nav" id="categories-container" style="flex-shrink: 0;"></div>
+            <div style="flex: 1; min-width: 0;">
                 <div class="bento-grid" id="products-container">
                     <p id="status-msg" style="text-align:center; grid-column: 1/-1; padding: 50px; color:#999;">Sincronizando catálogo premium...</p>
                 </div>
@@ -2162,19 +2162,22 @@
             renderOfertasDestacadas();
         }
 
-                        function renderCategories() {
+                                function renderCategories() {
             const container = document.getElementById('categories-container');
             if(!container) return;
-            const hasOffers = products.some(p => p.oferta);
-            let cats = ['todos'];
-            if (hasOffers) cats.push('ofertas');
             
-            const allCats = [...new Set(products.map(p => p.categoria.toLowerCase()))];
-            allCats.forEach(cat => {
+            let cats = ['todos'];
+            
+            products.forEach(p => {
+                const cat = p.categoria.toLowerCase();
                 if (!cats.includes(cat)) {
                     cats.push(cat);
                 }
             });
+            
+            if (products.some(p => p.oferta)) {
+                if (!cats.includes('ofertas')) cats.push('ofertas');
+            }
             
             container.innerHTML = cats.map(c => `
                 <button class="cat-btn ${c === 'ofertas' ? 'offer-btn' : ''} ${c === 'combos' ? 'offer-btn' : ''} ${currentCategory === c ? 'active' : ''}" 
