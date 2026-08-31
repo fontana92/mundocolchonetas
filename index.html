@@ -1091,11 +1091,11 @@
         .sidebar-categorias.hidden .category-nav {
             display: none !important;
         }
-        .sidebar-categorias.hidden::after {
+                .sidebar-categorias.hidden::before {
             content: '☰';
             font-size: 1rem;
             color: #fff;
-             pointer-events: none;
+            pointer-events: none;
         }
 
         @media (max-width: 480px) {
@@ -2356,9 +2356,13 @@
     }
 }
 
-       function toggleCategorias() {
+      function toggleCategorias() {
     const sidebar = document.getElementById('sidebar-categorias');
-    sidebar.classList.toggle('hidden');
+    if (sidebar.classList.contains('hidden')) {
+        sidebar.classList.remove('hidden');
+    } else {
+        sidebar.classList.add('hidden');
+    }
 }
 
         // =======================================================
@@ -3045,7 +3049,11 @@
                 window.__autoplayCleanup();
             }
         });
-
+document.getElementById('sidebar-categorias').addEventListener('click', function(e) {
+    if (this.classList.contains('hidden') && e.target === this) {
+        this.classList.remove('hidden');
+    }
+});
 
     </script>
 </body>
