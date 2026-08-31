@@ -1228,12 +1228,16 @@
             <input type="text" id="product-search" class="search-input" placeholder="Buscar por nombre, categoría o detalle..." oninput="handleSearch()">
         </div>
 
-                <div style="display:flex; gap:15px; align-items:flex-start;" class="catalogo-container">
-            <aside class="sidebar-categorias">
+                        <button class="btn-menu-categorias" onclick="toggleCategorias()">
+            <i class="fas fa-bars"></i> Categorías
+        </button>
+        <div style="display:flex; gap:15px; align-items:flex-start;" class="catalogo-container">
+            <aside class="sidebar-categorias" id="sidebar-categorias">
                 <h3 style="font-size:0.9rem; font-weight:800; margin-bottom:10px; color:var(--text-body);">📋 Categorías</h3>
                 <div class="category-nav" id="categories-container"></div>
             </aside>
            <div style="flex:1; min-width:0;" class="productos-wrapper">
+
                 <div class="bento-grid" id="products-container">
                     <p id="status-msg" style="text-align:center; grid-column: 1/-1; padding: 50px; color:#999;">Sincronizando catálogo premium...</p>
                 </div>
@@ -2310,6 +2314,10 @@
 
         function filterCat(c) { currentCategory = c; renderAll(); }
 
+function toggleCategorias() {
+            const sidebar = document.getElementById('sidebar-categorias');
+            sidebar.classList.toggle('open');
+        }
         // =======================================================
         // RENDERIZAR PRODUCTOS
         // =======================================================
@@ -2603,6 +2611,105 @@
                 padding: 8px 15px !important;
                 font-size: 0.7rem !important;
             }
+        .btn-menu-categorias {
+            display: none;
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 99px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+            align-items: center;
+            gap: 8px;
+        }
+        .sidebar-categorias {
+            width: 180px;
+            flex-shrink: 0;
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            padding: 12px;
+            position: sticky;
+            top: 80px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .sidebar-categorias .category-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            position: static;
+            max-height: none;
+            min-width: auto;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar-categorias .cat-btn {
+            width: 100%;
+            text-align: left;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+        }
+        .sidebar-categorias .cat-btn:hover {
+            background: var(--slate-100);
+        }
+        .sidebar-categorias .cat-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+        .sidebar-categorias .cat-btn.offer-btn {
+            color: #ff4757;
+        }
+        .sidebar-categorias .cat-btn.offer-btn.active {
+            background: #ff4757;
+            color: white;
+        }
+        @media (max-width: 480px) {
+            .btn-menu-categorias {
+                display: flex;
+                width: 100%;
+                justify-content: center;
+            }
+            .sidebar-categorias {
+                display: none;
+                width: 100%;
+                position: static;
+                margin-bottom: 15px;
+                max-height: 300px;
+            }
+            .sidebar-categorias.open {
+                display: block;
+            }
+            .catalogo-container {
+                flex-direction: column !important;
+            }
+            .productos-wrapper {
+                width: 100% !important;
+            }
+            .bento-grid {
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 4px !important;
+            }
+            .product-card { padding: 4px !important; }
+            .product-image-container { height: 80px !important; margin-bottom: 3px !important; }
+            .product-card h3 { font-size: 0.6rem !important; margin: 1px 0 3px 0 !important; }
+            .product-card p { font-size: 0.5rem !important; }
+            .current-price { font-size: 0.75rem !important; }
+            .old-price { font-size: 0.5rem !important; }
+            .quantity-selector button { width: 18px !important; height: 18px !important; font-size: 0.6rem !important; }
+            .quantity-selector input { width: 18px !important; height: 18px !important; font-size: 0.55rem !important; }
+            .btn-add-cart { width: 22px !important; height: 22px !important; font-size: 0.6rem !important; }
+            .badge-offer { font-size: 0.45rem !important; padding: 2px 5px !important; }
+            .badge-tag { font-size: 0.45rem !important; padding: 2px 6px !important; }
+        }
                 </style>
             `;
             document.getElementById('detail-modal').classList.add('active');
