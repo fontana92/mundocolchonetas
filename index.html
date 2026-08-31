@@ -2497,96 +2497,67 @@
                             grid-template-columns: 1fr !important;
                         }
                     }
-        .sidebar-categorias {
-            width: 200px;
-            flex-shrink: 0;
-            background: var(--card-bg);
-            border-radius: 15px;
-            border: 1px solid var(--border);
-            padding: 15px;
-            position: sticky;
-            top: 80px;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        .sidebar-categorias .category-nav {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            position: static;
-            max-height: none;
-            min-width: auto;
-            padding: 0;
-            margin: 0;
-        }
-        .sidebar-categorias .cat-btn {
-            width: 100%;
-            text-align: left;
-            padding: 10px 15px;
-            border-radius: 10px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            border: none;
-            background: transparent;
-            color: var(--text-body);
-        }
-        .sidebar-categorias .cat-btn:hover {
-            background: var(--slate-100);
-            color: var(--primary);
-            padding-left: 20px;
-        }
-        .sidebar-categorias .cat-btn.active {
-            background: var(--primary);
-            color: white;
-            padding-left: 20px;
-            box-shadow: 0 4px 15px rgba(142, 68, 173, 0.3);
-        }
-        .sidebar-categorias .cat-btn.offer-btn {
-            color: #ff4757;
-        }
-        .sidebar-categorias .cat-btn.offer-btn.active {
-            background: #ff4757;
-            color: white;
-        }
-
-        @media (max-width: 768px) {
-            .sidebar-categorias {
-                width: 140px;
-                padding: 10px;
-                top: 70px;
+                    /* Contenedor principal en celular */
+            main > div[style*="display:flex"] {
+                flex-direction: column !important;
             }
-            .sidebar-categorias h3 {
+            .category-nav {
+                flex-direction: row !important;
+                position: static !important;
+                max-height: none !important;
+                overflow-x: auto !important;
+                min-width: auto !important;
+                margin-bottom: 15px !important;
+                display: flex !important;
+                width: 100% !important;
+                order: 1 !important;
+            }
+            .cat-btn {
+                width: auto !important;
+                text-align: center !important;
+                flex-shrink: 0 !important;
+                padding: 8px 15px !important;
                 font-size: 0.7rem !important;
-                margin-bottom: 5px !important;
             }
-            .sidebar-categorias .cat-btn {
-                padding: 8px 10px;
-                font-size: 0.65rem;
-                border-radius: 8px;
+            main > div[style*="display:flex"] {
+                flex-direction: column !important;
+                display: block !important;
             }
-            .catalogo-container {
-                gap: 8px !important;
+            .category-nav {
+                order: 1 !important;
+                width: 100% !important;
+                display: flex !important;
+                flex-direction: row !important;
+                flex-wrap: nowrap !important;
+                overflow-x: auto !important;
+                margin-bottom: 15px !important;
             }
-        }
-
-        @media (max-width: 480px) {
-            .sidebar-categorias {
-                width: 110px;
-                padding: 8px;
+            main > div[style*="display:flex"] > div:last-child {
+                width: 100% !important;
             }
-            .sidebar-categorias h3 {
-                font-size: 0.6rem !important;
-            }
-            .sidebar-categorias .cat-btn {
-                padding: 6px 8px;
-                font-size: 0.55rem;
-            }
-            .catalogo-container {
+            #products-container {
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr) !important;
+                width: 100% !important;
                 gap: 5px !important;
             }
-        }
+            .category-nav { 
+                flex-direction: row !important; 
+                position: static !important; 
+                max-height: none !important; 
+                overflow-x: auto !important; 
+                min-width: auto !important;
+                margin-bottom: 15px !important;
+                display: flex !important;
+                width: 100% !important;
+            }
+            .cat-btn { 
+                width: auto !important; 
+                text-align: center !important;
+                flex-shrink: 0 !important;
+                padding: 8px 15px !important;
+                font-size: 0.7rem !important;
+            }
                 </style>
             `;
             document.getElementById('detail-modal').classList.add('active');
