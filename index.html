@@ -3054,7 +3054,40 @@ document.getElementById('sidebar-categorias').addEventListener('click', function
         this.classList.remove('hidden');
     }
 });
-
+        @media (max-width: 480px) {
+            .cart-sidebar {
+                padding: 10px !important;
+                overflow-y: auto !important;
+            }
+            .cart-sidebar .trust-badges {
+                display: none !important;
+            }
+            .cart-sidebar > div:last-child {
+                padding-top: 10px !important;
+                margin-top: 5px !important;
+            }
+            .cart-sidebar > div:last-child button {
+                padding: 15px !important;
+                font-size: 0.9rem !important;
+                display: block !important;
+                width: 100% !important;
+                margin-top: 10px !important;
+            }
+            .shipping-box {
+                margin-bottom: 10px !important;
+                padding: 10px !important;
+            }
+            .cupon-input-container {
+                margin: 8px 0 !important;
+            }
+            #cart-items {
+                max-height: 40vh !important;
+                min-height: 150px !important;
+            }
+            #cart-total {
+                font-size: 1.2rem !important;
+            }
+        }
     </script>
 </body>
 </html>
