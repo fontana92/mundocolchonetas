@@ -1117,6 +1117,7 @@
             content: '☰';
             font-size: 1rem;
             color: #fff;
+             pointer-events: none;
         }
 
         @media (max-width: 480px) {
@@ -3156,6 +3157,12 @@
                 window.__autoplayCleanup();
             }
         });
+
+document.getElementById('sidebar-categorias').addEventListener('click', function() {
+    if (this.classList.contains('hidden')) {
+        this.classList.remove('hidden');
+    }
+});
 
     </script>
 </body>
