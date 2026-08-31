@@ -2162,16 +2162,19 @@
             renderOfertasDestacadas();
         }
 
-        function renderCategories() {
+                        function renderCategories() {
             const container = document.getElementById('categories-container');
             if(!container) return;
             const hasOffers = products.some(p => p.oferta);
             let cats = ['todos'];
             if (hasOffers) cats.push('ofertas');
-            const hasCombos = products.some(p => norm(p.categoria) === 'combos');
-            if (hasCombos) cats.push('combos');
-            const otherCats = [...new Set(products.map(p => p.categoria.toLowerCase()))];
-            cats = [...cats, ...otherCats.filter(cat => cat !== 'combos')];
+            
+            const allCats = [...new Set(products.map(p => p.categoria.toLowerCase()))];
+            allCats.forEach(cat => {
+                if (!cats.includes(cat)) {
+                    cats.push(cat);
+                }
+            });
             
             container.innerHTML = cats.map(c => `
                 <button class="cat-btn ${c === 'ofertas' ? 'offer-btn' : ''} ${c === 'combos' ? 'offer-btn' : ''} ${currentCategory === c ? 'active' : ''}" 
