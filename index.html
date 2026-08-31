@@ -2494,10 +2494,13 @@
             renderAll(); 
         }
 
-       function toggleCategorias(event) {
-    event.stopPropagation();
+       function toggleCategorias() {
     const sidebar = document.getElementById('sidebar-categorias');
-    sidebar.classList.toggle('hidden');
+    if (sidebar.classList.contains('hidden')) {
+        sidebar.classList.remove('hidden');
+    } else {
+        sidebar.classList.add('hidden');
+    }
 }
         // =======================================================
         // RENDERIZAR PRODUCTOS
@@ -3227,7 +3230,12 @@
                 window.__autoplayCleanup();
             }
         });
-
+document.addEventListener('click', function(e) {
+    const sidebar = document.getElementById('sidebar-categorias');
+    if (sidebar && sidebar.classList.contains('hidden') && e.target === sidebar) {
+        sidebar.classList.remove('hidden');
+    }
+});
     </script>
 </body>
 </html>
