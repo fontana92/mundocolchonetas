@@ -3290,6 +3290,12 @@ document.addEventListener('click', function(e) {
         sidebar.classList.remove('hidden');
     }
 });
+document.addEventListener('click', function(e) {
+    const sidebar = document.getElementById('sidebar-categorias');
+    if (sidebar && sidebar.classList.contains('hidden') && e.target.closest('.sidebar-categorias')) {
+        sidebar.classList.remove('hidden');
+    }
+});
     </script>
 </body>
 </html>
