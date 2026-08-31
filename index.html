@@ -1067,7 +1067,7 @@
             font-weight: 800;
             color: var(--text-body);
         }
-        @media (max-width: 480px) {
+                @media (max-width: 480px) {
             .trust-badges {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 8px;
@@ -1081,6 +1081,44 @@
             }
             .trust-badge .trust-title {
                 font-size: 0.65rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .catalogo-container {
+                display: block !important;
+                flex-direction: column !important;
+            }
+            .productos-wrapper {
+                width: 100% !important;
+                flex: none !important;
+            }
+            .category-nav {
+                display: flex !important;
+                flex-direction: row !important;
+                position: static !important;
+                max-height: none !important;
+                overflow-x: auto !important;
+                overflow-y: hidden !important;
+                min-width: auto !important;
+                width: 100% !important;
+                margin-bottom: 15px !important;
+                padding: 5px 0 !important;
+                gap: 5px !important;
+            }
+            .cat-btn {
+                flex-shrink: 0 !important;
+                white-space: nowrap !important;
+                width: auto !important;
+                text-align: center !important;
+                padding: 8px 15px !important;
+                font-size: 0.7rem !important;
+            }
+            #products-container {
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr) !important;
+                width: 100% !important;
+                gap: 5px !important;
             }
         }
 </style>
@@ -1165,9 +1203,9 @@
             <input type="text" id="product-search" class="search-input" placeholder="Buscar por nombre, categoría o detalle..." oninput="handleSearch()">
         </div>
 
-        <div style="display: flex; gap: 20px; align-items: flex-start;">
+        <div style="display:flex; gap:20px; align-items:flex-start;" class="catalogo-container">
             <div class="category-nav" id="categories-container" style="flex-shrink: 0;"></div>
-            <div style="flex: 1; min-width: 0;">
+           <div style="flex:1; min-width:0;" class="productos-wrapper">
                 <div class="bento-grid" id="products-container">
                     <p id="status-msg" style="text-align:center; grid-column: 1/-1; padding: 50px; color:#999;">Sincronizando catálogo premium...</p>
                 </div>
