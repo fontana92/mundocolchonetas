@@ -1027,23 +1027,41 @@
                 position: relative !important;
                 display: block !important;
             }
-                        .sidebar-categorias {
+                                    .sidebar-categorias {
                 position: fixed !important;
                 left: 3px !important;
                 top: 100px !important;
                 width: 110px !important;
                 padding: 10px !important;
                 z-index: 100 !important;
-                background: rgba(255, 255, 255, 0.45) !important;
-                backdrop-filter: blur(8px) !important;
-                -webkit-backdrop-filter: blur(8px) !important;
+                background: rgba(255, 255, 255, 0.3) !important;
+                backdrop-filter: blur(5px) !important;
+                -webkit-backdrop-filter: blur(5px) !important;
                 border-radius: 15px !important;
-                border: 1px solid rgba(142, 68, 173, 0.25) !important;
-                box-shadow: 0 4px 20px rgba(0,0,0,0.08) !important;
+                border: 1px solid rgba(142, 68, 173, 0.2) !important;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.05) !important;
                 max-height: calc(100vh - 110px) !important;
                 height: calc(100vh - 110px) !important;
                 overflow-y: auto !important;
                 transition: all 0.3s ease !important;
+            }
+            .sidebar-categorias.hidden {
+                width: 40px !important;
+                padding: 5px !important;
+                cursor: pointer !important;
+            }
+            .sidebar-categorias.hidden .category-nav,
+            .sidebar-categorias.hidden h3 {
+                display: none !important;
+            }
+            .sidebar-categorias.hidden::after {
+                content: '☰';
+                font-size: 1.2rem;
+                color: #8e44ad;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100%;
             }
             .sidebar-categorias h3 {
                 display: block !important;
@@ -1391,7 +1409,7 @@
         </button>
         <div style="display:flex; gap:15px; align-items:flex-start;" class="catalogo-container">
             <aside class="sidebar-categorias" id="sidebar-categorias">
-                <h3 style="font-size:0.9rem; font-weight:800; margin-bottom:10px; color:var(--text-body);">📋 Categorías</h3>
+                                <h3 onclick="toggleCategorias()" style="font-size:0.9rem; font-weight:800; margin-bottom:10px; color:var(--text-body); cursor:pointer;">📋 Categorías <i class="fas fa-chevron-down" style="font-size:0.6rem;"></i></h3>
                 <div class="category-nav" id="categories-container"></div>
             </aside>
            <div style="flex:1; min-width:0;" class="productos-wrapper">
@@ -2470,11 +2488,14 @@
             `).join('');
         }
 
-        function filterCat(c) { currentCategory = c; renderAll(); }
+        function filterCat(c) { 
+            currentCategory = c; 
+            renderAll(); 
+        }
 
-function toggleCategorias() {
+        function toggleCategorias() {
             const sidebar = document.getElementById('sidebar-categorias');
-            sidebar.classList.toggle('open');
+            sidebar.classList.toggle('hidden');
         }
         // =======================================================
         // RENDERIZAR PRODUCTOS
