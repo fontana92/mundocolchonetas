@@ -1022,26 +1022,27 @@
                 font-size: 0.65rem;
             }
         }
-                 @media (max-width: 480px) {
+                        @media (max-width: 480px) {
             .catalogo-container {
                 position: relative !important;
                 display: block !important;
             }
             .sidebar-categorias {
                 position: fixed !important;
-                left: 3px !important;
+                left: 5px !important;
                 top: 110px !important;
-                width: 100px !important;
+                width: 110px !important;
                 padding: 10px !important;
                 z-index: 100 !important;
-                background: rgba(255, 255, 255, 0.92) !important;
-                backdrop-filter: blur(15px) !important;
-                -webkit-backdrop-filter: blur(15px) !important;
+                background: rgba(255, 255, 255, 0.75) !important;
+                backdrop-filter: blur(20px) !important;
+                -webkit-backdrop-filter: blur(20px) !important;
                 border-radius: 15px !important;
-                border: 1px solid rgba(142, 68, 173, 0.4) !important;
-                box-shadow: 0 8px 30px rgba(0,0,0,0.2) !important;
+                border: 1px solid rgba(142, 68, 173, 0.35) !important;
+                box-shadow: 0 8px 30px rgba(0,0,0,0.15) !important;
                 max-height: calc(100vh - 130px) !important;
                 overflow-y: auto !important;
+                transition: all 0.3s ease !important;
             }
             .sidebar-categorias h3 {
                 display: block !important;
@@ -1050,6 +1051,7 @@
                 margin-bottom: 8px !important;
                 text-align: center !important;
                 color: #8e44ad !important;
+                cursor: pointer !important;
             }
             .sidebar-categorias .cat-btn {
                 padding: 8px 5px !important;
@@ -1060,6 +1062,17 @@
                 text-overflow: ellipsis !important;
                 border-radius: 8px !important;
                 margin-bottom: 3px !important;
+            }
+            .sidebar-categorias.collapsed .category-nav {
+                display: none !important;
+            }
+            .sidebar-categorias.collapsed {
+                width: 50px !important;
+                padding: 8px !important;
+            }
+            .sidebar-categorias.collapsed h3 {
+                font-size: 0.6rem !important;
+                writing-mode: vertical-rl !important;
             }
             .productos-wrapper {
                 width: 100% !important;
@@ -1093,7 +1106,7 @@
             }
             .quantity-selector button { 
                 width: 20px !important; 
-                height: 20px !eimportant; 
+                height: 20px !important; 
                 font-size: 0.6rem !important; 
             }
             .quantity-selector input { 
