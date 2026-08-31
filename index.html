@@ -1022,29 +1022,7 @@
                 font-size: 0.65rem;
             }
         }
-                        @media (max-width: 480px) {
-            .catalogo-container {
-                position: relative !important;
-                display: block !important;
-            }
-                                    .sidebar-categorias {
-                position: fixed !important;
-                left: 3px !important;
-                top: 100px !important;
-                width: 110px !important;
-                padding: 10px !important;
-                z-index: 100 !important;
-                background: rgba(255, 255, 255, 0.3) !important;
-                backdrop-filter: blur(5px) !important;
-                -webkit-backdrop-filter: blur(5px) !important;
-                border-radius: 15px !important;
-                border: 1px solid rgba(142, 68, 173, 0.2) !important;
-                box-shadow: 0 4px 15px rgba(0,0,0,0.05) !important;
-                max-height: calc(100vh - 110px) !important;
-                height: calc(100vh - 110px) !important;
-                overflow-y: auto !important;
-                transition: all 0.3s ease !important;
-            }
+  
                    
                                             .sidebar-categorias {
             width: 180px;
@@ -2615,97 +2593,7 @@
                             grid-template-columns: 1fr !important;
                         }
                     }
-                           .btn-menu-categorias {
-            display: none;
-            padding: 10px 20px;
-            background: #8e44ad;
-            color: white;
-            border: none;
-            border-radius: 99px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 0.8rem;
-            margin-bottom: 15px;
-            align-items: center;
-            gap: 8px;
-        }
-        @media (max-width: 480px) {
-            .btn-menu-categorias {
-                display: flex;
-                width: 100%;
-                justify-content: center;
-            }
-            .sidebar-categorias {
-                display: none;
-                width: 100%;
-                position: static;
-                margin-bottom: 15px;
-                max-height: 300px;
-            }
-            .sidebar-categorias.open {
-                display: block;
-            }
-            .catalogo-container {
-                flex-direction: column !important;
-            }
-            .productos-wrapper {
-                width: 100% !important;
-            }
-            .bento-grid {
-                grid-template-columns: repeat(3, 1fr) !important;
-                gap: 4px !important;
-            }
-            .product-card { padding: 4px !important; }
-            .product-image-container { height: 80px !important; margin-bottom: 3px !important; }
-            .product-card h3 { font-size: 0.6rem !important; }
-            .current-price { font-size: 0.75rem !important; }
-            .quantity-selector button { width: 18px !important; height: 18px !important; }
-            .quantity-selector input { width: 18px !important; height: 18px !important; }
-            .btn-add-cart { width: 22px !important; height: 22px !important; }
-            .badge-offer { font-size: 0.45rem !important; padding: 2px 5px !important; }
-            .badge-tag { font-size: 0.45rem !important; padding: 2px 6px !important; }
-        }
-        @media (max-width: 480px) {
-            .cart-sidebar {
-                padding: 15px !important;
-            }
-            .cart-sidebar > div:first-child {
-                margin-bottom: 10px !important;
-            }
-            .shipping-box {
-                padding: 10px !important;
-                margin-bottom: 10px !important;
-            }
-            .shipping-box input {
-                padding: 8px !important;
-                font-size: 0.8rem !important;
-            }
-            .cupon-input-container {
-                margin: 8px 0 !important;
-            }
-            .cupon-input {
-                padding: 8px 12px !important;
-                font-size: 0.8rem !important;
-            }
-            .trust-badges {
-                display: none !important;
-            }
-            #cart-items > div {
-                padding: 8px !important;
-                margin-bottom: 8px !important;
-            }
-            #cart-items h4 {
-                font-size: 0.8rem !important;
-            }
-            #cart-items p {
-                font-size: 0.75rem !important;
-            }
-            #cart-items button {
-                width: 24px !important;
-                height: 24px !important;
-                font-size: 0.7rem !important;
-            }
-        }
+                           
                 </style>
             `;
             document.getElementById('detail-modal').classList.add('active');
@@ -3158,11 +3046,6 @@
             }
         });
 
-document.getElementById('sidebar-categorias').addEventListener('click', function() {
-    if (this.classList.contains('hidden')) {
-        this.classList.remove('hidden');
-    }
-});
 
     </script>
 </body>
