@@ -895,16 +895,63 @@
             .badge-tag { font-size: 0.55rem !important; padding: 3px 10px !important; top: 5px !important; right: 5px !important; }
             .product-card > div:last-child { gap: 4px !important; margin-top: 3px !important; }
             .product-card > div:last-child .quantity-selector { padding: 2px !important; }
-                        .category-nav { 
+
+            /* Contenedor principal en celular */
+            main > div[style*="display:flex"] {
+                flex-direction: column !important;
+            }
+            .category-nav {
+                flex-direction: row !important;
+                position: static !important;
+                max-height: none !important;
+                overflow-x: auto !important;
+                min-width: auto !important;
+                margin-bottom: 15px !important;
+                display: flex !important;
+                width: 100% !important;
+                order: 1 !important;
+            }
+            .cat-btn {
+                width: auto !important;
+                text-align: center !important;
+                flex-shrink: 0 !important;
+                padding: 8px 15px !important;
+                font-size: 0.7rem !important;
+            }
+
+            main > div[style*="display:flex"] {
+                flex-direction: column !important;
+            }
+            .category-nav {
+                order: 1 !important;
+            }
+            #products-container {
+                display: grid !important;
+                order: 2 !important;
+                width: 100% !important;
+            }
+            #products-container {
+                display: grid !important;
+                order: 2 !important;
+                width: 100% !important;
+            }
+                                    .category-nav { 
                 flex-direction: row !important; 
                 position: static !important; 
                 max-height: none !important; 
                 overflow-x: auto !important; 
                 min-width: auto !important;
                 margin-bottom: 15px !important;
+                display: flex !important;
+                width: 100% !important;
             }
-            .cat-btn { width: auto !important; text-align: center !important; }
-            #products-container + div { display: none; }
+            .cat-btn { 
+                width: auto !important; 
+                text-align: center !important;
+                flex-shrink: 0 !important;
+                padding: 8px 15px !important;
+                font-size: 0.7rem !important;
+            }
    .share-float { left: 10px; bottom: 25px; }
             .share-container { left: 10px; bottom: 100px; width: 280px; }
             #back-to-top { left: 10px; bottom: 90px; width: 45px; height: 45px; font-size: 1.2rem; }
