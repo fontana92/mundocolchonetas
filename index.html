@@ -1022,92 +1022,99 @@
                 font-size: 0.65rem;
             }
         }
-          @media (max-width: 480px) {
+                 @media (max-width: 480px) {
             .catalogo-container {
                 position: relative !important;
                 display: block !important;
             }
             .sidebar-categorias {
                 position: fixed !important;
-                left: 5px !important;
-                top: 120px !important;
-                width: 90px !important;
-                padding: 8px !important;
+                left: 3px !important;
+                top: 110px !important;
+                width: 100px !important;
+                padding: 10px !important;
                 z-index: 100 !important;
-                background: rgba(255, 255, 255, 0.85) !important;
-                backdrop-filter: blur(10px) !important;
-                -webkit-backdrop-filter: blur(10px) !important;
-                border-radius: 12px !important;
-                border: 1px solid rgba(142, 68, 173, 0.3) !important;
-                box-shadow: 0 4px 20px rgba(0,0,0,0.15) !important;
-                max-height: 60vh !important;
+                background: rgba(255, 255, 255, 0.92) !important;
+                backdrop-filter: blur(15px) !important;
+                -webkit-backdrop-filter: blur(15px) !important;
+                border-radius: 15px !important;
+                border: 1px solid rgba(142, 68, 173, 0.4) !important;
+                box-shadow: 0 8px 30px rgba(0,0,0,0.2) !important;
+                max-height: calc(100vh - 130px) !important;
                 overflow-y: auto !important;
             }
             .sidebar-categorias h3 {
-                display: none !important;
+                display: block !important;
+                font-size: 0.75rem !important;
+                font-weight: 800 !important;
+                margin-bottom: 8px !important;
+                text-align: center !important;
+                color: #8e44ad !important;
             }
             .sidebar-categorias .cat-btn {
-                padding: 6px 4px !important;
-                font-size: 0.5rem !important;
+                padding: 8px 5px !important;
+                font-size: 0.6rem !important;
                 text-align: center !important;
                 white-space: nowrap !important;
                 overflow: hidden !important;
                 text-overflow: ellipsis !important;
-                border-radius: 6px !important;
+                border-radius: 8px !important;
+                margin-bottom: 3px !important;
             }
             .productos-wrapper {
                 width: 100% !important;
             }
             .bento-grid {
                 grid-template-columns: repeat(3, 1fr) !important;
-                gap: 3px !important;
-                padding-left: 0 !important;
+                gap: 4px !important;
             }
             .product-card { 
-                padding: 3px !important; 
+                padding: 5px !important; 
+                border-radius: 10px !important;
             }
             .product-image-container { 
-                height: 80px !important; 
-                margin-bottom: 2px !important; 
+                height: 95px !important; 
+                margin-bottom: 4px !important; 
+                border-radius: 8px !important;
             }
             .product-card h3 { 
-                font-size: 0.6rem !important; 
-                margin: 1px 0 2px 0 !important; 
+                font-size: 0.65rem !important; 
+                margin: 2px 0 4px 0 !important; 
+                line-height: 1.1 !important;
             }
             .product-card p { 
-                font-size: 0.5rem !important; 
+                font-size: 0.55rem !important; 
             }
             .current-price { 
-                font-size: 0.7rem !important; 
+                font-size: 0.8rem !important; 
             }
             .old-price { 
-                font-size: 0.5rem !important; 
+                font-size: 0.55rem !important; 
             }
             .quantity-selector button { 
-                width: 18px !important; 
-                height: 18px !important; 
-                font-size: 0.55rem !important; 
+                width: 20px !important; 
+                height: 20px !eimportant; 
+                font-size: 0.6rem !important; 
             }
             .quantity-selector input { 
-                width: 18px !important; 
-                height: 18px !important; 
-                font-size: 0.5rem !important; 
-            }
-            .btn-add-cart { 
-                width: 22px !important; 
-                height: 22px !important; 
+                width: 20px !important; 
+                height: 20px !important; 
                 font-size: 0.55rem !important; 
             }
+            .btn-add-cart { 
+                width: 24px !important; 
+                height: 24px !important; 
+                font-size: 0.6rem !important; 
+            }
             .badge-offer { 
-                font-size: 0.4rem !important; 
-                padding: 1px 4px !important; 
+                font-size: 0.45rem !important; 
+                padding: 2px 5px !important; 
             }
             .badge-tag { 
-                font-size: 0.4rem !important; 
-                padding: 1px 4px !important; 
+                font-size: 0.45rem !important; 
+                padding: 2px 5px !important; 
             }
         }
-        
                .sidebar-categorias {
             width: 180px;
             flex-shrink: 0;
