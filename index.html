@@ -919,23 +919,31 @@
                 font-size: 0.7rem !important;
             }
 
-            main > div[style*="display:flex"] {
+                        main > div[style*="display:flex"] {
                 flex-direction: column !important;
+                display: block !important;
             }
             .category-nav {
                 order: 1 !important;
+                width: 100% !important;
+                display: flex !important;
+                flex-direction: row !important;
+                flex-wrap: nowrap !important;
+                overflow-x: auto !important;
+                margin-bottom: 15px !important;
             }
-            #products-container {
-                display: grid !important;
-                order: 2 !important;
+            main > div[style*="display:flex"] > div:last-child {
                 width: 100% !important;
             }
             #products-container {
                 display: grid !important;
-                order: 2 !important;
+                grid-template-columns: repeat(2, 1fr) !important;
                 width: 100% !important;
+                gap: 5px !important;
             }
-                                    .category-nav { 
+
+
+                                              .category-nav { 
                 flex-direction: row !important; 
                 position: static !important; 
                 max-height: none !important; 
