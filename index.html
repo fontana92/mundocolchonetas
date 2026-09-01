@@ -3069,7 +3069,14 @@
                 window.__autoplayCleanup();
             }
         });
-       
+       function toggleCategorias() {
+    const sidebar = document.getElementById('sidebar-categorias');
+    if (sidebar.classList.contains('hidden')) {
+        sidebar.classList.remove('hidden');
+    } else {
+        sidebar.classList.add('hidden');
+    }
+}
     </script>
 </body>
 </html>
