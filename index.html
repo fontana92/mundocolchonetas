@@ -1285,10 +1285,10 @@
             <input type="text" id="product-search" class="search-input" placeholder="Buscar por nombre, categoría o detalle..." oninput="handleSearch()">
                 </div>
         <div style="display:flex; gap:15px; align-items:flex-start;" class="catalogo-container">
-            <aside class="sidebar-categorias" id="sidebar-categorias">
-                <h3 onclick="toggleCategorias()" style="font-size:0.9rem; font-weight:800; margin-bottom:10px; color:var(--text-body); cursor:pointer;">📋 Categorías <i class="fas fa-chevron-down" style="font-size:0.6rem;"></i></h3>
-                <div class="category-nav" id="categories-container"></div>
-            </aside>
+        <aside class="sidebar-categorias" id="sidebar-categorias" onclick="if(this.classList.contains('hidden')){this.classList.remove('hidden');}">
+    <h3 onclick="event.stopPropagation(); document.getElementById('sidebar-categorias').classList.add('hidden');" style="font-size:0.9rem; font-weight:800; margin-bottom:10px; color:var(--text-body); cursor:pointer;">📋 Categorías ✕</h3>
+    <div class="category-nav" id="categories-container"></div>
+</aside>
             
            <div style="flex:1; min-width:0;" class="productos-wrapper">
 
@@ -2376,14 +2376,7 @@
     }
 }
 
-      function toggleCategorias() {
-    const sidebar = document.getElementById('sidebar-categorias');
-    if (sidebar.classList.contains('hidden')) {
-        sidebar.classList.remove('hidden');
-    } else {
-        sidebar.classList.add('hidden');
-    }
-}
+      
 
         // =======================================================
         // RENDERIZAR PRODUCTOS
